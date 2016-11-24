@@ -7,8 +7,8 @@
 
 namespace Dravencms\AdminModule\Components\Structure\MenuGrid;
 
-use Dravencms\Components\BaseControl;
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Nette\Utils\Html;

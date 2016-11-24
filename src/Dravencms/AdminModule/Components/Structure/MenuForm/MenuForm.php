@@ -6,7 +6,7 @@
 
 namespace Dravencms\AdminModule\Components\Structure\MenuForm;
 
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
