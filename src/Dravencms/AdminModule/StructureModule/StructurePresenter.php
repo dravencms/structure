@@ -3,10 +3,10 @@
 namespace Dravencms\AdminModule\StructureModule;
 
 use Dravencms\AdminModule\SecuredPresenter;
-use Dravencms\AdminModule\Components\Structure\MenuFormFactory;
-use Dravencms\AdminModule\Components\Structure\MenuGridFactory;
-use App\Model\Structure\Entities\Menu;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory;
+use Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory;
+use Dravencms\Model\Structure\Entities\Menu;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Salamek\Cms\TCms;

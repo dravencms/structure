@@ -1,6 +1,6 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Structure\Search;
+namespace Dravencms\FrontModule\Components\Structure\Search\Bar;
 
 use Dravencms\Components\BaseControl;
 use Dravencms\Components\BaseFormFactory;

@@ -5,12 +5,12 @@
  */
 
 
-namespace Dravencms\AdminModule\Components\Structure;
+namespace Dravencms\AdminModule\Components\Structure\MenuGrid;
 
 use Dravencms\Components\BaseControl;
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Structure\Entities\Menu;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Entities\Menu;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 use Nette\Utils\Html;
 use Kdyby\Doctrine\EntityManager;
 

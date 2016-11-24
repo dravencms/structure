@@ -1,9 +1,9 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Structure\Menu;
+namespace Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb;
 
 use Dravencms\Components\BaseControl;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Breadcrumb extends BaseControl
 {

@@ -3,7 +3,7 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Structure\Entities;
+namespace Dravencms\Model\Structure\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +13,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
 use Salamek\Cms\Models\IMenu;
-use Tracy\Debugger;
 
 /**
  * Class Menu

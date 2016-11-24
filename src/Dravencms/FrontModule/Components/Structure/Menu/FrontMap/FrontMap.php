@@ -1,9 +1,9 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Structure\Menu;
+namespace Dravencms\FrontModule\Components\Structure\Menu\Frontmap;
 
 use Dravencms\Components\BaseControl;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Frontmap extends BaseControl
 {

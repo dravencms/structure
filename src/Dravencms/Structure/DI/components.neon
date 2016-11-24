@@ -1,0 +1,6 @@
+- Dravencms\FrontModule\Components\Structure\Menu\Front\FrontFactory
+- Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\BreadcrumbFactory
+- Dravencms\FrontModule\Components\Structure\Menu\Special\SpecialFactory
+- Dravencms\FrontModule\Components\Structure\Search\Bar\BarFactory
+- Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory
+- Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory

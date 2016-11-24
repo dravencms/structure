@@ -4,16 +4,16 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace Dravencms\AdminModule\Components\Structure;
+namespace Dravencms\AdminModule\Components\Structure\MenuForm;
 
 use Dravencms\Components\BaseFormFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use App\Model\Structure\Entities\MenuParameterSumGenerator;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\Structure\MenuParameterSumGenerator;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
-use App\Model\Structure\Entities\Menu;
+use Dravencms\Model\Structure\Entities\Menu;
 use Salamek\Cms\Cms;
 
 class MenuForm extends Control

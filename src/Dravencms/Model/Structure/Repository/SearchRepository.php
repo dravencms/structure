@@ -3,10 +3,9 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Structure\Repository;
+namespace Dravencms\Model\Structure\Repository;
 
-use App\Model\Structure\Entities\Menu;
-use App\Model\Structure\Entities\MenuParameterSumGenerator;
+use Dravencms\Model\Structure\Entities\Menu;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -14,8 +13,6 @@ use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
-use Salamek\Cms\Models\IMenu;
-use Salamek\Cms\Models\IMenuRepository;
 
 class SearchRepository implements ICmsComponentRepository
 {

@@ -3,16 +3,15 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Structure\Repository;
+namespace Dravencms\Model\Structure\Repository;
 
 
-use App\Model\Structure\Entities\MenuContent;
-use App\Model\Structure\Entities\MenuParameterSumGenerator;
+use Dravencms\Model\Structure\Entities\MenuContent;
+use Dravencms\Structure\MenuParameterSumGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Salamek\Cms\Models\IMenu;
 use Salamek\Cms\Models\IMenuContentRepository;
-use Tracy\Debugger;
 
 class MenuContentRepository implements IMenuContentRepository
 {

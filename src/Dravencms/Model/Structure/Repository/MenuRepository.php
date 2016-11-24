@@ -3,11 +3,11 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Structure\Repository;
+namespace Dravencms\Model\Structure\Repository;
 
 use App\Model\BaseRepository;
-use App\Model\Structure\Entities\Menu;
-use App\Model\Structure\Entities\MenuParameterSumGenerator;
+use Dravencms\Model\Structure\Entities\Menu;
+use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;

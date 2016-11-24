@@ -1,10 +1,10 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Structure\Menu;
+namespace Dravencms\FrontModule\Components\Structure\Menu\Special;
 
 use Dravencms\Components\BaseControl;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use App\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Special extends BaseControl
 {
