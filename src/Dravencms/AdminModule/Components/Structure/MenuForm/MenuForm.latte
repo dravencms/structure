@@ -1,0 +1,151 @@
+<form n:name="form" class="panel form-horizontal">
+    <ul class="alert alert-danger" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    <div class="panel-body">
+        <ul class="nav nav-tabs" role="tablist">
+            <li n:foreach="$activeLocales AS $activeLocale" role="presentation" n:class="$activeLocale->isDefault() ? active"><a href="#{$activeLocale->getLanguageCode()}" aria-controls="home" role="tab" data-toggle="tab"><span class="flag-icon flag-icon-{$activeLocale->getCountry()->getCode()|lower}"></span> {$activeLocale->getName()}</a></li>
+        </ul>
+        <div class="tab-content">
+            <div n:foreach="$activeLocales AS $activeLocale" role="tabpanel" n:class="$activeLocale->isDefault() ? active, tab-pane" id="{$activeLocale->getLanguageCode()}">
+                {formContainer $activeLocale->getLanguageCode()}
+                    <fieldset>
+                        <legend>{$activeLocale->getName()}</legend>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="name">{_"Name"}</label>
+                                    <input type="text" n:name="name" autofocus="autofocus" class="form-control">
+                                </div>
+                            </div><!-- col-sm-6 -->
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="title">{_"Title"}</label>
+                                    <input n:name="title" class="form-control">
+                                </div>
+                            </div><!-- col-sm-6 -->
+                        </div><!-- row -->
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="h1">{_"H1"}</label>
+                                    <input n:name="h1" class="form-control">
+                                </div>
+                            </div><!-- col-sm-6 -->
+                        </div><!-- row -->
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="metaDescription">{_"SEO - Description"}</label>
+                                    <input n:name="metaDescription" class="form-control">
+                                </div>
+                            </div><!-- col-sm-6 -->
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="metaKeywords">{_"SEO - Keyword"}</label>
+                                    <input n:name="metaKeywords" class="form-control">
+                                </div>
+                            </div><!-- col-sm-->
+                        </div><!-- row -->
+                    </fieldset>
+                {/formContainer}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="en">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="metaRobots">{_"SEO - Robots"}</label>
+                    <input n:name="metaRobots" class="form-control">
+                </div>
+            </div><!-- col-sm-6 -->
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="sitemapPriority">{_"SEO - Sitemap priority"}</label>
+                    <select n:name="sitemapPriority" class="form-control"></select>
+                </div>
+            </div><!-- col-sm-->
+        </div><!-- row -->
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="layoutName">{_"Layout template"}</label>
+                    <select n:name="layoutName" class="form-control"></select>
+                </div>
+            </div><!-- col-sm-6 -->
+        </div><!-- row -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isActive" class="px"> <span class="lbl">{_"Active"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isHidden" class="px"> <span class="lbl">{_"Hidden"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isShowH1" class="px"> <span class="lbl">{_"Show main title"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isRegularExpression" class="px"> <span class="lbl">{_"Is regular expression"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isRegularExpressionMatchArguments" class="px"> <span class="lbl">{_"Is ARGS used in regular expression"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isSitemap" class="px"> <span class="lbl">{_"Is sitemap"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isHomePage" class="px"> <span class="lbl">{_"Is homepage"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="submit" n:name="send" class="btn btn-success button" value="{_"Save"}">
+    </div>
+</form>

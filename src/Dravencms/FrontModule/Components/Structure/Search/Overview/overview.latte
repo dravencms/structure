@@ -1,0 +1,14 @@
+<div class="news-wrapper" n:snippet="overview">
+    <article n:foreach="$overview AS $menu" class="news-item page-row has-divider clearfix row">
+        {*<figure class="thumb col-md-2 col-sm-3 col-xs-4">
+            <img class="img-responsive" n:img="$article->getStructureFile(), '100x100'" alt="{$article->getName()}">
+        </figure>*}
+        <div class="details col-md-12 col-sm-12 col-xs-12">
+            <h3 class="title"><a href="{plink $menu->getPresenter().':'.$menu->getAction()}">{$menu->getName()}</a></h3>
+            <p>{$menu->getMetaDescription()|noescape}</p>
+            <a class="btn btn-theme read-more" href="{plink $menu->getPresenter().':'.$menu->getAction()}">Více<i class="fa fa-chevron-right"></i></a>
+        </div>
+    </article><!--//news-item-->
+
+    {control visualPaginator}
+</div>

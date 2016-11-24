@@ -1,0 +1,3 @@
+<ul class="menu-top navbar-right hidden-xs">
+    <li n:foreach="$menuItems AS $menuItem" {if !$iterator->isLast()} class="divider"{/if}><a href="{plink $menuItem->getPresenter().':'.$menuItem->getAction()}">{$menuItem->getName()}</a></li>
+</ul><!--//menu-top-->

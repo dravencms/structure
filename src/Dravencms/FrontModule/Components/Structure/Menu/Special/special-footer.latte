@@ -1,0 +1,3 @@
+<ul>
+    <li n:foreach="$menuItems AS $menuItem"><a href="{plink $menuItem->getPresenter().':'.$menuItem->getAction()}"><i class="fa fa-caret-right"></i>{$menuItem->getName()}</a></li>
+</ul>
