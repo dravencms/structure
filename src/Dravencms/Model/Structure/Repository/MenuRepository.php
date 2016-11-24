@@ -5,7 +5,7 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
-use App\Model\BaseRepository;
+use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
@@ -16,8 +16,10 @@ use Salamek\Cms\Models\ILocale;
 use Salamek\Cms\Models\IMenu;
 use Salamek\Cms\Models\IMenuRepository;
 
-class MenuRepository extends BaseRepository implements IMenuRepository
+class MenuRepository implements IMenuRepository
 {
+    use TLocalizedRepository;
+
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $menuRepository;
 
