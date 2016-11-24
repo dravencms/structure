@@ -15,6 +15,7 @@
     }
   ],
   "require": {
+    "salamek/nette-cms": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
