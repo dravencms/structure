@@ -2,7 +2,7 @@
 
 namespace Dravencms\FrontModule\Components\Structure\Search\Overview;
 
-use Dravencms\Components\BaseControl;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Structure\Repository\SearchRepository;
 use IPub\VisualPaginator\Components\Control;
 use Salamek\Cms\ICmsActionOption;

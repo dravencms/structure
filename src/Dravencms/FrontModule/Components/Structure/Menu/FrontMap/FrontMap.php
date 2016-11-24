@@ -2,7 +2,7 @@
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Frontmap;
 
-use Dravencms\Components\BaseControl;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Frontmap extends BaseControl

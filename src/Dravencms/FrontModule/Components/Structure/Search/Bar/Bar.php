@@ -2,8 +2,8 @@
 
 namespace Dravencms\FrontModule\Components\Structure\Search\Bar;
 
-use Dravencms\Components\BaseControl;
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 use Nette\Application\UI\Form;
 use Salamek\Cms\Cms;
 

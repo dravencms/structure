@@ -2,7 +2,7 @@
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb;
 
-use Dravencms\Components\BaseControl;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Breadcrumb extends BaseControl
