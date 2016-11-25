@@ -1,6 +1,6 @@
 {
   "name": "dravencms/structure",
-  "type": "library",
+  "type": "dravencms-package",
   "description": "Structure module for dravencms",
   "keywords": [
     "dravencms",
@@ -25,6 +25,19 @@
   "autoload": {
     "psr-0": {
       "Dravencms\\": "src/"
+    }
+  },
+  "extra": {
+    "dravencms": {
+      "configuration": {
+        "extensions": {
+          "timeline": "Dravencms\\Structure\\DI\\StructureExtension"
+        }
+      },
+      "scripts": {
+        "post-install": "Dravencms\\Structure\\Script\\PostInstall",
+        "pre-uninstall": "Dravencms\\Structure\\Script\\PreUninstall"
+      }
     }
   }
 }
