@@ -31,7 +31,19 @@
     "dravencms": {
       "configuration": {
         "extensions": {
+          "cms": "Salamek\\Cms\\DI\\CmsExtension",
           "structure": "Dravencms\\Structure\\DI\\StructureExtension"
+        },
+        "cms": {
+          "tempPath": "%appDir%/FrontModule/cms",
+          "presenterModule": "Front",
+          "presenterMapping": "Dravencms\\*Module\\*Presenter",
+          "parentClass": "Dravencms\\FrontModule\\SlugPresenter",
+          "layoutDir": "%appDir%/FrontModule/templates",
+          "defaultLayout": "%layout.name%",
+          "mappings": {
+            "Dravencms\\FrontModule\\Components\\*\\*\\-\\*Factory": "Dravencms\\Model\\*\\Repository\\*Repository"
+          }
         }
       },
       "scripts": {
