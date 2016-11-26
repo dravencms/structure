@@ -31,7 +31,7 @@
     "dravencms": {
       "configuration": {
         "extensions": {
-          "timeline": "Dravencms\\Structure\\DI\\StructureExtension"
+          "structure": "Dravencms\\Structure\\DI\\StructureExtension"
         }
       },
       "scripts": {
