@@ -8,5 +8,5 @@ namespace Dravencms\Structure;
 
 interface IRouterFactory
 {
-
+    public function createRouter();
 }

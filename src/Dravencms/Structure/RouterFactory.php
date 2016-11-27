@@ -50,7 +50,7 @@ class RouterFactory
 
         $frontEnd[] = new SlugRouter('[<locale [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository);
 
-        $frontEnd[] = new Route('[<locale [a-z]{2}>/]<presenter>/<action>[/<id [0-9]+>]', []);
+        //$frontEnd[] = new Route('[<locale [a-z]{2}>/]<presenter>/<action>[/<id [0-9]+>]', []);
 
         foreach ($this->routeFactories AS $routeFactory) {
             $router[] = $routeFactory->createRouter();
