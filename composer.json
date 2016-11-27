@@ -48,11 +48,12 @@
         "services": {
           "routeFactory.Front": "Salamek\\Cms\\SlugRouter",
           "route": {
-            "class": "Salamek\\Structure\\RouterFactory",
+            "class": "Dravencms\\Structure\\RouterFactory",
             "setup": [
               "addRouteFactory(@routeFactory.Front)"
             ]
-          }
+          },
+          "router": "@Dravencms\\Structure\\RouterFactory::createRouter"
         }
       },
       "scripts": {
