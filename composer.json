@@ -46,10 +46,12 @@
           }
         },
         "services": {
+          "routeFactory.Structure": "Dravencms\\Structure\\RouteFactory",
           "route": {
-            "class": "Dravencms\\Structure\\RouterFactory"
-          },
-          "router": "@Dravencms\\Structure\\RouterFactory::createRouter"
+            "setup": [
+              "addRouteFactory(@routeFactory.Structure)"
+            ]
+          }
         }
       },
       "scripts": {
