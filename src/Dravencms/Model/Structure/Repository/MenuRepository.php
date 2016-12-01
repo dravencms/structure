@@ -371,6 +371,51 @@ class MenuRepository implements IMenuRepository
         return $this->menuRepository->findBy(['isSitemap' => $isSitemap]);
     }
 
+
+    /**
+     * @param null $query
+     * @param null $limit
+     * @param null $offset
+     * @return Menu[]
+     */
+    public function search($query = null, $limit = null, $offset = null)
+    {
+        $qb = $this->menuRepository->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.isActive = :isActive')
+            ->andWhere('m.isContent = :isContent')
+            ->setParameters(
+                [
+                    'isActive' => true,
+                    'isContent' => true
+                ]
+            );
+
+        if ($query)
+        {
+            $qb->andWhere('m.name LIKE :query')
+                ->orWhere('m.slug LIKE :query')
+                ->orWhere('m.metaDescription LIKE :query')
+                ->orWhere('m.metaKeywords LIKE :query')
+                ->orWhere('m.title LIKE :query')
+                ->orWhere('m.h1 LIKE :query')
+                ->setParameter('query', '%'.$query.'%');
+        }
+
+        if ($limit)
+        {
+            $qb->setMaxResults($limit);
+        }
+
+        if ($offset)
+        {
+            $qb->setFirstResult($offset);
+        }
+
+        $qb->orderBy('m.sitemapPriority', 'DESC');
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * @param $name
      * @param $metaDescription

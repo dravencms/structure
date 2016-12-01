@@ -3,23 +3,24 @@
 namespace Dravencms\FrontModule\Components\Structure\Search\Overview;
 
 use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\SearchRepository;
 use IPub\VisualPaginator\Components\Control;
 use Salamek\Cms\ICmsActionOption;
 
 class Overview extends BaseControl
 {
-    /** @var SearchRepository */
-    private $searchRepository;
+    /** @var MenuRepository */
+    private $menuRepository;
 
     /** @var ICmsActionOption */
     private $cmsActionOption;
 
-    public function __construct(ICmsActionOption $cmsActionOption, SearchRepository $searchRepository)
+    public function __construct(ICmsActionOption $cmsActionOption, MenuRepository $menuRepository)
     {
         parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
-        $this->searchRepository = $searchRepository;
+        $this->menuRepository = $menuRepository;
     }
 
 
@@ -29,7 +30,7 @@ class Overview extends BaseControl
 
         $q = $this->presenter->getParameter('q');
 
-        $all = $this->searchRepository->search($q);
+        $all = $this->menuRepository->search($q);
         $allCount = count($all);
         $visualPaginator = $this['visualPaginator'];
 
@@ -38,7 +39,7 @@ class Overview extends BaseControl
         $paginator->itemCount = $allCount;
 
         $template->allCount = $allCount;
-        $template->overview = $this->searchRepository->search($q, $paginator->itemsPerPage, $paginator->offset);
+        $template->overview = $this->menuRepository->search($q, $paginator->itemsPerPage, $paginator->offset);
         $template->setFile(__DIR__.'/overview.latte');
         $template->render();
     }

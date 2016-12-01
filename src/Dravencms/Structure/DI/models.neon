@@ -1,4 +1,5 @@
 - Dravencms\Structure\MenuParameterSumGenerator
 - Dravencms\Model\Structure\Repository\MenuRepository
 - Dravencms\Model\Structure\Repository\MenuContentRepository
-- Dravencms\Model\Structure\Repository\SearchRepository
+- Dravencms\Model\Structure\Repository\SearchCmsRepository
+- Dravencms\Structure\Bridge\CmsLocale\LocaleRepository
