@@ -14,7 +14,7 @@ use Salamek\Cms\SlugRouter;
  * Class RouteFactory
  * @package Salamek\Cms
  */
-class RouterFactory implements IRouterFactory
+class RouteFactory implements IRouterFactory
 {
     /** @var MenuRepository @inject */
     private $structureMenuRepository;
