@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
-use Salamek\Cms\Models\IMenu;
-use Salamek\Cms\Models\IMenuContent;
 
 /**
  * Class MenuContent

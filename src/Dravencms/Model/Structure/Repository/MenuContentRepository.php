@@ -10,10 +10,9 @@ use Dravencms\Model\Structure\Entities\MenuContent;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\IMenu;
-use Salamek\Cms\Models\IMenuContentRepository;
+use Dravencms\Model\Structure\Entities\IMenu;
 
-class MenuContentRepository implements IMenuContentRepository
+class MenuContentRepository
 {
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $menuContentRepository;
@@ -40,7 +39,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @param IMenu $menu
      * @param $factory
      * @param array $parameters
-     * @return array
+     * @return MenuContent
      */
     public function getOneByMenuFactoryParameters(IMenu $menu, $factory, array $parameters)
     {
@@ -81,7 +80,7 @@ class MenuContentRepository implements IMenuContentRepository
 
     /**
      * @param $id
-     * @return null|object
+     * @return null|MenuContent
      */
     public function getOneById($id)
     {

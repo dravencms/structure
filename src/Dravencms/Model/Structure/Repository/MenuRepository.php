@@ -12,11 +12,10 @@ use Doctrine\ORM\Query;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\ILocale;
-use Salamek\Cms\Models\IMenu;
-use Salamek\Cms\Models\IMenuRepository;
+use Dravencms\Model\Locale\Entities\ILocale;
+use Dravencms\Model\Structure\Entities\IMenu;
 
-class MenuRepository implements IMenuRepository
+class MenuRepository
 {
     use TLocalizedRepository;
 
@@ -280,14 +279,14 @@ class MenuRepository implements IMenuRepository
     /**
      * @param $presenter
      * @param $action
-     * @return Menu|bool
+     * @return Menu|null
      */
-    public function getByPresenterAction($presenter, $action)
+    public function getOneByPresenterAction($presenter, $action)
     {
         $this->buildCache(false);
 
         $key = $presenter . ':' . $action;
-        return array_key_exists($key, $this->cachePresenter) ? $this->cachePresenter[$key] : false;
+        return array_key_exists($key, $this->cachePresenter) ? $this->cachePresenter[$key] : null;
     }
 
     /**
@@ -526,7 +525,7 @@ class MenuRepository implements IMenuRepository
      * @param ILocale $locale
      * @return array
      */
-    public function getBySlug($slug, $requestParams = [], $locale = null)
+    public function getOneBySlug($slug, $requestParams = [], $locale = null)
     {
         $parameters = [];
 

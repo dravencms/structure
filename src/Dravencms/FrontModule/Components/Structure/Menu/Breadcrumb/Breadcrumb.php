@@ -20,7 +20,7 @@ class Breadcrumb extends BaseControl
     {
         $template = $this->template;
         
-        $thisPage = $this->menuRepository->getByPresenterAction(':'.$this->presenter->getName(), $this->presenter->getAction());
+        $thisPage = $this->menuRepository->getOneByPresenterAction(':'.$this->presenter->getName(), $this->presenter->getAction());
         $homePage = $this->menuRepository->getHomePage();
 
         $breadcrumbs = $this->menuRepository->buildParentTree($thisPage);

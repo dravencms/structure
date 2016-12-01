@@ -9,13 +9,21 @@ use Salamek\Cms\Models\ILocale;
  */
 class Locale implements ILocale
 {
+    /** @var \Dravencms\Model\Locale\Entities\Locale  */
     private $locale;
 
+    /**
+     * Locale constructor.
+     * @param \Dravencms\Model\Locale\Entities\Locale $locale
+     */
     public function __construct(\Dravencms\Model\Locale\Entities\Locale $locale)
     {
         $this->locale = $locale;
     }
 
+    /**
+     * @return string
+     */
     public function getLanguageCode()
     {
         return $this->locale->getLanguageCode();

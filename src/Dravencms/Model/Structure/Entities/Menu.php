@@ -12,7 +12,6 @@ use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
-use Salamek\Cms\Models\IMenu;
 
 /**
  * Class Menu
@@ -554,7 +553,7 @@ class Menu extends Nette\Object implements IMenu
     }
 
     /**
-     * @return mixed
+     * @return Menu
      */
     public function getChildren()
     {

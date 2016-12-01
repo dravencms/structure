@@ -6,9 +6,9 @@
 namespace Dravencms\Structure;
 
 use Dravencms\Base\IRouterFactory;
-use Dravencms\Model\Structure\Repository\MenuRepository;
 use Nette\Application\Routers\RouteList;
 use Salamek\Cms\SlugRouter;
+use Dravencms\Structure\Bridge\CmsMenu\MenuRepository;
 
 /**
  * Class RouteFactory
