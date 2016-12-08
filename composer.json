@@ -42,7 +42,7 @@
           "layoutDir": "%appDir%/FrontModule/templates",
           "defaultLayout": "%layout.name%",
           "mappings": {
-            "Dravencms\\FrontModule\\Components\\*\\*\\-\\*Factory": "Dravencms\\Model\\*\\Repository\\*Repository"
+            "Dravencms\\FrontModule\\Components\\*\\*\\-\\*Factory": "Dravencms\\Model\\*\\Repository\\*CmsRepository"
           }
         },
         "services": {
