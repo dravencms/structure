@@ -6,3 +6,7 @@
 - Dravencms\Structure\Bridge\CmsLocale\LocaleRepository
 - Dravencms\Structure\Bridge\CmsMenu\MenuRepository
 - Dravencms\Structure\Bridge\CmsMenu\MenuContentRepository
+
+- Dravencms\Model\Structure\Fixtures\AclOperationFixtures
+- Dravencms\Model\Structure\Fixtures\AclResourceFixtures
+- Dravencms\Model\Structure\Fixtures\AdminMenuFixtures
