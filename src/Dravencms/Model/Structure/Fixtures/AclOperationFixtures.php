@@ -21,7 +21,7 @@ class AclOperationFixtures extends AbstractFixture implements DependentFixtureIn
     public function load(ObjectManager $manager)
     {
         $operations = [
-            'tag' => [
+            'structure' => [
                 'edit' => 'Umožnuje editaci structure',
                 'delete' => 'Umožnuje smazání structure',
             ]
