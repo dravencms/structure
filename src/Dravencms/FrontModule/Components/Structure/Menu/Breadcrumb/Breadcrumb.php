@@ -16,10 +16,15 @@ class Breadcrumb extends BaseControl
         $this->menuRepository = $menuRepository;
     }
 
-    public function render()
+    public function render(array $config = [])
     {
         $template = $this->template;
-        
+
+        $template->showCarrot = (array_key_exists('showCarrot', $config) ? $config['showCarrot'] : true);
+        $template->showYouAreHere = (array_key_exists('showYouAreHere', $config) ? $config['showYouAreHere'] : true);
+        $template->listClass = (array_key_exists('listClass', $config) ? $config['listClass'] : 'breadcrumbs-list');
+        $template->activeClass = (array_key_exists('activeClass', $config) ? $config['activeClass'] : 'current');
+
         $thisPage = $this->menuRepository->getOneByPresenterAction(':'.$this->presenter->getName(), $this->presenter->getAction());
         $homePage = $this->menuRepository->getHomePage();
 

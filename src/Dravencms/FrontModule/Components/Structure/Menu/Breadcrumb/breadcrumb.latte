@@ -1,15 +1,15 @@
 <div class="breadcrumbs pull-right">
-    <ul class="breadcrumbs-list">
-        <li class="breadcrumbs-label">Jste zde:</li>
-        <li><a href="{$basePath}/">{$homePage->getName()}</a><i class="fa fa-angle-right"></i></li>
-        <li n:foreach="$breadcrumbs AS $breadcrumb" {if $thisPage == $breadcrumb} class="current"{/if}>
+    <ul class="{$listClass}">
+        <li n:if="$showYouAreHere" class="breadcrumbs-label">Jste zde:</li>
+        <li><a href="{$basePath}/">{$homePage->getName()}</a><i n:if="$showCarrot" class="fa fa-angle-right"></i></li>
+        <li n:foreach="$breadcrumbs AS $breadcrumb" {if $thisPage == $breadcrumb} class="{$activeClass}"{/if}>
             {if $thisPage == $breadcrumb}
                 {$breadcrumb->getName()|truncate, 40}
             {else}
                 <a{if $breadcrumb->isContent()} href="{plink $breadcrumb->getPresenter().':'.$breadcrumb->getAction()}" {/if}>
                     {$breadcrumb->getName()|truncate, 40}
                 </a>
-                <i class="fa fa-angle-right"></i>
+                <i n:if="$showCarrot" class="fa fa-angle-right"></i>
             {/if}
 
         </li>
