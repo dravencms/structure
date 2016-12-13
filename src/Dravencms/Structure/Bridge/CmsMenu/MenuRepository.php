@@ -72,7 +72,7 @@ class MenuRepository implements IMenuRepository
 
         list($nativeMenu, $parametersMenu) = $this->menuRepository->getOneBySlug($slug, $parameters, $nativeLocale);
 
-        return [new Menu($nativeMenu), $parametersMenu];
+        return [($nativeMenu ? new Menu($nativeMenu) : null), $parametersMenu];
     }
 
     /**

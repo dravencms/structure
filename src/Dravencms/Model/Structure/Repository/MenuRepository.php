@@ -531,7 +531,7 @@ class MenuRepository
 
         $this->buildCache(false);
 
-        $found = array_key_exists($slug, $this->cacheRegexFalse) ? $this->cacheRegexFalse[$slug] : false;
+        $found = array_key_exists($slug, $this->cacheRegexFalse) ? $this->cacheRegexFalse[$slug] : null;
 
         //Normal not found, lets try regexp
         if (!$found) {
