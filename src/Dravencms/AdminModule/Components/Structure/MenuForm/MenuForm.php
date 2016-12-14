@@ -84,6 +84,7 @@ class MenuForm extends Control
             $defaultValues['isHomePage'] = $this->menu->isHomePage();
             $defaultValues['presenter'] = $this->menu->getPresenter();
             $defaultValues['action'] = $this->menu->getAction();
+            $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
 
             $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
             $defaultValues += $repository->findTranslations($this->menu);
@@ -156,6 +157,8 @@ class MenuForm extends Control
         $form->addSelect('sitemapPriority', null, $sitemapPriorities);
 
         $form->addSelect('layoutName', null, $this->cms->detectLayouts());
+
+        $form->addTextarea('latteTemplate');
 
         $form->addCheckbox('isHidden');
         $form->addCheckbox('isActive');
@@ -281,6 +284,8 @@ class MenuForm extends Control
                 ->translate($menu, 'metaDescription', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->metaDescription)
                 ->translate($menu, 'metaKeywords', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->metaKeywords);
         }
+
+        $menu->setLatteTemplate($values->latteTemplate);
 
         $this->entityManager->persist($menu);
 
