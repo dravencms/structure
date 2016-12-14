@@ -22,9 +22,11 @@ class Bar extends BaseControl
         $this->cms = $cms;
     }
 
-    public function render()
+    public function render(array $config = [])
     {
         $template = $this->template;
+
+        $template->formClass = (array_key_exists('formClass', $config) ? $config['formClass'] : 'pull-right search-form');
 
         $template->setFile(__DIR__ . '/bar.latte');
         $template->render();

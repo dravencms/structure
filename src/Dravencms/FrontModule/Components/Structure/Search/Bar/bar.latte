@@ -1,6 +1,8 @@
-<form n:name="form" class="pull-right search-form" role="search" novalidate="">
-    <div class="form-group">
+<form n:name="form" class="{$formClass}" role="search">
+    <div class="input-group">
         <input n:name="q" type="text" class="form-control" placeholder="Prohledat stránku...">
+        <span class="input-group-btn">
+            <button n:name="send" class="btn btn-primary btn-theme">Hledat</button>
+        </span>
     </div>
-    <button n:name="send" class="btn btn-theme">Hledat</button>
 </form>
