@@ -158,7 +158,7 @@ class StructurePresenter extends SecuredPresenter
      */
     public function handleComponentJson($componentClass)
     {
-        $this->payload->actions = (object)/*Ve work with object in JS not arrays*/
+        $this->payload->actions = (object)/*We work with object in JS not arrays*/
         $this->cms->getActionArray($componentClass);
         $this->sendPayload();
     }
@@ -170,7 +170,10 @@ class StructurePresenter extends SecuredPresenter
     public function handleStructureSave($structureMenuId, array $structureTree)
     {
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
-        $this->cms->saveStructureTree($menu, $structureTree);
+
+        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
+
+        $this->cms->saveStructureTree($cmsMenu, $structureTree);
         $this->payload->structureTree = $structureTree;
         $this->sendPayload();
     }

@@ -41,7 +41,7 @@ class MenuContentRepository implements IMenuContentRepository
         $menuNative = $this->menuRepository->getOneById($menu->getId());
         $menuContentNative = $this->menuContentRepository->getOneByMenuFactoryParameters($menuNative, $factory, $parameters);
 
-        return new MenuContent($menuContentNative);
+        return ($menuContentNative ? new MenuContent($menuContentNative) : null);
     }
 
     /**
@@ -55,7 +55,7 @@ class MenuContentRepository implements IMenuContentRepository
     {
         $menuNative = $this->menuRepository->getOneById($menu->getId());
 
-        $this->menuContentRepository->saveMenuContent($menuNative, $factory, $parameters);
+        return new MenuContent($this->menuContentRepository->saveMenuContent($menuNative, $factory, $parameters));
     }
 
     /**
