@@ -6,7 +6,6 @@
 namespace Dravencms\Structure\Bridge\CmsMenu;
 
 
-use Dravencms\Model\Structure\Repository\MenuRepository;
 use Nette;
 use Salamek\Cms\Models\IMenuContentRepository;
 use Salamek\Cms\Models\IMenu;
@@ -22,9 +21,9 @@ class MenuContentRepository implements IMenuContentRepository
     /**
      * MenuContentRepository constructor.
      * @param \Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository
-     * @param MenuRepository $menuRepository
+     * @param \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository
      */
-    public function __construct(\Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository, MenuRepository $menuRepository)
+    public function __construct(\Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository, \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository)
     {
         $this->menuContentRepository = $menuContentRepository;
         $this->menuRepository = $menuRepository;
