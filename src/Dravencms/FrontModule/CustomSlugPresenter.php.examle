@@ -26,17 +26,26 @@ abstract class SlugPresenter extends BasePresenter
     /** @var FrontFactory @inject */
     public $structureMenuFrontFactory;
 
+    /** @var BarFactory @inject */
+    public $socialIconBarFactory;
+
     /** @var SpecialFactory @inject */
     public $structureMenuSpecialFactory;
 
+    /** @var MainFactory @inject */
+    public $partnerPartnerMainFactory;
+
     /** @var BreadcrumbFactory @inject */
     public $structureMenuBreadcrumbFactory;
+
+    /** @var TrackingFactory @inject */
+    public $seoSeoTrackingFactory;
 
     /** @var \Dravencms\FrontModule\Components\Structure\Search\Bar\BarFactory @inject */
     public $structureSearchBarFactory;
 
     /**
-     * @return Components\Structure\Search\Bar\Bar
+     * @return Components\Structure\Search\Bar
      */
     public function createComponentStructureSearchBar()
     {
@@ -44,7 +53,15 @@ abstract class SlugPresenter extends BasePresenter
     }
 
     /**
-     * @return Components\Structure\Menu\Breadcrumb\Breadcrumb
+     * @return Components\Seo\Seo\Tracking
+     */
+    public function createComponentSeoSeoTracking()
+    {
+        return $this->seoSeoTrackingFactory->create();
+    }
+
+    /**
+     * @return Components\Structure\Menu\Breadcrumb
      */
     public function createComponentStructureMenuBreadcrumb()
     {
@@ -52,24 +69,39 @@ abstract class SlugPresenter extends BasePresenter
     }
 
     /**
-     * @return Components\Structure\Menu\Special\Special
+     * @return Components\Partner\Partner\Main
+     */
+    public function createComponentPartnerPartnerMain()
+    {
+        return $this->partnerPartnerMainFactory->create();
+    }
+
+    /**
+     * @return Components\Structure\Menu\Special
      */
     public function createComponentStructureMenuSpecial()
     {
         return $this->structureMenuSpecialFactory->create();
     }
 
+    /**
+     * @return Components\Social\Icon\Bar
+     */
+    public function createComponentSocialIconBar()
+    {
+        return $this->socialIconBarFactory->create();
+    }
 
     /**
-     * @return Components\Structure\Menu\Front\Front
+     * @return Components\Structure\Menu\Front
      */
     public function createComponentStructureMenuFront()
     {
         return $this->structureMenuFrontFactory->create();
     }
-
+    
     /**
-     * @return Components\Locale\Locale\Switcher\Switcher
+     * @return Components\Locale\Locale\Switcher
      */
     public function createComponentLocaleLocaleSwitcher()
     {
