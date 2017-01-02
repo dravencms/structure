@@ -146,7 +146,7 @@ class MenuRepository
     /**
      * @param $id
      * @param ILocale|null $locale
-     * @return array
+     * @return Menu[]
      */
     public function getById($id, ILocale $locale = null)
     {
@@ -166,7 +166,7 @@ class MenuRepository
     /**
      * @param $id
      * @param ILocale|null $locale
-     * @return mixed|null|object
+     * @return Menu|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getOneById($id, ILocale $locale = null)
