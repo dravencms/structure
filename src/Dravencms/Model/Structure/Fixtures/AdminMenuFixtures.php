@@ -34,6 +34,6 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
      */
     public function getDependencies()
     {
-        return ['Dravencms\Model\Tag\Fixtures\AclOperationFixtures'];
+        return ['Dravencms\Model\Structure\Fixtures\AclOperationFixtures'];
     }
 }
