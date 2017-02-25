@@ -14,9 +14,12 @@ use Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\BreadcrumbFactory
 use Dravencms\FrontModule\Components\Structure\Menu\Front\FrontFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Special\SpecialFactory;
 use Salamek\Cms\Cms;
+use Dravencms\Locale\TLocalizedPresenter;
 
 abstract class CustomSlugPresenter extends SlugPresenter
 {
+    use TLocalizedPresenter;
+
     /** @var BarFactory @inject */
     public $socialIconBarFactory;
 

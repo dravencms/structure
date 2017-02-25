@@ -10,10 +10,13 @@ use Dravencms\FrontModule\Components\Locale\Locale\Switcher\SwitcherFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\BreadcrumbFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Front\FrontFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Special\SpecialFactory;
+use Dravencms\Locale\TLocalizedPresenter;
 use Salamek\Cms\Cms;
 
 abstract class SlugPresenter extends BasePresenter
 {
+    use TLocalizedPresenter;
+    
     /** @var Cms @inject */
     public $cmsFactory;
 
