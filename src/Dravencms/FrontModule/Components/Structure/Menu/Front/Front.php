@@ -20,18 +20,21 @@ class Front extends BaseControl
         $this->localeRepository = $localeRepository;
     }
 
-    public function render()
+    public function render($options = [])
     {
+        $options['class'] = (array_key_exists('class', $options) ? $options['class'] : 'nav navbar-nav');
+        $options['subClass'] = (array_key_exists('subClass', $options) ? $options['subClass'] : 'dropdown-menu');
+
         $template = $this->template;
         $menuLinkingType = 'normal'; //!FIXME INTO CONFIG
 
         $options = [
             'decorate' => true,
-            'rootOpen' => function ($tree) {
+            'rootOpen' => function ($tree) use($options) {
                 if (count($tree) && ($tree[0]['lvl'] == 0)) {
-                    return '<ul class="nav navbar-nav">';
+                    return '<ul class="'.$options['class'].'">';
                 } else {
-                    return '<ul class="dropdown-menu" id="menu-item-'.$tree[0]['root'].'">';
+                    return '<ul class="'.$options['subClass'].'" id="menu-item-'.$tree[0]['root'].'">';
                 }
             },
             'rootClose' => function ($tree) {
