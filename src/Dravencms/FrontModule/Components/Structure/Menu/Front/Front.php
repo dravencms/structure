@@ -3,7 +3,7 @@
 namespace Dravencms\FrontModule\Components\Structure\Menu\Front;
 
 use Dravencms\Components\BaseControl\BaseControl;
-use Dravencms\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Front extends BaseControl
@@ -11,13 +11,16 @@ class Front extends BaseControl
     /** @var MenuRepository */
     private $menuRepository;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
+    /** @var CurrentLocale */
+    private $currentLocale;
 
-    public function __construct(MenuRepository $menuRepository, LocaleRepository $localeRepository)
+    public function __construct(
+        MenuRepository $menuRepository,
+        CurrentLocale $currentLocale
+    )
     {
         $this->menuRepository = $menuRepository;
-        $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
     }
 
     public function render($options = [])
@@ -63,7 +66,7 @@ class Front extends BaseControl
             }
         ];
 
-        $template->htmlTree = $this->menuRepository->getTree($options, $this->localeRepository->getCurrentLocale());
+        $template->htmlTree = $this->menuRepository->getTree($options, $this->currentLocale);
 
         $template->setFile(__DIR__ . '/front.latte');
         $template->render();

@@ -65,7 +65,7 @@ class MenuRepository implements IMenuRepository
     public function getOneBySlug($slug, $parameters = [], $locale = null)
     {
         if (!is_null($locale)) {
-            $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
+            $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale);
         } else {
             $nativeLocale = null;
         }

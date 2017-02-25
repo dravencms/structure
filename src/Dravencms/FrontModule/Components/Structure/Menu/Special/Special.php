@@ -3,6 +3,7 @@
 namespace Dravencms\FrontModule\Components\Structure\Menu\Special;
 
 use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
@@ -11,18 +12,21 @@ class Special extends BaseControl
     /** @var MenuRepository */
     private $menuRepository;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
+    /** @var CurrentLocale */
+    private $currentLocale;
 
     /**
      * Special constructor.
      * @param MenuRepository $menuRepository
-     * @param LocaleRepository $localeRepository
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(MenuRepository $menuRepository, LocaleRepository $localeRepository)
+    public function __construct(
+        MenuRepository $menuRepository,
+        CurrentLocale $currentLocale
+    )
     {
         $this->menuRepository = $menuRepository;
-        $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
     }
 
     /**
@@ -31,7 +35,7 @@ class Special extends BaseControl
     public function render(array $showItems)
     {
         $template = $this->template;
-        $template->menuItems = $this->menuRepository->getById($showItems, $this->localeRepository->getCurrentLocale());
+        $template->menuItems = $this->menuRepository->getById($showItems, $this->currentLocale);
         $template->setFile(__DIR__ . '/special.latte');
         $template->render();
     }
@@ -43,7 +47,7 @@ class Special extends BaseControl
     {
         $template = $this->template;
 
-        $template->menuItems = $this->menuRepository->getById($showItems, $this->localeRepository->getCurrentLocale());
+        $template->menuItems = $this->menuRepository->getById($showItems, $this->currentLocale);
 
         $template->setFile(__DIR__ . '/special-footer.latte');
         $template->render();

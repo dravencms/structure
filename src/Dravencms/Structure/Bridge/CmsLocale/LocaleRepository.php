@@ -2,6 +2,7 @@
 
 namespace Dravencms\Structure\Bridge\CmsLocale;
 
+use Dravencms\Locale\CurrentLocale;
 use Salamek\Cms\Models\ILocaleRepository;
 
 /**
@@ -12,13 +13,21 @@ class LocaleRepository implements ILocaleRepository
     /** @var \Dravencms\Model\Locale\Repository\LocaleRepository  */
     private $localeRepository;
 
+    /** @var CurrentLocale */
+    private $currentLocale;
+
     /**
      * LocaleRepository constructor.
      * @param \Dravencms\Model\Locale\Repository\LocaleRepository $localeRepository
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(\Dravencms\Model\Locale\Repository\LocaleRepository $localeRepository)
+    public function __construct(
+        \Dravencms\Model\Locale\Repository\LocaleRepository $localeRepository,
+        CurrentLocale $currentLocale
+    )
     {
         $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
     }
 
     /**
@@ -37,7 +46,7 @@ class LocaleRepository implements ILocaleRepository
      */
     public function getCurrentLocale()
     {
-        return new Locale($this->localeRepository->getCurrentLocale());
+        return new Locale($this->currentLocale);
     }
 
     /**
