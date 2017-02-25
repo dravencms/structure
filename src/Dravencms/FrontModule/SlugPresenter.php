@@ -7,9 +7,6 @@ namespace Dravencms\FrontModule;
 
 
 use Dravencms\FrontModule\Components\Locale\Locale\Switcher\SwitcherFactory;
-use Dravencms\FrontModule\Components\Partner\Partner\Main\MainFactory;
-use Dravencms\FrontModule\Components\Seo\Seo\Tracking\TrackingFactory;
-use Dravencms\FrontModule\Components\Social\Icon\Bar\BarFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\BreadcrumbFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Front\FrontFactory;
 use Dravencms\FrontModule\Components\Structure\Menu\Special\SpecialFactory;
