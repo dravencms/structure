@@ -26,7 +26,6 @@ class Front extends BaseControl
         $options['subClass'] = (array_key_exists('subClass', $options) ? $options['subClass'] : 'dropdown-menu');
 
         $template = $this->template;
-        $menuLinkingType = 'normal'; //!FIXME INTO CONFIG
 
         $options = [
             'decorate' => true,
@@ -66,7 +65,7 @@ class Front extends BaseControl
 
         $template->htmlTree = $this->menuRepository->getTree($options, $this->localeRepository->getCurrentLocale());
 
-        $template->setFile(__DIR__ . '/front-' . $menuLinkingType . '.latte');
+        $template->setFile(__DIR__ . '/front.latte');
         $template->render();
     }
 }
