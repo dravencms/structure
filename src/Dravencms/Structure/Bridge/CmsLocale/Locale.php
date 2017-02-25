@@ -14,9 +14,9 @@ class Locale implements ILocale
 
     /**
      * Locale constructor.
-     * @param \Dravencms\Model\Locale\Entities\Locale $locale
+     * @param \Dravencms\Model\Locale\Entities\ILocale $locale
      */
-    public function __construct(\Dravencms\Model\Locale\Entities\Locale $locale)
+    public function __construct(\Dravencms\Model\Locale\Entities\ILocale $locale)
     {
         $this->locale = $locale;
     }
