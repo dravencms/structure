@@ -27,7 +27,7 @@ class RouteFactory implements IRouterFactory
 
     /** @var LocaleRepository */
     private $localeRepository;
-
+    
     /**
      * RouteFactory constructor.
      * @param MenuRepository $structureMenuRepository

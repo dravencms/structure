@@ -451,7 +451,7 @@ class SlugRouter extends Object implements IRouter
         $locale = (array_key_exists('locale', $params) ? $params['locale'] : null);
 
         $foundLocale = $this->localeRepository->getOneByLanguageCode($locale);
-        if (!$foundLocale)
+        if (!$foundLocale || !$foundLocale->isActive())
         {
             $foundLocale = $this->localeRepository->getDefault();
             $params['locale'] = $foundLocale->getLanguageCode();
@@ -519,7 +519,17 @@ class SlugRouter extends Object implements IRouter
             $params['slug'] = null;
         } else {
             if ($pageInfo) {
-                $params['slug'] = $pageInfo->getSlug(); //!FIXME 
+
+                $locale = $appRequest->getParameter('locale');
+                $foundLocale = $this->localeRepository->getOneByLanguageCode($locale);
+                if (!$foundLocale)
+                {
+                    $foundLocale = $this->localeRepository->getDefault();
+                }
+
+                $translatedMenu = $this->menuTranslationRepository->getTranslation($pageInfo, $foundLocale);
+
+                $params['slug'] = $translatedMenu->getSlug();
             } else {
                 return null;
             }
