@@ -8,7 +8,6 @@ namespace Dravencms\Model\Structure\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
@@ -27,10 +26,9 @@ class Menu extends Nette\Object
 
     /**
      * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
      */
-    private $name;
+    private $identifier;
 
     /**
      * @var boolean
@@ -45,49 +43,10 @@ class Menu extends Nette\Object
     private $isActive;
 
     /**
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/")
-     *      })
-     * }, fields={"name"})
-     * @Doctrine\ORM\Mapping\Column(length=255, unique=true,nullable=false)
-     */
-    private $slug;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255)
-     */
-    private $metaDescription;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255)
-     */
-    private $metaKeywords;
-
-    /**
      * @var string
      * @ORM\Column(type="string",length=255)
      */
     private $metaRobots;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255)
-     */
-    private $title;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255)
-     */
-    private $h1;
 
     /**
      * @var boolean
@@ -174,20 +133,6 @@ class Menu extends Nette\Object
     private $layoutName;
 
     /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
-
-    /**
-     * @var integer
-     * @ORM\Column(type="integer",nullable=true)
-     */
-    private $oldId;
-
-    /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      */
@@ -224,14 +169,15 @@ class Menu extends Nette\Object
     private $menuContents;
 
     /**
+     * @var ArrayCollection|MenuTranslation[]
+     * @ORM\OneToMany(targetEntity="MenuTranslation", mappedBy="menu",cascade={"persist", "remove"})
+     */
+    private $translations;
+
+    /**
      * Menu constructor.
      * @param callable $parameterSumGenerator
-     * @param $name
-     * @param $metaDescription
-     * @param $metaKeywords
      * @param $metaRobots
-     * @param $title
-     * @param $h1
      * @param bool $isActive
      * @param bool $isHidden
      * @param bool $isHomePage
@@ -249,12 +195,8 @@ class Menu extends Nette\Object
      */
     public function __construct(
         callable $parameterSumGenerator,
-        $name,
-        $metaDescription,
-        $metaKeywords,
+        $identifier,
         $metaRobots,
-        $title,
-        $h1,
         $isActive = true,
         $isHidden = false,
         $isHomePage = false,
@@ -270,14 +212,10 @@ class Menu extends Nette\Object
         $layoutName = 'layout',
         $isContent = true
     ) {
-        $this->name = $name;
+        $this->identifier = $identifier;
         $this->isActive = $isActive;
         $this->isHidden = $isHidden;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeywords = $metaKeywords;
         $this->metaRobots = $metaRobots;
-        $this->title = $title;
-        $this->h1 = $h1;
         $this->isHomePage = $isHomePage;
         $this->sitemapPriority = $sitemapPriority;
         $this->isSitemap = $isSitemap;
@@ -292,6 +230,7 @@ class Menu extends Nette\Object
         $this->isContent = $isContent;
 
         $this->menuContents = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -306,19 +245,19 @@ class Menu extends Nette\Object
     }
 
     /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
      * @param boolean $isHomePage
      */
     public function setIsHomePage($isHomePage)
     {
         $this->isHomePage = $isHomePage;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -338,51 +277,11 @@ class Menu extends Nette\Object
     }
 
     /**
-     * @param string $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    /**
-     * @param string $metaDescription
-     */
-    public function setMetaDescription($metaDescription)
-    {
-        $this->metaDescription = $metaDescription;
-    }
-
-    /**
-     * @param string $metaKeywords
-     */
-    public function setMetaKeywords($metaKeywords)
-    {
-        $this->metaKeywords = $metaKeywords;
-    }
-
-    /**
      * @param string $metaRobots
      */
     public function setMetaRobots($metaRobots)
     {
         $this->metaRobots = $metaRobots;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @param string $h1
-     */
-    public function setH1($h1)
-    {
-        $this->h1 = $h1;
     }
 
     /**
@@ -476,14 +375,6 @@ class Menu extends Nette\Object
     }
 
     /**
-     * @param int $oldId
-     */
-    public function setOldId($oldId)
-    {
-        $this->oldId = $oldId;
-    }
-
-    /**
      * @param MenuContent $menuContent
      */
     public function addMenuContent(MenuContent $menuContent)
@@ -529,17 +420,9 @@ class Menu extends Nette\Object
     {
         return $this->isHomePage;
     }
-    
-    /**
-     * @param $locale
-     */
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
-    }
 
     /**
-     * @return mixed
+     * @return Menu
      */
     public function getParent()
     {
@@ -560,14 +443,6 @@ class Menu extends Nette\Object
     public function getLvl()
     {
         return $this->lvl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -621,49 +496,9 @@ class Menu extends Nette\Object
     /**
      * @return string
      */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
-    {
-        return $this->metaKeywords;
-    }
-
-    /**
-     * @return string
-     */
     public function getMetaRobots()
     {
         return $this->metaRobots;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getH1()
-    {
-        return $this->h1;
     }
 
     /**
@@ -776,5 +611,21 @@ class Menu extends Nette\Object
     public function getRgt()
     {
         return $this->rgt;
+    }
+
+    /**
+     * @return ArrayCollection|MenuTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }

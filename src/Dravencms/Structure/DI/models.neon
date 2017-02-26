@@ -1,10 +1,13 @@
 - Dravencms\Structure\MenuParameterSumGenerator
+- Dravencms\Structure\MenuSlugGenerator
 - Dravencms\Model\Structure\Repository\MenuRepository
+- Dravencms\Model\Structure\Repository\MenuTranslationRepository
 - Dravencms\Model\Structure\Repository\MenuContentRepository
 - Dravencms\Model\Structure\Repository\SearchCmsRepository
 
 - Dravencms\Structure\Bridge\CmsLocale\LocaleRepository
 - Dravencms\Structure\Bridge\CmsMenu\MenuRepository
+- Dravencms\Structure\Bridge\CmsMenu\MenuTranslationRepository
 - Dravencms\Structure\Bridge\CmsMenu\MenuContentRepository
 
 - Dravencms\Model\Structure\Fixtures\AclOperationFixtures

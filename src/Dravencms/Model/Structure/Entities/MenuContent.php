@@ -47,12 +47,6 @@ class MenuContent extends Nette\Object
     private $parametersSum;
 
     /**
-     * @var integer
-     * @ORM\Column(type="integer",nullable=true)
-     */
-    private $oldId;
-
-    /**
      * MenuContent constructor.
      * @param Menu $menu
      * @param $factory

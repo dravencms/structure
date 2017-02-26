@@ -30,14 +30,6 @@ class Menu implements IMenu
     }
 
     /**
-     * @return string
-     */
-    public function getH1()
-    {
-        return $this->menu->getH1();
-    }
-
-    /**
      * @return int
      */
     public function getId()
@@ -75,33 +67,9 @@ class Menu implements IMenu
     /**
      * @return string
      */
-    public function getMetaDescription()
-    {
-        return $this->menu->getMetaDescription();
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
-    {
-        return $this->menu->getMetaKeywords();
-    }
-
-    /**
-     * @return string
-     */
     public function getMetaRobots()
     {
         return $this->menu->getMetaRobots();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->menu->getName();
     }
 
     /**
@@ -126,22 +94,6 @@ class Menu implements IMenu
     public function isHomePage()
     {
         return $this->menu->isHomePage();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->menu->getSlug();
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->menu->getTitle();
     }
 
     /**

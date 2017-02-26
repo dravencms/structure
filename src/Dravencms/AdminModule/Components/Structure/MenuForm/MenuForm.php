@@ -8,8 +8,11 @@ namespace Dravencms\AdminModule\Components\Structure\MenuForm;
 
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Model\Structure\Entities\MenuTranslation;
+use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
+use Dravencms\Structure\MenuSlugGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
@@ -23,6 +26,9 @@ class MenuForm extends Control
 
     /** @var MenuRepository */
     private $structureMenuRepository;
+
+    /** @var MenuTranslationRepository */
+    private $menuTranslationRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -42,6 +48,9 @@ class MenuForm extends Control
     /** @var LocaleRepository */
     private $localeRepository;
 
+    /** @var MenuSlugGenerator */
+    private $menuSlugGenerator;
+
     /** @var null|callable */
     public $onSuccess = null;
 
@@ -49,24 +58,39 @@ class MenuForm extends Control
      * MenuForm constructor.
      * @param BaseFormFactory $baseForm
      * @param MenuRepository $structureMenuRepository
+     * @param MenuTranslationRepository $menuTranslationRepository
      * @param EntityManager $entityManager
      * @param Cms $cms
      * @param Menu|null $parentMenu
      * @param Menu|null $menu
      * @param MenuParameterSumGenerator $menuParameterSumGenerator
      * @param LocaleRepository $localeRepository
+     * @param MenuSlugGenerator $menuSlugGenerator
      */
-    public function __construct(BaseFormFactory $baseForm, MenuRepository $structureMenuRepository, EntityManager $entityManager, Cms $cms, Menu $parentMenu = null, Menu $menu = null, MenuParameterSumGenerator $menuParameterSumGenerator, LocaleRepository $localeRepository)
+    public function __construct(
+        BaseFormFactory $baseForm,
+        MenuRepository $structureMenuRepository,
+        MenuTranslationRepository $menuTranslationRepository,
+        EntityManager $entityManager,
+        Cms $cms,
+        Menu $parentMenu = null,
+        Menu $menu = null,
+        MenuParameterSumGenerator $menuParameterSumGenerator,
+        LocaleRepository $localeRepository,
+        MenuSlugGenerator $menuSlugGenerator
+    )
     {
         parent::__construct();
         $this->baseFormFactory = $baseForm;
         $this->structureMenuRepository = $structureMenuRepository;
+        $this->menuTranslationRepository = $menuTranslationRepository;
         $this->entityManager = $entityManager;
         $this->cms = $cms;
         $this->menu = $menu;
         $this->parentMenu = $parentMenu;
         $this->menuParameterSumGenerator = $menuParameterSumGenerator;
         $this->localeRepository = $localeRepository;
+        $this->menuSlugGenerator = $menuSlugGenerator;
 
         $defaultValues = [];
         if ($this->menu)
@@ -85,19 +109,16 @@ class MenuForm extends Control
             $defaultValues['presenter'] = $this->menu->getPresenter();
             $defaultValues['action'] = $this->menu->getAction();
             $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
+            $defaultValues['identifier'] = $this->menu->getIdentifier();
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaultValues += $repository->findTranslations($this->menu);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale)
+            foreach ($this->menu->getTranslations() AS $translation)
             {
-                $defaultValues[$defaultLocale->getLanguageCode()]['name'] = $this->menu->getName();
-                $defaultValues[$defaultLocale->getLanguageCode()]['slug'] = $this->menu->getSlug();
-                $defaultValues[$defaultLocale->getLanguageCode()]['h1'] = $this->menu->getH1();
-                $defaultValues[$defaultLocale->getLanguageCode()]['title'] = $this->menu->getTitle();
-                $defaultValues[$defaultLocale->getLanguageCode()]['metaDescription'] = $this->menu->getMetaDescription();
-                $defaultValues[$defaultLocale->getLanguageCode()]['metaKeywords'] = $this->menu->getMetaKeywords();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['slug'] = $translation->getSlug();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['h1'] = $translation->getH1();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaDescription'] = $translation->getMetaDescription();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaKeywords'] = $translation->getMetaKeywords();
             }
         }
         else{
@@ -159,6 +180,8 @@ class MenuForm extends Control
         $form->addSelect('layoutName', null, $this->cms->detectLayouts());
 
         $form->addTextarea('latteTemplate');
+        $form->addText('identifier')
+            ->setRequired('Please fill in an unique identifier');
 
         $form->addCheckbox('isHidden');
         $form->addCheckbox('isActive');
@@ -184,7 +207,7 @@ class MenuForm extends Control
         $values = $form->getValues();
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            if (!$this->structureMenuRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->parentMenu, $this->menu))
+            if (!$this->menuTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->parentMenu, $this->menu))
             {
                 $form->addError('Menu item with this name already exists!');
             }
@@ -195,6 +218,11 @@ class MenuForm extends Control
                     $form->addError('Seo description is too long, only 10 words are allowed');
                 }
             }
+        }
+
+        if (!$this->structureMenuRepository->isIdentifierFree($values->identifier, $this->menu))
+        {
+            $form->addError('Menu item with this identifier already exists!');
         }
     }
 
@@ -213,13 +241,9 @@ class MenuForm extends Control
         if ($this->menu)
         {
             $menu = $this->menu;
-            /*$menu->setName($values->name);
-            $menu->setMetaDescription($values->metaDescription);
-            $menu->setMetaKeywords($values->metaKeywords);*/
+
+            $menu->setIdentifier($values->identifier);
             $menu->setMetaRobots($values->metaRobots);
-            /*$menu->setTitle($values->title);
-            $menu->setH1($values->h1);
-            */
             $menu->setIsActive($values->isActive);
             $menu->setIsHidden($values->isHidden);
             if ($values->isHomePage)
@@ -237,18 +261,12 @@ class MenuForm extends Control
         }
         else
         {
-            $defaultLocale = $this->localeRepository->getDefault();
-
             $menu = new Menu(
                 function($parameters){
                     return $this->menuParameterSumGenerator->hash($parameters);
                 },
-                $values->{$defaultLocale->getLanguageCode()}->name,
-                $values->{$defaultLocale->getLanguageCode()}->metaDescription,
-                $values->{$defaultLocale->getLanguageCode()}->metaKeywords,
+                $values->identifier,
                 $values->metaRobots,
-                $values->{$defaultLocale->getLanguageCode()}->title,
-                $values->{$defaultLocale->getLanguageCode()}->h1,
                 $values->isActive,
                 $values->isHidden,
                 $values->isHomePage,
@@ -274,15 +292,39 @@ class MenuForm extends Control
             }
         }
 
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
+        $this->entityManager->flush();
+
+        $slugGenerator = function($formTranslation){
+            /** @var MenuTranslation $formTranslation */
+            return $this->menuSlugGenerator->slugify($formTranslation);
+        };
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($menu, 'name', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->name)
-                ->translate($menu, 'title', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->title)
-                ->translate($menu, 'h1', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->h1)
-                //->translate($menu, 'slug', $activeLocale->getLanguageCode(), ($menu->getParent() ? $this->structureMenuRepository->getOneById($menu->getParent()->getId(), $activeLocale)->getSlug().'/' : '').Strings::webalize($values->{$activeLocale->getLanguageCode()}->name))
-                ->translate($menu, 'metaDescription', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->metaDescription)
-                ->translate($menu, 'metaKeywords', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->metaKeywords);
+            if ($formTranslation = $this->menuTranslationRepository->getTranslation($menu, $activeLocale))
+            {
+                $formTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+                $formTranslation->setMetaDescription($values->{$activeLocale->getLanguageCode()}->metaDescription);
+                $formTranslation->setMetaKeywords($values->{$activeLocale->getLanguageCode()}->metaKeywords);
+                $formTranslation->setTitle($values->{$activeLocale->getLanguageCode()}->title);
+                $formTranslation->setH1($values->{$activeLocale->getLanguageCode()}->h1);
+
+                $formTranslation->generateSlug($slugGenerator);
+            }
+            else
+            {
+                $formTranslation = new MenuTranslation(
+                    $menu,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name,
+                    $values->{$activeLocale->getLanguageCode()}->metaDescription,
+                    $values->{$activeLocale->getLanguageCode()}->metaKeywords,
+                    $values->{$activeLocale->getLanguageCode()}->title,
+                    $values->{$activeLocale->getLanguageCode()}->h1,
+                    $slugGenerator
+                );
+            }
+
+            $this->entityManager->persist($formTranslation);
         }
 
         $menu->setLatteTemplate($values->latteTemplate);

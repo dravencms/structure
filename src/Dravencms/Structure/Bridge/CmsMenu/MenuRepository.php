@@ -32,18 +32,11 @@ class MenuRepository implements IMenuRepository
 
     /**
      * @param $id
-     * @param ILocale|null $locale
      * @return Menu
      */
-    public function getOneById($id, ILocale $locale = null)
+    public function getOneById($id)
     {
-        if (!is_null($locale)) {
-            $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
-        } else {
-            $nativeLocale = null;
-        }
-
-        return new Menu($this->menuRepository->getOneById($id, $nativeLocale));
+        return new Menu($this->menuRepository->getOneById($id));
     }
 
     /**
@@ -57,26 +50,7 @@ class MenuRepository implements IMenuRepository
     }
 
     /**
-     * @param $slug
-     * @param array $parameters
-     * @param null $locale
-     * @return array
-     */
-    public function getOneBySlug($slug, $parameters = [], $locale = null)
-    {
-        if (!is_null($locale)) {
-            $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale);
-        } else {
-            $nativeLocale = null;
-        }
-
-        list($nativeMenu, $parametersMenu) = $this->menuRepository->getOneBySlug($slug, $parameters, $nativeLocale);
-
-        return [($nativeMenu ? new Menu($nativeMenu) : null), $parametersMenu];
-    }
-
-    /**
-     * @return \Generator|Menu[]
+     * @return Menu[]
      */
     public function getAll()
     {
@@ -86,12 +60,6 @@ class MenuRepository implements IMenuRepository
     }
 
     /**
-     * @param $name
-     * @param $metaDescription
-     * @param $metaKeywords
-     * @param $metaRobots
-     * @param $title
-     * @param $h1
      * @param bool $isActive
      * @param bool $isHidden
      * @param bool $isHomePage
@@ -108,12 +76,6 @@ class MenuRepository implements IMenuRepository
      * @return Menu
      */
     public function createNewMenu(
-        $name,
-        $metaDescription,
-        $metaKeywords,
-        $metaRobots,
-        $title,
-        $h1,
         $isActive = true,
         $isHidden = false,
         $isHomePage = false,
@@ -128,39 +90,14 @@ class MenuRepository implements IMenuRepository
         $isRegularExpressionMatchArguments = false,
         $layoutName = 'layout'
     ) {
-        return new Menu($this->menuRepository->createNewMenu($name, $metaDescription, $metaKeywords, $metaRobots, $title, $h1, $isActive, $isHidden, $isHomePage, $sitemapPriority, $isSitemap,
+        return new Menu($this->menuRepository->createNewMenu($isActive, $isHidden, $isHomePage, $sitemapPriority, $isSitemap,
             $isShowH1, $presenter, $action, $isSystem, $parameters, $isRegularExpression, $isRegularExpressionMatchArguments, $layoutName));
     }
 
     /**
      * @param IMenu $menu
-     * @param ILocale $locale
-     * @param $name
-     * @param $metaDescription
-     * @param $metaKeywords
-     * @param $title
-     * @param $h1
-     */
-    public function translateMenu(
-        IMenu $menu,
-        ILocale $locale,
-        $name,
-        $metaDescription,
-        $metaKeywords,
-        $title,
-        $h1
-    ) {
-
-        $nativeMenu = $this->menuRepository->getOneById($menu->getId());
-
-        $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
-
-        $this->menuRepository->translateMenu($nativeMenu, $nativeLocale, $name, $metaDescription, $metaKeywords, $title, $h1);
-    }
-
-    /**
-     * @param IMenu $menu
      * @param string $latteTemplate
+     * @return void
      */
     public function saveLatteTemplate(IMenu $menu, $latteTemplate)
     {

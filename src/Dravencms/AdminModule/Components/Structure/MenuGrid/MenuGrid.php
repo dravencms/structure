@@ -11,6 +11,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Nette\Utils\Html;
 use Kdyby\Doctrine\EntityManager;
 
@@ -21,6 +22,8 @@ class MenuGrid extends BaseControl
 
     /** @var MenuRepository */
     private $menuRepository;
+
+    private $menuTranslationRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -38,14 +41,22 @@ class MenuGrid extends BaseControl
      * MenuGrid constructor.
      * @param Menu|null $parentMenu
      * @param MenuRepository $menuRepository
+     * @param MenuTranslationRepository $menuTranslationRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
      */
-    public function __construct(Menu $parentMenu = null, MenuRepository $menuRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+        Menu $parentMenu = null,
+        MenuRepository $menuRepository,
+        MenuTranslationRepository $menuTranslationRepository,
+        BaseGridFactory $baseGridFactory,
+        EntityManager $entityManager
+    )
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
+        $this->menuTranslationRepository = $menuTranslationRepository;
         $this->parentMenu = $parentMenu;
         $this->menuRepository = $menuRepository;
         $this->entityManager = $entityManager;
@@ -67,18 +78,18 @@ class MenuGrid extends BaseControl
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->menuRepository->getMenuItemsQueryBuilder($this->parentMenu, $this->isSystem));
+        $grid->setModel($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
 
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setCustomRender(function ($row) use($grid) {
                 /** @var $row Menu */
                 if ($row->isHomePage()) {
                     $el = Html::el('span', $grid->getTranslator()->translate('Home page'));
                     $el->class = 'label label-info';
-                    return $row->getName() . ' ' . $el;
+                    return $row->getIdentifier() . ' ' . $el;
                 } else {
-                    return $row->getName();
+                    return $row->getIdentifier();
                 }
             })
             ->setSortable()
@@ -110,10 +121,13 @@ class MenuGrid extends BaseControl
         $grid->addActionHref('submenu', 'Submenu items')
             ->setIcon('folder-open')
             ->setCustomHref(function ($item) {
-                return $this->presenter->link('Structure:default', array('structureMenuId' => $item->id));
+                return $this->presenter->link('Structure:default', ['structureMenuId' => $item->getId()]);
             });
 
         $grid->addActionHref('edit', 'Edit')
+            ->setCustomHref(function($row){
+                return $this->presenter->link('Structure:edit', ['id' => $row->getId()]);
+            })
             ->setIcon('pencil');
 
         $grid->addActionHref('delete', 'Delete', 'delete!')
@@ -122,10 +136,10 @@ class MenuGrid extends BaseControl
             })
             ->setIcon('trash-o')
             ->setConfirm(function ($item) {
-                return array("Are you sure you want to delete %s ?", $item->name);
+                return ["Are you sure you want to delete %s ?", $item->getIdentifier()];
             });
 
-        $operations = array('delete' => 'Delete');
+        $operations = ['delete' => 'Delete'];
         $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
             ->setConfirm('delete', 'Are you sure you want to delete %i items?');
 

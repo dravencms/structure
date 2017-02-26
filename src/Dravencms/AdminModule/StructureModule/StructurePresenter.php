@@ -6,7 +6,9 @@ use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory;
 use Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory;
 use Dravencms\Model\Structure\Entities\Menu;
+use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuRepository;
+use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Salamek\Cms\TCms;
@@ -20,6 +22,9 @@ class StructurePresenter extends SecuredPresenter
     
     /** @var MenuRepository @inject */
     public $structureMenuRepository;
+
+    /** @var MenuTranslationRepository @inject */
+    public $structureMenuTranslationRepository;
 
     /** @var EntityManager @inject */
     public $entityManager;
@@ -45,7 +50,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
         if ($structureMenuId) {
-            /** @var Menu $structureMenu */
+            /** @var MenuTranslation $structureMenu */
             $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
             if (!$structureMenu) {
                 $this->error();
@@ -54,7 +59,8 @@ class StructurePresenter extends SecuredPresenter
             $this->structureMenu = $structureMenu;
             $this->template->menu = $structureMenu;
             $this->template->mapping = $this->cms->getLayoutMapping($structureMenu->getLayoutName());
-            $this->template->h1 .= ' - ' . $structureMenu->getName();
+
+            $this->template->h1 .= ' - ' . $this->structureMenu->getIdentifier();
         }
 
         $this->template->structureMenuId = $structureMenuId;
@@ -68,7 +74,6 @@ class StructurePresenter extends SecuredPresenter
     public function actionEdit($id = null, $structureMenuId = null)
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
-        //$defaultValues = [];
 
         if ($structureMenuId)
         {
@@ -76,18 +81,17 @@ class StructurePresenter extends SecuredPresenter
         }
 
         if ($id) {
-            /** @var Menu $structureMenu */
+            /** @var Menu $menu */
             $menu = $this->structureMenuRepository->getOneById($id);
             if (!$menu) {
                 $this->error();
-            }
+            } 
 
             $this->menuEdit = $menu;
-            $this->template->h1 .= ' - ' . $menu->getName();
+            $this->template->h1 .= ' - ' . $menu->getIdentifier();
 
         } else {
             $this->template->h1 .= ' - ' . $this->translator->translate('New menu item');
-
         }
     }
 
@@ -112,22 +116,30 @@ class StructurePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Structure\MenuGrid
+     * @return \Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGrid
      */
     protected function createComponentMenuGrid()
     {
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(false);
+        $control->onDelete[] = function () {
+            $this->flashMessage('Item has been deleted.', 'alert-success');
+            $this->redirect('this', ['structureMenuId' => $this->structureMenu->getId()]);
+        };
         return $control;
     }
 
     /**
-     * @return \AdminModule\Components\Structure\MenuGrid
+     * @return \Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGrid
      */
     protected function createComponentMenuSystemGrid()
     {
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(true);
+        $control->onDelete[] = function () {
+            $this->flashMessage('Item has been deleted.', 'alert-success');
+            $this->redirect('this', ['structureMenuId' => $this->structureMenu->getId()]);
+        };
         return $control;
     }
 
@@ -136,7 +148,7 @@ class StructurePresenter extends SecuredPresenter
      */
     public function handleBlocksJson($structureMenuId)
     {
-        $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
+        $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId)->getMenu();
         $this->payload->structure = (object)/*We work with object in JS not arrays*/
         $this->cms->parsePageLayout($structureMenu->getLatteTemplate());
 
@@ -172,7 +184,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
 
-        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
+        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu->getMenu());
 
         $this->cms->saveStructureTree($cmsMenu, $structureTree);
         $this->payload->structureTree = $structureTree;

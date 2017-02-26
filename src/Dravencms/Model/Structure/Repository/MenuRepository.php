@@ -5,22 +5,19 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Structure\Entities\Menu;
+use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
-use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class MenuRepository
 {
-    use TLocalizedRepository;
-
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $menuRepository;
-
+    
     /** @var EntityManager */
     private $entityManager;
 
@@ -60,6 +57,54 @@ class MenuRepository
     }
 
     /**
+     * @param Menu|null $parentMenu
+     * @param bool $isSystem
+     * @return static
+     */
+    public function getMenuQueryBuilder(Menu $parentMenu = null, $isSystem = false)
+    {
+        $qb = $this->menuRepository->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.isSystem = :isSystem')
+            ->setParameter('isSystem', $isSystem);
+
+        if ($parentMenu) {
+            $qb->andWhere('m.parent = :parent')
+                ->setParameter('parent', $parentMenu);
+        } else {
+            $qb->andWhere('m.parent IS NULL');
+        }
+
+        $qb->orderBy('m.lft', 'ASC');
+
+        return $qb;
+    }
+
+    /**
+     * @param $identifier
+     * @param Menu|null $ignoreMenu
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isIdentifierFree($identifier, Menu $ignoreMenu = null)
+    {
+        $qb = $this->menuRepository->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.identifier = :identifier')
+            ->setParameters([
+                'identifier' => $identifier,
+            ]);
+
+        if ($ignoreMenu) {
+            $qb->andWhere('m != :ignoreMenu')
+                ->setParameter('ignoreMenu', $ignoreMenu);
+        }
+
+        $query = $qb->getQuery();
+        return (is_null($query->getOneOrNullResult()));
+    }
+
+    /**
      * @param bool $force
      */
     private function buildCache($force = false)
@@ -82,13 +127,13 @@ class MenuRepository
         }
     }
 
-
     /**
-     * @return \Kdyby\Doctrine\EntityRepository
+     * @param $id
+     * @return Menu[]
      */
-    public function getMenuRepository()
+    public function getById($id)
     {
-        return $this->menuRepository;
+        return $this->menuRepository->findBy(['id' => $id]);
     }
 
     /**
@@ -128,7 +173,7 @@ class MenuRepository
         $query = $this->menuRepository
             ->createQueryBuilder('node')
             ->select('node')
-            ->orderBy('node.root, node.lft', 'ASC')
+            ->orderBy('node.lft', 'ASC')
             ->where('node.isHidden = :isHidden')
             ->andWhere('node.isActive = :isActive')
             ->setParameters(
@@ -144,96 +189,20 @@ class MenuRepository
 
     /**
      * @param $id
-     * @param ILocale|null $locale
-     * @return Menu[]
-     */
-    public function getById($id, ILocale $locale = null)
-    {
-        $query = $this->menuRepository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.id IN (:id)')
-            ->setParameter('id', $id)
-            ->getQuery();
-
-        if ($locale) {
-            return $this->getTranslatedResult($query, $locale);
-        }
-
-        return $query->getResult();
-    }
-
-    /**
-     * @param $id
-     * @param ILocale|null $locale
      * @return Menu|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneById($id, ILocale $locale = null)
+    public function getOneById($id)
     {
-        $query = $this->menuRepository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery();
-
-        if ($locale) {
-            $this->addTranslationWalkerToQuery($query, $locale);
-        }
-
-        return $query->getOneOrNullResult();
+        return $this->menuRepository->find($id);
     }
-
-    /**
-     * @param $name
-     * @return mixed|null|Menu
-     */
-    public function getByName($name)
-    {
-        return $this->menuRepository->findOneBy(['name' => $name]);
-    }
-
+    
     /**
      * @return Menu[]
      */
     public function getAll()
     {
         return $this->menuRepository->findBy(['isActive' => true]);
-    }
-
-    /**
-     * @param $name
-     * @param ILocale $locale
-     * @param Menu|null $parentMenu
-     * @param Menu|null $ignoreMenu
-     * @return bool
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function isNameFree($name, ILocale $locale, Menu $parentMenu = null, Menu $ignoreMenu = null)
-    {
-        $qb = $this->menuRepository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.name = :name')
-            ->setParameters([
-                'name' => $name,
-            ]);
-
-        if ($parentMenu) {
-            $qb->andWhere('m.parent = :parent')
-                ->setParameter('parent', $parentMenu);
-        } else {
-            $qb->andWhere('m.parent IS NULL');
-        }
-
-        if ($ignoreMenu) {
-            $qb->andWhere('m != :ignoreMenu')
-                ->setParameter('ignoreMenu', $ignoreMenu);
-        }
-
-        $query = $qb->getQuery();
-
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
-
-        return (is_null($query->getOneOrNullResult()));
     }
 
     /**
@@ -250,31 +219,7 @@ class MenuRepository
 
         $this->entityManager->flush();
     }
-
-    /**
-     * @param Menu|null $parentMenu
-     * @param bool $isSystem
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getMenuItemsQueryBuilder(Menu $parentMenu = null, $isSystem = false)
-    {
-        $qb = $this->menuRepository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.isSystem = :isSystem')
-            ->setParameter('isSystem', $isSystem);
-
-        if ($parentMenu) {
-            $qb->andWhere('m.parent = :parent')
-                ->setParameter('parent', $parentMenu);
-        } else {
-            $qb->andWhere('m.parent IS NULL');
-        }
-
-        $qb->orderBy('m.root, m.lft', 'ASC');
-
-        return $qb;
-    }
-
+    
     /**
      * @param $presenter
      * @param $action
@@ -368,59 +313,9 @@ class MenuRepository
     {
         return $this->menuRepository->findBy(['isSitemap' => $isSitemap]);
     }
-
-
-    /**
-     * @param null $query
-     * @param null $limit
-     * @param null $offset
-     * @return Menu[]
-     */
-    public function search($query = null, $limit = null, $offset = null)
-    {
-        $qb = $this->menuRepository->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.isActive = :isActive')
-            ->andWhere('m.isContent = :isContent')
-            ->setParameters(
-                [
-                    'isActive' => true,
-                    'isContent' => true
-                ]
-            );
-
-        if ($query)
-        {
-            $qb->andWhere('m.name LIKE :query')
-                ->orWhere('m.slug LIKE :query')
-                ->orWhere('m.metaDescription LIKE :query')
-                ->orWhere('m.metaKeywords LIKE :query')
-                ->orWhere('m.title LIKE :query')
-                ->orWhere('m.h1 LIKE :query')
-                ->setParameter('query', '%'.$query.'%');
-        }
-
-        if ($limit)
-        {
-            $qb->setMaxResults($limit);
-        }
-
-        if ($offset)
-        {
-            $qb->setFirstResult($offset);
-        }
-
-        $qb->orderBy('m.sitemapPriority', 'DESC');
-        return $qb->getQuery()->getResult();
-    }
+    
 
     /**
-     * @param $name
-     * @param $metaDescription
-     * @param $metaKeywords
-     * @param $metaRobots
-     * @param $title
-     * @param $h1
      * @param bool $isActive
      * @param bool $isHidden
      * @param bool $isHomePage
@@ -438,12 +333,6 @@ class MenuRepository
      * @throws \Exception
      */
     public function createNewMenu(
-        $name,
-        $metaDescription,
-        $metaKeywords,
-        $metaRobots,
-        $title,
-        $h1,
         $isActive = true,
         $isHidden = false,
         $isHomePage = false,
@@ -461,12 +350,6 @@ class MenuRepository
         $newMenu = new Menu(function ($parameters) {
             return $this->menuParameterSumGenerator->hash($parameters);
         },
-            $name,
-            $metaDescription,
-            $metaKeywords,
-            $metaRobots,
-            $title,
-            $h1,
             $isActive,
             $isHidden,
             $isHomePage,
@@ -484,93 +367,6 @@ class MenuRepository
         $this->entityManager->persist($newMenu);
         $this->entityManager->flush();
         return $newMenu;
-    }
-
-    /**
-     * @param Menu $menu
-     * @param ILocale $locale
-     * @param $name
-     * @param $metaDescription
-     * @param $metaKeywords
-     * @param $title
-     * @param $h1
-     * @throws \Exception
-     */
-    public function translateMenu(
-        Menu $menu,
-        ILocale $locale,
-        $name,
-        $metaDescription,
-        $metaKeywords,
-        $title,
-        $h1
-    ) {
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-
-        $repository->translate($menu, 'name', $locale->getLanguageCode(), $name)
-            ->translate($menu, 'metaDescription', $locale->getLanguageCode(), $metaDescription)
-            ->translate($menu, 'metaKeywords', $locale->getLanguageCode(), $metaKeywords)
-            ->translate($menu, 'title', $locale->getLanguageCode(), $title)
-            ->translate($menu, 'h1', $locale->getLanguageCode(), $h1);
-
-        $this->entityManager->persist($menu);
-        $this->entityManager->flush();
-    }
-
-    /**
-     * @param $slug
-     * @param array $requestParams
-     * @param ILocale $locale
-     * @return array
-     */
-    public function getOneBySlug($slug, $requestParams = [], $locale = null)
-    {
-        $parameters = [];
-
-        $this->buildCache(false);
-
-        $found = array_key_exists($slug, $this->cacheRegexFalse) ? $this->cacheRegexFalse[$slug] : null;
-
-        //Normal not found, lets try regexp
-        if (!$found) {
-            foreach ($this->cacheRegexTrue AS $regexpRow) {
-                if ($regexpRow->isRegularExpressionMatchArguments() && !empty($requestParams)) {
-                    $slugMatch = $slug . '?' . http_build_query($requestParams);
-                } else {
-                    $slugMatch = $slug;
-                }
-
-                if (preg_match('/' . $regexpRow->slug . '/i', $slugMatch, $matches)) {
-                    if (count($matches)) {
-                        //Strip numbered keys
-                        foreach ($matches as $k => $v) {
-                            if (is_int($k)) {
-                                unset($matches[$k]);
-                            }
-                        }
-                        $parameters = $matches;
-                    }
-
-                    $found = $regexpRow;
-                    break;
-                }
-            }
-        }
-
-        //Regexp not found, if slug is null lets assume its homepage
-        if (!$found && is_null($slug)) {
-            $found = $this->getHomePage();
-        }
-
-        if ($found) {
-            $arrParams = $found->getParameters();
-            if ($arrParams) {
-                $parameters = array_merge($arrParams, $parameters);
-            }
-        }
-
-        return [$found, $parameters];
     }
 
     /**
