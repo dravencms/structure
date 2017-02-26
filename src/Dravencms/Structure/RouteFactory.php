@@ -6,9 +6,12 @@
 namespace Dravencms\Structure;
 
 use Dravencms\Base\IRouterFactory;
+use Dravencms\Locale\CurrentLocale;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Nette\Application\Routers\RouteList;
-use Salamek\Cms\SlugRouter;
-use Dravencms\Structure\Bridge\CmsMenu\MenuRepository;
+#use Salamek\Cms\SlugRouter;
+use Dravencms\Model\Structure\Repository\MenuRepository;
 
 /**
  * Class RouteFactory
@@ -19,13 +22,26 @@ class RouteFactory implements IRouterFactory
     /** @var MenuRepository @inject */
     private $structureMenuRepository;
 
+    /** @var MenuTranslationRepository */
+    private $menuTranslationRepository;
+
+    /** @var LocaleRepository */
+    private $localeRepository;
+
     /**
-     * RouterFactory constructor.
+     * RouteFactory constructor.
      * @param MenuRepository $structureMenuRepository
+     * @param MenuTranslationRepository $menuTranslationRepository
      */
-    public function __construct(MenuRepository $structureMenuRepository)
+    public function __construct(
+        MenuRepository $structureMenuRepository,
+        MenuTranslationRepository $menuTranslationRepository,
+        LocaleRepository $localeRepository
+    )
     {
         $this->structureMenuRepository = $structureMenuRepository;
+        $this->menuTranslationRepository = $menuTranslationRepository;
+        $this->localeRepository = $localeRepository;
     }
 
     /**
@@ -37,7 +53,7 @@ class RouteFactory implements IRouterFactory
 
         $router[] = $frontEnd = new RouteList('Front');
 
-        $frontEnd[] = new SlugRouter('[<locale [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository);
+        $frontEnd[] = new SlugRouter('[<locale [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
 
         //$frontEnd[] = new Route('[<locale [a-z]{2}>/]<presenter>/<action>[/<id [0-9]+>]', []);
 

@@ -114,11 +114,11 @@ class MenuRepository
 
             /** @var Menu $item */
             foreach ($result AS $item) {
-                if ($item->isRegularExpression()) {
+                /*if ($item->isRegularExpression()) {
                     $this->cacheRegexTrue[] = $item;
                 } else {
                     $this->cacheRegexFalse[$item->getSlug()] = $item;
-                }
+                }*/
 
                 $this->cachePresenter[$item->getPresenter() . ':' . $item->getAction()] = $item;
             }

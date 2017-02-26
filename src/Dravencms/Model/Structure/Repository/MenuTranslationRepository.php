@@ -155,53 +155,64 @@ class MenuTranslationRepository
      * @param ILocale $locale
      * @return array
      */
-    public function getOneBySlug($slug, $requestParams = [], $locale = null)
+    public function getOneBySlug($slug, $requestParams = [], ILocale $locale = null)
     {
-        $parameters = [];
+        $found = $this->menuTranslationRepository->findOneBy(['slug' => $slug, 'locale' => $locale]);
+        if ($found)
+        {
+            return [$found->getMenu(), ($found->getParameters() ? array_merge($found->getParameters(), $requestParams): [])];
+        }
 
-        $this->buildCache(false);
+        $qb = $this->menuTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->join('t.menu', 'm')
+            ->where('t.locale = :locale')
+            ->andWhere('m.isRegularExpression = :isRegularExpression')
+            ->setParameters([
+                'isRegularExpression' => true,
+                'locale' => $locale
+            ]);
+        /** @var MenuTranslation $regexpRow */
+        foreach ($qb->getQuery()->getResult() AS $regexpRow) {
+            if ($regexpRow->getMenu()->isRegularExpressionMatchArguments() && !empty($requestParams)) {
+                $slugMatch = $slug . '?' . http_build_query($requestParams);
+            } else {
+                $slugMatch = $slug;
+            }
 
-        $found = array_key_exists($slug, $this->cacheRegexFalse) ? $this->cacheRegexFalse[$slug] : null;
-
-        //Normal not found, lets try regexp
-        if (!$found) {
-            foreach ($this->cacheRegexTrue AS $regexpRow) {
-                if ($regexpRow->isRegularExpressionMatchArguments() && !empty($requestParams)) {
-                    $slugMatch = $slug . '?' . http_build_query($requestParams);
-                } else {
-                    $slugMatch = $slug;
-                }
-
-                if (preg_match('/' . $regexpRow->slug . '/i', $slugMatch, $matches)) {
-                    if (count($matches)) {
-                        //Strip numbered keys
-                        foreach ($matches as $k => $v) {
-                            if (is_int($k)) {
-                                unset($matches[$k]);
-                            }
+            if (preg_match('/' . $regexpRow->getSlug() . '/i', $slugMatch, $matches)) {
+                $parameters = [];
+                if (count($matches)) {
+                    //Strip numbered keys
+                    foreach ($matches as $k => $v) {
+                        if (is_int($k)) {
+                            unset($matches[$k]);
                         }
-                        $parameters = $matches;
                     }
-
-                    $found = $regexpRow;
-                    break;
+                    $parameters = $matches;
                 }
+
+                return [$regexpRow->getMenu(), array_merge($parameters, $requestParams)];
+                break;
             }
         }
 
-        //Regexp not found, if slug is null lets assume its homepage
-        if (!$found && is_null($slug)) {
-            $found = $this->getHomePage();
+        $qb = $this->menuTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->join('t.menu', 'm')
+            ->where('t.locale = :locale')
+            ->andWhere('m.isHomePage = :isHomePage')
+            ->setParameters([
+                'isHomePage' => true,
+                'locale' => $locale
+            ]);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        if ($result)
+        {
+            return [$result->getMenu(), []];
         }
 
-        if ($found) {
-            $arrParams = $found->getParameters();
-            if ($arrParams) {
-                $parameters = array_merge($arrParams, $parameters);
-            }
-        }
-
-        return [$found, $parameters];
+        return null;
     }
 
 
