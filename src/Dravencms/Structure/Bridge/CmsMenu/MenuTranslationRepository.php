@@ -11,6 +11,7 @@ use Nette;
 use Salamek\Cms\Models\ILocale;
 use Salamek\Cms\Models\IMenu;
 use Salamek\Cms\Models\IMenuTranslationRepository;
+use Tracy\Debugger;
 
 class MenuTranslationRepository implements IMenuTranslationRepository
 {

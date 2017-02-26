@@ -184,7 +184,7 @@ class MenuRepository
             )
             ->getQuery();
 
-        return $this->menuRepository->buildTree(($locale ? $this->getTranslatedArrayResult($query, $locale) : $query->getArrayResult()), $options);
+        return $this->menuRepository->buildTree($query->getArrayResult(), $options);
     }
 
     /**

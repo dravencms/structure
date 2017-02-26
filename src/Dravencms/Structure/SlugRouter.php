@@ -352,9 +352,8 @@ class SlugRouter extends Object implements IRouter
     }
 
     /**
-     * Maps HTTP request to a Request object.
-     *
-     * @return App\Request|NULL
+     * @param Nette\Http\IRequest $httpRequest
+     * @return Request|null
      */
     public function match(Nette\Http\IRequest $httpRequest)
     {
@@ -455,6 +454,9 @@ class SlugRouter extends Object implements IRouter
         if (!$foundLocale)
         {
             $foundLocale = $this->localeRepository->getDefault();
+            $params['locale'] = $foundLocale->getLanguageCode();
+            //!FIXME DEFAULT SHOULD BE EMPTY!!!, but default locale detection fails in CMS if locale is not set (it fallbacks to CS instead to default)
+            //!FIXME FIX Detection in kyby translation to match CMS rules, then remove this and use CurrentLocale!
         }
 
         // Find presenter
