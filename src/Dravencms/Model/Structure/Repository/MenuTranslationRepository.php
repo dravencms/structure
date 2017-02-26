@@ -5,10 +5,12 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
+use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
+use Dravencms\Structure\MenuSlugGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Dravencms\Model\Locale\Entities\ILocale;
@@ -18,16 +20,24 @@ class MenuTranslationRepository
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $menuTranslationRepository;
 
+    /** @var MenuSlugGenerator */
+    private $menuSlugGenerator;
+
     /** @var EntityManager */
     private $entityManager;
 
     /**
      * MenuTranslationRepository constructor.
      * @param EntityManager $entityManager
+     * @param MenuSlugGenerator $menuSlugGenerator
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(
+        EntityManager $entityManager,
+        MenuSlugGenerator $menuSlugGenerator
+    )
     {
         $this->entityManager = $entityManager;
+        $this->menuSlugGenerator = $menuSlugGenerator;
         $this->menuTranslationRepository = $entityManager->getRepository(MenuTranslation::class);
     }
 
@@ -212,5 +222,40 @@ class MenuTranslationRepository
                 'locale' => $locale
             ]);
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**.
+     * @param Menu $menu
+     * @param Locale $locale
+     * @param $h1
+     * @param $metaDescription
+     * @param $metaKeywords
+     * @param $title
+     * @param $name
+     * @return MenuTranslation
+     * @throws \Exception
+     */
+    public function translateMenu(Menu $menu, Locale $locale, $h1, $metaDescription, $metaKeywords, $title, $name)
+    {
+        if ($foundTranslation = $this->getTranslation($menu, $locale))
+        {
+            $foundTranslation->setH1($h1);
+            $foundTranslation->setName($name);
+            $foundTranslation->setMetaDescription($metaDescription);
+            $foundTranslation->setMetaKeywords($metaKeywords);
+            $foundTranslation->setTitle($title);
+        }
+        else
+        {
+            $foundTranslation = new MenuTranslation($menu, $locale, $name, $metaDescription, $metaKeywords, $title, $h1, function($menuTranslation){
+                return $this->menuSlugGenerator->slugify($menuTranslation);
+            });
+        }
+
+        $this->entityManager->persist($foundTranslation);
+
+        $this->entityManager->flush();
+
+        return $foundTranslation;
     }
 }

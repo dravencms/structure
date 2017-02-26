@@ -313,9 +313,9 @@ class MenuRepository
     {
         return $this->menuRepository->findBy(['isSitemap' => $isSitemap]);
     }
-    
 
     /**
+     * @param $identifier
      * @param bool $isActive
      * @param bool $isHidden
      * @param bool $isHomePage
@@ -333,6 +333,7 @@ class MenuRepository
      * @throws \Exception
      */
     public function createNewMenu(
+        $identifier,
         $isActive = true,
         $isHidden = false,
         $isHomePage = false,
@@ -350,6 +351,7 @@ class MenuRepository
         $newMenu = new Menu(function ($parameters) {
             return $this->menuParameterSumGenerator->hash($parameters);
         },
+            $identifier,
             $isActive,
             $isHidden,
             $isHomePage,

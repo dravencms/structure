@@ -60,6 +60,7 @@ class MenuRepository implements IMenuRepository
     }
 
     /**
+     * @param $identifier
      * @param bool $isActive
      * @param bool $isHidden
      * @param bool $isHomePage
@@ -76,6 +77,7 @@ class MenuRepository implements IMenuRepository
      * @return Menu
      */
     public function createNewMenu(
+        $identifier,
         $isActive = true,
         $isHidden = false,
         $isHomePage = false,
@@ -90,7 +92,7 @@ class MenuRepository implements IMenuRepository
         $isRegularExpressionMatchArguments = false,
         $layoutName = 'layout'
     ) {
-        return new Menu($this->menuRepository->createNewMenu($isActive, $isHidden, $isHomePage, $sitemapPriority, $isSitemap,
+        return new Menu($this->menuRepository->createNewMenu($identifier, $isActive, $isHidden, $isHomePage, $sitemapPriority, $isSitemap,
             $isShowH1, $presenter, $action, $isSystem, $parameters, $isRegularExpression, $isRegularExpressionMatchArguments, $layoutName));
     }
 

@@ -14,7 +14,7 @@ use Salamek\Cms\Models\IMenuTranslationRepository;
 
 class MenuTranslationRepository implements IMenuTranslationRepository
 {
-    /** @var \Dravencms\Model\Structure\Repository\MenuRepository */
+    /** @var \Dravencms\Model\Structure\Repository\MenuTranslationRepository */
     private $menuTranslationRepository;
 
     /** @var MenuRepository */
@@ -62,5 +62,22 @@ class MenuTranslationRepository implements IMenuTranslationRepository
     {
         $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
         return new MenuTranslation($this->menuTranslationRepository->getOneBySlug($slug, $parameters, $nativeLocale));
+    }
+
+    /**
+     * @param IMenu $menu
+     * @param ILocale $locale
+     * @param $h1
+     * @param $metaDescription
+     * @param $metaKeywords
+     * @param $title
+     * @param $name
+     * @return void
+     */
+    public function translateMenu(IMenu $menu, ILocale $locale, $h1, $metaDescription, $metaKeywords, $title, $name)
+    {
+        $nativeMenu = $this->menuRepository->getOneById($menu->getId());
+        $nativeLocale= $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
+        $this->menuTranslationRepository->translateMenu($nativeMenu, $nativeLocale, $h1, $metaDescription, $metaKeywords, $title, $name);
     }
 }

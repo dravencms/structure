@@ -37,10 +37,9 @@ class SearchCmsRepository implements ICmsComponentRepository
     /**
      * @param string $componentAction
      * @param array $parameters
-     * @param ILocale $locale
      * @return null
      */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
+    public function getActionOption($componentAction, array $parameters)
     {
         switch ($componentAction)
         {
