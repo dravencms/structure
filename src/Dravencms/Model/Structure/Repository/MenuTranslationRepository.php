@@ -8,7 +8,6 @@ namespace Dravencms\Model\Structure\Repository;
 use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
-use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
 use Dravencms\Structure\MenuSlugGenerator;
 use Kdyby\Doctrine\EntityManager;
@@ -160,7 +159,7 @@ class MenuTranslationRepository
         $found = $this->menuTranslationRepository->findOneBy(['slug' => $slug, 'locale' => $locale]);
         if ($found)
         {
-            return [$found->getMenu(), ($found->getParameters() ? array_merge($found->getParameters(), $requestParams): [])];
+            return [$found->getMenu(), ($found->getMenu()->getParameters() ? array_merge($found->getMenu()->getParameters(), $requestParams): [])];
         }
 
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
