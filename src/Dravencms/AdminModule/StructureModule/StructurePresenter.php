@@ -148,7 +148,7 @@ class StructurePresenter extends SecuredPresenter
      */
     public function handleBlocksJson($structureMenuId)
     {
-        $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId)->getMenu();
+        $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
         $this->payload->structure = (object)/*We work with object in JS not arrays*/
         $this->cms->parsePageLayout($structureMenu->getLatteTemplate());
 
@@ -184,7 +184,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
 
-        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu->getMenu());
+        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
 
         $this->cms->saveStructureTree($cmsMenu, $structureTree);
         $this->payload->structureTree = $structureTree;
