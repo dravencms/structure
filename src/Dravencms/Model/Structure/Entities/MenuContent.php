@@ -16,7 +16,7 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="structureMenuContent")
  */
-class MenuContent extends Nette\Object implements IMenuContent
+class MenuContent extends Nette\Object
 {
     use Identifier;
     use TimestampableEntity;
@@ -54,12 +54,12 @@ class MenuContent extends Nette\Object implements IMenuContent
 
     /**
      * MenuContent constructor.
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param $factory
      * @param array $parameters
      * @param callable $parameterSumGenerator
      */
-    public function __construct(IMenu $menu, $factory, array $parameters, callable $parameterSumGenerator)
+    public function __construct(Menu $menu, $factory, array $parameters, callable $parameterSumGenerator)
     {
         $this->setMenu($menu);
         $this->factory = $factory;
@@ -77,9 +77,9 @@ class MenuContent extends Nette\Object implements IMenuContent
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      */
-    public function setMenu(IMenu $menu)
+    public function setMenu(Menu $menu)
     {
         $menu->addMenuContent($this);
         $this->menu = $menu;

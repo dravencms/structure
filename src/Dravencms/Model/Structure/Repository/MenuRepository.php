@@ -13,7 +13,6 @@ use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Dravencms\Model\Locale\Entities\ILocale;
-use Dravencms\Model\Structure\Entities\IMenu;
 
 class MenuRepository
 {
@@ -93,10 +92,10 @@ class MenuRepository
     }
 
     /**
-     * @param IMenu $menu
-     * @return IMenu[]
+     * @param Menu $menu
+     * @return Menu[]
      */
-    private function buildParentTreeResolver(IMenu $menu)
+    private function buildParentTreeResolver(Menu $menu)
     {
         $breadcrumb = [];
 
@@ -111,10 +110,10 @@ class MenuRepository
     }
 
     /**
-     * @param IMenu $menu
-     * @return IMenu[]
+     * @param Menu $menu
+     * @return Menu[]
      */
-    public function buildParentTree(IMenu $menu)
+    public function buildParentTree(Menu $menu)
     {
         return array_reverse($this->buildParentTreeResolver($menu));
     }
@@ -204,12 +203,12 @@ class MenuRepository
     /**
      * @param $name
      * @param ILocale $locale
-     * @param IMenu|null $parentMenu
-     * @param IMenu|null $ignoreMenu
+     * @param Menu|null $parentMenu
+     * @param Menu|null $ignoreMenu
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, IMenu $parentMenu = null, IMenu $ignoreMenu = null)
+    public function isNameFree($name, ILocale $locale, Menu $parentMenu = null, Menu $ignoreMenu = null)
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
@@ -290,21 +289,21 @@ class MenuRepository
     }
 
     /**
-     * @param IMenu $child
-     * @param IMenu $root
+     * @param Menu $child
+     * @param Menu $root
      */
-    public function persistAsLastChildOf(IMenu $child, IMenu $root)
+    public function persistAsLastChildOf(Menu $child, Menu $root)
     {
         $this->menuRepository->persistAsLastChildOf($child, $root);
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param string $latteTemplate
      * @throws \Exception
      * @return void
      */
-    public function saveLatteTemplate(IMenu $menu, $latteTemplate)
+    public function saveLatteTemplate(Menu $menu, $latteTemplate)
     {
         $menu->setLatteTemplate($latteTemplate);
         $this->entityManager->persist($menu);
@@ -312,13 +311,13 @@ class MenuRepository
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param $presenterName
      * @param $actionName
      * @throws \Exception
      * @return void
      */
-    public function savePresenterAction(IMenu $menu, $presenterName, $actionName)
+    public function savePresenterAction(Menu $menu, $presenterName, $actionName)
     {
         $menu->setPresenter($presenterName);
         $menu->setAction($actionName);
@@ -330,7 +329,7 @@ class MenuRepository
      * @param $factory
      * @param array $parameters
      * @param bool $isSystem
-     * @return IMenu
+     * @return Menu
      */
     public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
     {
@@ -488,7 +487,7 @@ class MenuRepository
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param ILocale $locale
      * @param $name
      * @param $metaDescription
@@ -498,7 +497,7 @@ class MenuRepository
      * @throws \Exception
      */
     public function translateMenu(
-        IMenu $menu,
+        Menu $menu,
         ILocale $locale,
         $name,
         $metaDescription,

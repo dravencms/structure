@@ -20,7 +20,7 @@ use Nette;
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  * @ORM\Table(name="structureMenu")
  */
-class Menu extends Nette\Object implements IMenu
+class Menu extends Nette\Object
 {
     use Identifier;
     use TimestampableEntity;
@@ -301,10 +301,10 @@ class Menu extends Nette\Object implements IMenu
     }
 
     /**
-     * @param IMenu|null $parent
+     * @param Menu|null $parent
      * @return $this
      */
-    public function setParent(IMenu $parent = null)
+    public function setParent(Menu $parent = null)
     {
         $this->parent = $parent;
 

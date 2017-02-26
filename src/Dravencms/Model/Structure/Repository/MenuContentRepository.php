@@ -6,11 +6,11 @@
 namespace Dravencms\Model\Structure\Repository;
 
 
+use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuContent;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Dravencms\Model\Structure\Entities\IMenu;
 
 class MenuContentRepository
 {
@@ -36,12 +36,12 @@ class MenuContentRepository
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param $factory
      * @param array $parameters
      * @return MenuContent
      */
-    public function getOneByMenuFactoryParameters(IMenu $menu, $factory, array $parameters)
+    public function getOneByMenuFactoryParameters(Menu $menu, $factory, array $parameters)
     {
         $qb = $this->menuContentRepository->createQueryBuilder('mc')
             ->select('mc')
@@ -60,13 +60,13 @@ class MenuContentRepository
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @param $factory
      * @param array $parameters
      * @return MenuContent
      * @throws \Exception
      */
-    public function saveMenuContent(IMenu $menu, $factory, array $parameters)
+    public function saveMenuContent(Menu $menu, $factory, array $parameters)
     {
         $menuContent = new MenuContent($menu, $factory, $parameters, function($parameters){
             return $this->menuParameterSumGenerator->hash($parameters);
@@ -88,11 +88,11 @@ class MenuContentRepository
     }
 
     /**
-     * @param IMenu $menu
+     * @param Menu $menu
      * @throws \Exception
      * @return void
      */
-    public function clearMenuContent(IMenu $menu)
+    public function clearMenuContent(Menu $menu)
     {
         foreach ($menu->getMenuContents() AS $menuContent)
         {
