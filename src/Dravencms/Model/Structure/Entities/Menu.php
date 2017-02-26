@@ -206,12 +206,6 @@ class Menu extends Nette\Object
     private $lvl;
 
     /**
-     * @Gedmo\TreeRoot
-     * @ORM\Column(name="root", type="integer", nullable=true)
-     */
-    private $root;
-
-    /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Menu", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
@@ -563,14 +557,6 @@ class Menu extends Nette\Object
     /**
      * @return mixed
      */
-    public function getRoot()
-    {
-        return $this->root;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getLvl()
     {
         return $this->lvl;
@@ -790,13 +776,5 @@ class Menu extends Nette\Object
     public function getRgt()
     {
         return $this->rgt;
-    }
-
-    /**
-     * @param mixed $root
-     */
-    public function setRoot($root)
-    {
-        $this->root = $root;
     }
 }

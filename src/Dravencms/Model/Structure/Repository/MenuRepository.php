@@ -593,51 +593,7 @@ class MenuRepository
      */
     public function moveUp(Menu $menu, $number = 1)
     {
-        if ($menu->getParent())
-        {
-            //Use standard moveUp when item has parent
-            $this->menuRepository->moveUp($menu, $number);
-        }
-        else
-        {
-            if ($number != 1)
-            {
-                throw new \Exception('$number != 1 is not supported');
-            }
-
-            /** @var Menu $prevItem */
-            $prevItem = $this->menuRepository->createQueryBuilder('node')
-                ->select('node')
-                ->where('node.root < :root')
-                ->andWhere('node.isSystem = :isSystem')
-                ->orderBy('node.root', 'DESC')
-                ->setParameter('root', $menu->getRoot())
-                ->setParameter('isSystem', false)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
-            
-            if ($prevItem)
-            {
-                $prevItemRoot = $prevItem->getRoot();
-
-                $qb = $this->menuRepository->createQueryBuilder('node');
-                $qb->update()
-                    ->set('node.root', $qb->expr()->literal($menu->getRoot()))
-                    ->where('node = :prevItem')
-                    ->setParameter('prevItem', $prevItem)
-                    ->getQuery()
-                    ->execute();
-
-                $qb = $this->menuRepository->createQueryBuilder('node');
-                $qb->update()
-                    ->set('node.root', $qb->expr()->literal($prevItemRoot))
-                    ->where('node = :prevItem')
-                    ->setParameter('prevItem', $menu)
-                    ->getQuery()
-                    ->execute();
-            }
-        }
+        $this->menuRepository->moveUp($menu, $number);
     }
 
     /**
@@ -648,49 +604,6 @@ class MenuRepository
      */
     public function moveDown(Menu $menu, $number = 1)
     {
-        if ($menu->getParent())
-        {
-            //Use standard moveUp when item has parent
-            $this->menuRepository->moveDown($menu, $number);
-        }
-        else
-        {
-            if ($number != 1)
-            {
-                throw new \Exception('$number != 1 is not supported');
-            }
-
-            /** @var Menu $prevItem */
-            $nextItem = $this->menuRepository->createQueryBuilder('node')
-                ->select('node')
-                ->where('node.root > :root')
-                ->andWhere('node.isSystem = :isSystem')
-                ->orderBy('node.root', 'ASC')
-                ->setParameter('root', $menu->getRoot())
-                ->setParameter('isSystem', false)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
-
-            if ($nextItem)
-            {
-                $nextItemRoot = $nextItem->getRoot();
-                $qb = $this->menuRepository->createQueryBuilder('node');
-                $qb->update()
-                    ->set('node.root', $qb->expr()->literal($menu->getRoot()))
-                    ->where('node = :nextItem')
-                    ->setParameter('nextItem', $nextItem)
-                    ->getQuery()
-                    ->execute();
-
-                $qb = $this->menuRepository->createQueryBuilder('node');
-                $qb->update()
-                    ->set('node.root', $qb->expr()->literal($nextItemRoot))
-                    ->where('node = :nextItem')
-                    ->setParameter('nextItem', $menu)
-                    ->getQuery()
-                    ->execute();
-            }
-        }
+        $this->menuRepository->moveDown($menu, $number);
     }
 }
