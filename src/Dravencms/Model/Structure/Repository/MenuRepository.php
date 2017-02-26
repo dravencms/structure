@@ -173,13 +173,17 @@ class MenuRepository
         $query = $this->menuRepository
             ->createQueryBuilder('node')
             ->select('node')
+            ->addSelect('t')
+            ->join('node.translations', 't')
             ->orderBy('node.lft', 'ASC')
             ->where('node.isHidden = :isHidden')
             ->andWhere('node.isActive = :isActive')
+            ->andWhere('t.locale = :locale')
             ->setParameters(
                 [
                     'isHidden' => false,
-                    'isActive' => true
+                    'isActive' => true,
+                    'locale' => $locale
                 ]
             )
             ->getQuery();

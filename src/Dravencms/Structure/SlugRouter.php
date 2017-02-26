@@ -529,7 +529,7 @@ class SlugRouter extends Object implements IRouter
 
                 $translatedMenu = $this->menuTranslationRepository->getTranslation($pageInfo, $foundLocale);
 
-                $params['slug'] = $translatedMenu->getSlug();
+                $params['slug'] = ($translatedMenu ? $translatedMenu->getSlug() : null);
             } else {
                 return null;
             }

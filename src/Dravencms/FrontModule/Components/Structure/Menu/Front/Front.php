@@ -6,6 +6,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
+use Tracy\Debugger;
 
 class Front extends BaseControl
 {
@@ -69,8 +70,7 @@ class Front extends BaseControl
             },
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) {
-                $translationMenu = $this->menuTranslationRepository->getTranslation($this->menuRepository->getOneById($node['id']), $this->currentLocale);
-                return '<a href="' . (!empty($node['__children']) && !$node['isContent'] ? '#' : $this->presenter->link($node['presenter'].':'.$node['action'])) . '" '.(!empty($node['__children']) ? ' data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" data-close-others="false" data-target="#menu-item-'.$node['id'].'"' : '').'>' . $translationMenu->getName() . ' ' . (!empty($node['__children']) ? '<span class="caret"></span>' : '') . '</a>';
+                return '<a href="' . (!empty($node['__children']) && !$node['isContent'] ? '#' : $this->presenter->link($node['presenter'].':'.$node['action'])) . '" '.(!empty($node['__children']) ? ' data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" data-close-others="false" data-target="#menu-item-'.$node['id'].'"' : '').'>' . $node['translations'][0]['name'] . ' ' . (!empty($node['__children']) ? '<span class="caret"></span>' : '') . '</a>';
             }
         ];
 
