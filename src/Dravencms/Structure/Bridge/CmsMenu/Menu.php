@@ -111,4 +111,9 @@ class Menu implements IMenu
     {
         return $this->menu->isSystem();
     }
+
+    public function getIdentifier()
+    {
+        return $this->menu->getIdentifier();
+    }
 }

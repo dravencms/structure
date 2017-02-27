@@ -5,13 +5,10 @@
 
 namespace Dravencms\Structure\Bridge\CmsMenu;
 
-use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Dravencms\Model\Structure\Repository\MenuRepository;
 use Nette;
 use Salamek\Cms\Models\ILocale;
 use Salamek\Cms\Models\IMenu;
 use Salamek\Cms\Models\IMenuTranslationRepository;
-use Tracy\Debugger;
 
 class MenuTranslationRepository implements IMenuTranslationRepository
 {
@@ -21,19 +18,19 @@ class MenuTranslationRepository implements IMenuTranslationRepository
     /** @var MenuRepository */
     private $menuRepository;
 
-    /** @var LocaleRepository */
+    /** @var \Dravencms\Model\Locale\Repository\LocaleRepository */
     private $localeRepository;
 
     /**
      * MenuTranslationRepository constructor.
      * @param \Dravencms\Model\Structure\Repository\MenuTranslationRepository $menuTranslationRepository
-     * @param MenuRepository $menuRepository
-     * @param LocaleRepository $localeRepository
+     * @param \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository
+     * @param \Dravencms\Model\Locale\Repository\LocaleRepository $localeRepository
      */
     public function __construct(
         \Dravencms\Model\Structure\Repository\MenuTranslationRepository $menuTranslationRepository,
-        MenuRepository $menuRepository,
-        LocaleRepository $localeRepository
+        \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository,
+        \Dravencms\Model\Locale\Repository\LocaleRepository $localeRepository
     )
     {
         $this->menuTranslationRepository = $menuTranslationRepository;
