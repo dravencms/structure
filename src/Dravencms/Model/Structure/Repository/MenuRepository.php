@@ -231,7 +231,7 @@ class MenuRepository
      */
     public function getOneByPresenterAction($presenter, $action)
     {
-        $this->buildCache(false);
+        $this->buildCache(true);
 
         $key = $presenter . ':' . $action;
         return array_key_exists($key, $this->cachePresenter) ? $this->cachePresenter[$key] : null;
