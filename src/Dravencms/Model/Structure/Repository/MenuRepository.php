@@ -356,6 +356,7 @@ class MenuRepository
             return $this->menuParameterSumGenerator->hash($parameters);
         },
             $identifier,
+            'index, fallow',
             $isActive,
             $isHidden,
             $isHomePage,
