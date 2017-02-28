@@ -123,11 +123,16 @@ class MenuRepository implements IMenuRepository
      * @param $factory
      * @param array $parameters
      * @param bool $isSystem
-     * @return Menu
+     * @return Menu|null
      */
     public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
     {
-        return new Menu($this->menuRepository->getOneByFactoryAndParametersAndIsSystem($factory, $parameters, $isSystem));
+        $found = $this->menuRepository->getOneByFactoryAndParametersAndIsSystem($factory, $parameters, $isSystem);
+        if (!$found)
+        {
+            return null;
+        }
+        return new Menu($found);
     }
 
 }
