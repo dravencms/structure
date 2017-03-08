@@ -514,7 +514,7 @@ class SlugRouter extends Object implements IRouter
     {
         $pageInfo = $this->structureMenuRepository->getOneByPresenterAction(($this->module ? ':' . $this->module . ':' : '') . $appRequest->getPresenterName(),
             $appRequest->parameters['action']);
-        
+
         $params = $appRequest->parameters;
         if ($pageInfo && $pageInfo->isHomePage() == true) {
             $params['slug'] = null;
