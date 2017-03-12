@@ -63,7 +63,8 @@ class MenuContentRepository implements IMenuContentRepository
      */
     public function getOneById($id)
     {
-        return new MenuContent($this->menuContentRepository->getOneById($id));
+        $nativeMenuContent = $this->menuContentRepository->getOneById($id);
+        return ($nativeMenuContent ? new MenuContent($nativeMenuContent) : null);
     }
 
     /**
