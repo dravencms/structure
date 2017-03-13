@@ -44,7 +44,7 @@ class Front extends BaseControl
                 if (count($tree) && ($tree[0]['lvl'] == 0)) {
                     return '<ul class="'.$options['class'].'">';
                 } else {
-                    return '<ul class="'.$options['subClass'].'" id="menu-item-'.$tree[0]['root'].'">';
+                    return '<ul class="'.$options['subClass'].'" id="menu-item-'.$tree[0]['lvl'].'">';
                 }
             },
             'rootClose' => function ($tree) {
