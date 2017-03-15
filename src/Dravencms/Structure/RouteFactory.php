@@ -55,7 +55,16 @@ class RouteFactory implements IRouterFactory
 
         try
         {
-            $frontEnd[] = new SlugRouter('[<locale='.$this->localeRepository->getDefault()->getLanguageCode().' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
+            if ($this->localeRepository->getDefault())
+            {
+                $defaultLanguageCode = $this->localeRepository->getDefault()->getLanguageCode();
+            }
+            else
+            {
+                $defaultLanguageCode = 'en';
+            }
+
+            $frontEnd[] = new SlugRouter('[<locale='.$defaultLanguageCode.' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
         }
         catch(TableNotFoundException $e)
         {
