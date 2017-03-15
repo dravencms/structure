@@ -5,6 +5,7 @@
 
 namespace Dravencms\Structure;
 
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Dravencms\Base\IRouterFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
@@ -52,7 +53,14 @@ class RouteFactory implements IRouterFactory
 
         $router[] = $frontEnd = new RouteList('Front');
 
-        $frontEnd[] = new SlugRouter('[<locale='.$this->localeRepository->getDefault()->getLanguageCode().' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
+        try
+        {
+            $frontEnd[] = new SlugRouter('[<locale='.$this->localeRepository->getDefault()->getLanguageCode().' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
+        }
+        catch(TableNotFoundException $e)
+        {
+            //!FIXME Ignore missing table, this is only way i can find to prevent this  part of code from crashing console when database is not created
+        }
 
         return $router;
     }
