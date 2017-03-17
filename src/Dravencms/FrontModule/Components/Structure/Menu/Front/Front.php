@@ -6,7 +6,6 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
-use Tracy\Debugger;
 
 class Front extends BaseControl
 {
@@ -34,7 +33,7 @@ class Front extends BaseControl
     public function render()
     {
         $template = $this->template;
-        
+
         $template->htmlTree = $this->menuRepository->getTree($this->presenter->getCurrentTemplate()->getMenuConfig($this->presenter), $this->currentLocale);
 
         $template->setFile(__DIR__ . '/front.latte');
