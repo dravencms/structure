@@ -18,13 +18,18 @@ class Front extends BaseControl
     /** @var CurrentLocale */
     private $currentLocale;
 
+    /** @var array */
+    private $menuConfig;
+
     public function __construct(
+        array $menuConfig,
         MenuRepository $menuRepository,
         MenuTranslationRepository $menuTranslationRepository,
         CurrentLocale $currentLocale
     )
     {
         parent::__construct();
+        $this->menuConfig = $menuConfig;
         $this->menuRepository = $menuRepository;
         $this->menuTranslationRepository = $menuTranslationRepository;
         $this->currentLocale = $currentLocale;
@@ -34,7 +39,7 @@ class Front extends BaseControl
     {
         $template = $this->template;
 
-        $template->htmlTree = $this->menuRepository->getTree($this->presenter->getCurrentTemplate()->getMenuConfig($this->presenter), $this->currentLocale);
+        $template->htmlTree = $this->menuRepository->getTree($this->menuConfig, $this->currentLocale);
 
         $template->setFile(__DIR__ . '/front.latte');
         $template->render();

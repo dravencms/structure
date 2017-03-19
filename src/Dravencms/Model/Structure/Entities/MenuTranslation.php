@@ -5,19 +5,19 @@
 
 namespace Dravencms\Model\Structure\Entities;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Class MenuTranslation
  * @package App\Model\Structure\Entities
  * @ORM\Entity
- * @ORM\Table(name="structureMenuTranslation")
+ * @ORM\Table(name="structureMenuTranslation", uniqueConstraints={@UniqueConstraint(name="slug_unique", columns={"slug", "locale_id"})})
  */
 class MenuTranslation extends Nette\Object
 {
@@ -31,7 +31,7 @@ class MenuTranslation extends Nette\Object
     private $name;
 
     /**
-     * @ORM\Column(type="string",length=255, unique=true)
+     * @ORM\Column(type="string",length=255)
      */
     private $slug;
 

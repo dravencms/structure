@@ -72,12 +72,13 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      * @param $metaKeywords
      * @param $title
      * @param $name
+     * @param $slug
      * @return void
      */
-    public function translateMenu(IMenu $menu, ILocale $locale, $h1, $metaDescription, $metaKeywords, $title, $name)
+    public function translateMenu(IMenu $menu, ILocale $locale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug = null)
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $nativeLocale= $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
-        $this->menuTranslationRepository->translateMenu($nativeMenu, $nativeLocale, $h1, $metaDescription, $metaKeywords, $title, $name);
+        $this->menuTranslationRepository->translateMenu($nativeMenu, $nativeLocale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug);
     }
 }

@@ -242,10 +242,11 @@ class MenuTranslationRepository
      * @param $metaKeywords
      * @param $title
      * @param $name
+     * @param $slug
      * @return MenuTranslation
      * @throws \Exception
      */
-    public function translateMenu(Menu $menu, Locale $locale, $h1, $metaDescription, $metaKeywords, $title, $name)
+    public function translateMenu(Menu $menu, Locale $locale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug = null)
     {
         if ($foundTranslation = $this->getTranslation($menu, $locale))
         {
@@ -260,6 +261,11 @@ class MenuTranslationRepository
             $foundTranslation = new MenuTranslation($menu, $locale, $name, $metaDescription, $metaKeywords, $title, $h1, function($menuTranslation){
                 return $this->menuSlugGenerator->slugify($menuTranslation);
             });
+        }
+
+        if ($slug)
+        {
+            $foundTranslation->setSlug($slug);
         }
 
         $this->entityManager->persist($foundTranslation);

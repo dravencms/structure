@@ -22,7 +22,8 @@ namespace Dravencms\FrontModule\Components\Structure\Menu\Front;
 interface FrontFactory
 {
     /**
+     * @param array $menuConfig
      * @return Front
      */
-    public function create();
+    public function create(array $menuConfig);
 }
