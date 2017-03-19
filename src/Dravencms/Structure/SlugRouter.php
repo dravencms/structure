@@ -3,7 +3,6 @@
 namespace Dravencms\Structure;
 
 
-use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuRepository;
@@ -14,7 +13,6 @@ use Nette\Application\Request;
 use Nette\Application\Routers;
 use Nette\Object;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 /**
  * Description of SlugRouter
@@ -127,11 +125,15 @@ class SlugRouter extends Object implements IRouter
     /** @var string */
     private $module;
 
+    /** @var array */
+    private $localeRuntimeCache = [];
+    
     /**
      * SlugRouter constructor.
      * @param $mask
      * @param MenuRepository $menuRepository
      * @param MenuTranslationRepository $menuTranslationRepository
+     * @param LocaleRepository $localeRepository
      * @param string $module
      */
     public function __construct(
@@ -450,7 +452,7 @@ class SlugRouter extends Object implements IRouter
 
         $locale = (array_key_exists('locale', $params) ? $params['locale'] : null);
 
-        $foundLocale = $this->localeRepository->getOneByLanguageCode($locale);
+        $foundLocale = $this->localeRepository->getLocaleCache($locale);
         if (!$foundLocale || !$foundLocale->isActive())
         {
             $foundLocale = $this->localeRepository->getDefault();
@@ -522,15 +524,13 @@ class SlugRouter extends Object implements IRouter
             if ($pageInfo) {
 
                 $locale = $appRequest->getParameter('locale');
-                $foundLocale = $this->localeRepository->getOneByLanguageCode($locale);
+                $foundLocale = $this->localeRepository->getLocaleCache($locale);
                 if (!$foundLocale)
                 {
                     $foundLocale = $this->localeRepository->getDefault();
                 }
 
-                $translatedMenu = $this->menuTranslationRepository->getTranslation($pageInfo, $foundLocale);
-
-                $params['slug'] = ($translatedMenu ? $translatedMenu->getSlug() : null);
+                $params['slug'] = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
             } else {
                 return null;
             }

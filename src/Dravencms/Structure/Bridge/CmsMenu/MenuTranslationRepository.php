@@ -21,6 +21,8 @@ class MenuTranslationRepository implements IMenuTranslationRepository
     /** @var \Dravencms\Model\Locale\Repository\LocaleRepository */
     private $localeRepository;
 
+    private $localeRuntimeCache = [];
+
     /**
      * MenuTranslationRepository constructor.
      * @param \Dravencms\Model\Structure\Repository\MenuTranslationRepository $menuTranslationRepository
@@ -46,9 +48,21 @@ class MenuTranslationRepository implements IMenuTranslationRepository
     public function getOneByMenu(IMenu $menu, ILocale $locale = null)
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
-        $nativeLocale= $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
+        $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
         $natimeTranslation = $this->menuTranslationRepository->getTranslation($nativeMenu, $nativeLocale);
         return ($natimeTranslation ? new MenuTranslation($natimeTranslation) : null);
+    }
+
+    /**
+     * @param IMenu $menu
+     * @param ILocale|null $locale
+     * @return mixed|null
+     */
+    public function getSlugByMenu(IMenu $menu, ILocale $locale = null)
+    {
+        $nativeMenu = $this->menuRepository->getOneById($menu->getId());
+        $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
+        return $this->menuTranslationRepository->getSlug($nativeMenu, $nativeLocale);
     }
 
     /**
@@ -59,7 +73,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      */
     public function getOneBySlug($slug, $parameters = [], ILocale $locale = null)
     {
-        $nativeLocale = $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
+        $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
         list($nativeTranslation, $parameters) = $this->menuTranslationRepository->getOneBySlug($slug, $parameters, $nativeLocale);
         return ($nativeTranslation ? new MenuTranslation($nativeTranslation) : null);
     }
@@ -78,7 +92,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
     public function translateMenu(IMenu $menu, ILocale $locale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug = null)
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
-        $nativeLocale= $this->localeRepository->getOneByLanguageCode($locale->getLanguageCode());
+        $nativeLocale= $this->localeRepository->getLocaleCache($locale->getLanguageCode());
         $this->menuTranslationRepository->translateMenu($nativeMenu, $nativeLocale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug);
     }
 }

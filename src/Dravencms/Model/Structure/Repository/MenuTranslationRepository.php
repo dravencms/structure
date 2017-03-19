@@ -13,6 +13,7 @@ use Dravencms\Structure\MenuSlugGenerator;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Dravencms\Model\Locale\Entities\ILocale;
+use Tracy\Debugger;
 
 class MenuTranslationRepository
 {
@@ -24,6 +25,10 @@ class MenuTranslationRepository
 
     /** @var EntityManager */
     private $entityManager;
+
+    private $isMenuTranslationSlugRuntimeCacheInitialized = false;
+
+    private $menuTranslationSlugRuntimeCache = [];
 
     /**
      * MenuTranslationRepository constructor.
@@ -223,16 +228,30 @@ class MenuTranslationRepository
      */
     public function getTranslation(Menu $menu, ILocale $locale)
     {
-        $qb = $this->menuTranslationRepository->createQueryBuilder('t')
-            ->select('t')
-            ->where('t.locale = :locale')
-            ->andWhere('t.menu = :menu')
-            ->setParameters([
-                'menu' => $menu,
-                'locale' => $locale
-            ]);
-        return $qb->getQuery()->getOneOrNullResult();
+        return $this->menuTranslationRepository->findOneBy(['menu' => $menu, 'locale' => $locale]);
     }
+
+    /**
+     * @param Menu $menu
+     * @param ILocale $locale
+     * @return mixed|null
+     */
+    public function getSlug(Menu $menu, ILocale $locale)
+    {
+        if (!$this->isMenuTranslationSlugRuntimeCacheInitialized)
+        {
+            foreach($this->getAll() AS $menuTranslation)
+            {
+                $this->menuTranslationSlugRuntimeCache[$menuTranslation->getMenu()->getId().$menuTranslation->getLocale()->getLanguageCode()] = $menuTranslation->getSlug();
+            }
+
+            $this->isMenuTranslationSlugRuntimeCacheInitialized = true;
+        }
+
+        $key = $menu->getId().$locale->getLanguageCode();
+        return (array_key_exists($key, $this->menuTranslationSlugRuntimeCache) ? $this->menuTranslationSlugRuntimeCache[$key] : null);
+    }
+
 
     /**.
      * @param Menu $menu
@@ -273,5 +292,13 @@ class MenuTranslationRepository
         $this->entityManager->flush();
 
         return $foundTranslation;
+    }
+
+    /**
+     * @return MenuTranslation[]
+     */
+    public function getAll()
+    {
+        return $this->menuTranslationRepository->findAll();
     }
 }

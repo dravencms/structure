@@ -5,8 +5,8 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
+use Dravencms\Debugger;
 use Dravencms\Model\Structure\Entities\Menu;
-use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
 use Kdyby\Doctrine\EntityManager;
@@ -25,21 +25,16 @@ class MenuRepository
     private $menuParameterSumGenerator;
 
     /** @var bool */
-    private $cacheInitialized = false;
-
-    //!FIXME MOVE ALL THIS CACHING STUFF INTO CMS EXTENSION!!!
-
-    /** @var Menu[] */
-    private $cacheRegexFalse = [];
-
-    /** @var Menu[] */
-    private $cacheRegexTrue = [];
+    private $presenterCacheInitialized = false;
 
     /** @var Menu[] */
     private $cachePresenter = [];
 
     /** @var Menu[] */
     private $cacheFactory = [];
+
+    /** @var bool */
+    private $isCacheFactoryInitialized = false;
 
     /** @var Menu */
     private $cacheHomePage;
@@ -102,29 +97,6 @@ class MenuRepository
 
         $query = $qb->getQuery();
         return (is_null($query->getOneOrNullResult()));
-    }
-
-    /**
-     * @param bool $force
-     */
-    private function buildCache($force = false)
-    {
-        if (!$this->cacheInitialized || $force) {
-            $result = $this->menuRepository->findAll();
-
-            /** @var Menu $item */
-            foreach ($result AS $item) {
-                /*if ($item->isRegularExpression()) {
-                    $this->cacheRegexTrue[] = $item;
-                } else {
-                    $this->cacheRegexFalse[$item->getSlug()] = $item;
-                }*/
-
-                $this->cachePresenter[$item->getPresenter() . ':' . $item->getAction()] = $item;
-            }
-
-            $this->cacheInitialized = true;
-        }
     }
 
     /**
@@ -231,7 +203,16 @@ class MenuRepository
      */
     public function getOneByPresenterAction($presenter, $action)
     {
-        $this->buildCache(true);
+        if (!$this->presenterCacheInitialized) {
+            $result = $this->menuRepository->findAll();
+
+            /** @var Menu $item */
+            foreach ($result AS $item) {
+                $this->cachePresenter[$item->getPresenter() . ':' . $item->getAction()] = $item;
+            }
+
+            $this->presenterCacheInitialized = true;
+        }
 
         $key = $presenter . ':' . $action;
         return array_key_exists($key, $this->cachePresenter) ? $this->cachePresenter[$key] : null;
@@ -282,6 +263,24 @@ class MenuRepository
      */
     public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
     {
+        if (!$this->isCacheFactoryInitialized)
+        {
+            Debugger::memoryPoint();
+            $qb = $this->menuRepository->createQueryBuilder('m')
+                ->select(['m', 'mc'])
+                ->join('m.menuContents', 'mc')
+                ->groupBy('m');
+
+            foreach($qb->getQuery()->getResult() AS $meh)
+            {
+
+            }
+            Debugger::memoryPoint();
+
+            $this->isCacheFactoryInitialized = true;
+        }
+
+
         $parametersSum = $this->menuParameterSumGenerator->hash($parameters);
         $key = $factory . $parametersSum . ($isSystem ? 't' : 'f');
         $found = array_key_exists($key, $this->cacheFactory) ? $this->cacheFactory[$key] : false;
