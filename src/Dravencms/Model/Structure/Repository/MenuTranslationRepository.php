@@ -201,21 +201,24 @@ class MenuTranslationRepository
             }
         }
 
-        $qb = $this->menuTranslationRepository->createQueryBuilder('t')
-            ->select('t')
-            ->join('t.menu', 'm')
-            ->where('t.locale = :locale')
-            ->andWhere('m.isHomePage = :isHomePage')
-            ->setParameters([
-                'isHomePage' => true,
-                'locale' => $locale
-            ]);
-        $result = $qb->getQuery()->getOneOrNullResult();
-        if ($result)
+        if (!$slug)
         {
-            return [$result->getMenu(), []];
+            $qb = $this->menuTranslationRepository->createQueryBuilder('t')
+                ->select('t')
+                ->join('t.menu', 'm')
+                ->where('t.locale = :locale')
+                ->andWhere('m.isHomePage = :isHomePage')
+                ->setParameters([
+                    'isHomePage' => true,
+                    'locale' => $locale
+                ]);
+            $result = $qb->getQuery()->getOneOrNullResult();
+            if ($result)
+            {
+                return [$result->getMenu(), []];
+            }
         }
-
+        
         return null;
     }
 
