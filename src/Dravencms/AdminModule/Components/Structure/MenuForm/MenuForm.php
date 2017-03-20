@@ -214,8 +214,8 @@ class MenuForm extends Control
 
             if (!isset($values->basic)) {
                 $cnt = explode(',', $values->{$activeLocale->getLanguageCode()}->metaKeywords);
-                if (count($cnt) > 10) {
-                    $form->addError('Seo description is too long, only 10 words are allowed');
+                if (count($cnt) > 20) {
+                    $form->addError('Seo keywords is too long, only 10 words are allowed');
                 }
             }
         }

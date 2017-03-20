@@ -5,7 +5,6 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
-use Dravencms\Debugger;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Doctrine\ORM\Query;
