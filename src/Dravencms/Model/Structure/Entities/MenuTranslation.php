@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * Class MenuTranslation
  * @package App\Model\Structure\Entities
  * @ORM\Entity
- * @ORM\Table(name="structureMenuTranslation", uniqueConstraints={@UniqueConstraint(name="slug_unique", columns={"slug", "locale_id"})})
+ * @ORM\Table(name="structureMenuTranslation", uniqueConstraints={@UniqueConstraint(name="slug_unique", columns={"slug_sum", "locale_id"})})
  */
 class MenuTranslation extends Nette\Object
 {
@@ -31,9 +31,15 @@ class MenuTranslation extends Nette\Object
     private $name;
 
     /**
-     * @ORM\Column(type="string",length=255)
+     * @ORM\Column(type="text")
      */
     private $slug;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string",length=32)
+     */
+    private $slugSum;
 
     /**
      * @var string
@@ -104,6 +110,14 @@ class MenuTranslation extends Nette\Object
         $this->name = $name;
     }
 
+    /**
+     * @param string $slugSum
+     */
+    public function setSlugSum($slugSum)
+    {
+        $this->slugSum = $slugSum;
+    }
+
     public function generateSlug(callable  $slugGenerator)
     {
         $this->setSlug($slugGenerator($this));
@@ -115,6 +129,7 @@ class MenuTranslation extends Nette\Object
     public function setSlug($slug)
     {
         $this->slug = $slug;
+        $this->setSlugSum(md5($slug));
     }
 
     /**
@@ -227,5 +242,13 @@ class MenuTranslation extends Nette\Object
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlugSum()
+    {
+        return $this->slugSum;
     }
 }
