@@ -65,7 +65,41 @@ abstract class SlugPresenter extends BasePresenter
      */
     public function createComponentStructureMenuFront()
     {
-        return $this->structureMenuFrontFactory->create();
+        $menuConfig = [
+            'decorate' => true,
+            'rootOpen' => function ($tree) {
+                if (count($tree) && ($tree[0]['lvl'] == 0)) {
+                    return '<ul class="clearlist">';
+                } else {
+                    return '<ul class="mn-sub" id="menu-item-'.$tree[0]['lvl'].'">';
+                }
+            },
+            'rootClose' => function ($tree) {
+                if (count($tree) && ($tree[0]['lvl'] == 0)) {
+                    return '</ul>';
+                } else {
+                    return '</ul>';
+                }
+            },
+            'childOpen' => function ($tree) {
+                $active = false;
+                if (array_key_exists('__children', $tree) && count($tree['__children'])) {
+                    foreach ($tree['__children'] AS $child) {
+                        if ($this->isLinkCurrent($child['presenter'].':'.$child['action'])) {
+                            $active = true;
+                        }
+                    }
+                } else {
+                    $active = $this->isLinkCurrent($tree['presenter'].':'.$tree['action']);
+                }
+                return '<li class="'.($tree['lvl'] == 0 ? 'nav-item' : '').' ' . ($active ? 'active ' : '') . (!empty($tree['__children']) ? 'has-submenu': '') . '">';
+            },
+            'childClose' => '</li>',
+            'nodeDecorator' => function ($node) {
+                return '<a href="' . (!empty($node['__children']) && !$node['isContent'] ? '#' : $this->link($node['presenter'].':'.$node['action'])) . '" '.(!empty($node['__children']) ? '' : '').'>' . $node['translations'][0]['name'] . ' ' . (!empty($node['__children']) ? '<span class="caret"></span>' : '') . '</a>';
+            }
+        ];
+        return $this->structureMenuFrontFactory->create($menuConfig);
     }
 
     /**
