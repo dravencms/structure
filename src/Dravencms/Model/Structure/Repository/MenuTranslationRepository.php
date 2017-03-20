@@ -291,6 +291,8 @@ class MenuTranslationRepository
 
         $this->entityManager->flush();
 
+        $this->menuTranslationSlugRuntimeCache[$foundTranslation->getMenu()->getId().$foundTranslation->getLocale()->getLanguageCode()] = $foundTranslation->getSlug();
+
         return $foundTranslation;
     }
 

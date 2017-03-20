@@ -252,6 +252,9 @@ class MenuRepository
         $menu->setAction($actionName);
         $this->entityManager->persist($menu);
         $this->entityManager->flush();
+
+        $this->cachePresenter[$presenterName . ':' . $actionName] = $menu;
+
     }
 
     /**
@@ -353,6 +356,7 @@ class MenuRepository
 
         $this->entityManager->persist($newMenu);
         $this->entityManager->flush();
+
         return $newMenu;
     }
 

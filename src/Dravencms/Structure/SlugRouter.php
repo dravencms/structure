@@ -530,6 +530,8 @@ class SlugRouter extends Object implements IRouter
                     $foundLocale = $this->localeRepository->getDefault();
                 }
 
+
+
                 $params['slug'] = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
             } else {
                 return null;
