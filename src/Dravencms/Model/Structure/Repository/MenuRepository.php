@@ -265,47 +265,29 @@ class MenuRepository
     {
         if (!$this->isCacheFactoryInitialized)
         {
-            Debugger::memoryPoint();
             $qb = $this->menuRepository->createQueryBuilder('m')
-                ->select(['m', 'mc'])
+                ->select(['mc.parameters', 'mc.factory'])
+                ->addSelect('m AS menu')
                 ->join('m.menuContents', 'mc')
-                ->groupBy('m');
+                ->where('m.isActive = :isActive')
+                ->setParameters([
+                    'isActive' => true
+                ]);
 
-            foreach($qb->getQuery()->getResult() AS $meh)
+            /** @var Menu $menu */
+            foreach($qb->getQuery()->getResult() AS $mix)
             {
-
+                $parametersSum = $this->menuParameterSumGenerator->hash($mix['parameters']);
+                $key = $mix['factory'] . $parametersSum . ($mix['menu']->isSystem() ? 't' : 'f');
+                $this->cacheFactory[$key] = $mix['menu'];
             }
-            Debugger::memoryPoint();
 
             $this->isCacheFactoryInitialized = true;
         }
 
-
         $parametersSum = $this->menuParameterSumGenerator->hash($parameters);
         $key = $factory . $parametersSum . ($isSystem ? 't' : 'f');
-        $found = array_key_exists($key, $this->cacheFactory) ? $this->cacheFactory[$key] : false;
-        if (!$found) {
-            $qb = $this->menuRepository->createQueryBuilder('m')
-                ->select('m')
-                ->join('m.menuContents', 'mc')
-                ->where('m.isSystem = :isSystem')
-                ->andWhere('mc.factory = :factory')
-                ->andWhere('mc.parametersSum = :parametersSum')
-                ->setMaxResults(1)//It is possible that CMS will put multiple same components on multiple presenters and QueryBuilder::getOneOrNullResult() throws error on multiple result
-                ->setParameters(
-                    [
-                        'factory' => $factory,
-                        'isSystem' => $isSystem,
-                        'parametersSum' => $parametersSum
-                    ]
-                );
-            $found = $qb->getQuery()->getOneOrNullResult();
-            if ($found) {
-                $this->cacheFactory[$key] = $found;
-            }
-        }
-
-        return $found;
+        return array_key_exists($key, $this->cacheFactory) ? $this->cacheFactory[$key] : null;
     }
 
     /**
