@@ -118,21 +118,4 @@ class MenuRepository implements IMenuRepository
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $this->menuRepository->savePresenterAction($nativeMenu, $presenterName, $actionName);
     }
-
-    /**
-     * @param $factory
-     * @param array $parameters
-     * @param bool $isSystem
-     * @return Menu|null
-     */
-    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
-    {
-        $found = $this->menuRepository->getOneByFactoryAndParametersAndIsSystem($factory, $parameters, $isSystem);
-        if (!$found)
-        {
-            return null;
-        }
-        return new Menu($found);
-    }
-
 }

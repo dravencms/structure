@@ -23,6 +23,13 @@ class MenuContentRepository
     /** @var MenuParameterSumGenerator */
     private $menuParameterSumGenerator;
 
+    /** @var MenuContent[] */
+    private $cacheFactory = [];
+
+    /** @var bool */
+    private $isCacheFactoryInitialized = false;
+
+
     /**
      * MenuContentRepository constructor.
      * @param EntityManager $entityManager
@@ -75,7 +82,45 @@ class MenuContentRepository
         $this->entityManager->persist($menuContent);
         $this->entityManager->flush();
 
+        $parametersSum = $this->menuParameterSumGenerator->hash($menuContent->getParameters());
+        $key = $menuContent->getFactory() . $parametersSum . ($menuContent->getMenu()->isSystem() ? 't' : 'f');
+        $this->cacheFactory[$key] = $menuContent;
+
         return $menuContent;
+    }
+
+    /**
+     * @param $factory
+     * @param array $parameters
+     * @param bool $isSystem
+     * @return MenuContent
+     */
+    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
+    {
+        if (!$this->isCacheFactoryInitialized)
+        {
+            $qb = $this->menuContentRepository->createQueryBuilder('mc')
+                ->select('mc')
+                ->join('mc.menu', 'm')
+                ->where('m.isActive = :isActive')
+                ->setParameters([
+                    'isActive' => true
+                ]);
+
+            /** @var MenuContent $menuContent */
+            foreach($qb->getQuery()->getResult() AS $menuContent)
+            {
+                $parametersSum = $this->menuParameterSumGenerator->hash($menuContent->getParameters());
+                $key = $menuContent->getFactory() . $parametersSum . ($menuContent->getMenu()->isSystem() ? 't' : 'f');
+                $this->cacheFactory[$key] = $menuContent;
+            }
+
+            $this->isCacheFactoryInitialized = true;
+        }
+
+        $parametersSum = $this->menuParameterSumGenerator->hash($parameters);
+        $key = $factory . $parametersSum . ($isSystem ? 't' : 'f');
+        return array_key_exists($key, $this->cacheFactory) ? $this->cacheFactory[$key] : null;
     }
 
     /**

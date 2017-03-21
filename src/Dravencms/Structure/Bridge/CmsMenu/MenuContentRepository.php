@@ -78,4 +78,21 @@ class MenuContentRepository implements IMenuContentRepository
 
         $this->menuContentRepository->clearMenuContent($menuNative);
     }
+    
+    /**
+     * @param $factory
+     * @param array $parameters
+     * @param bool $isSystem
+     * @return Menu|null
+     */
+    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
+    {
+        $found = $this->menuContentRepository->getOneByFactoryAndParametersAndIsSystem($factory, $parameters, $isSystem);
+        if (!$found)
+        {
+            return null;
+        }
+        return new MenuContent($found);
+    }
+
 }

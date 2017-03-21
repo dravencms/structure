@@ -28,13 +28,7 @@ class MenuRepository
 
     /** @var Menu[] */
     private $cachePresenter = [];
-
-    /** @var Menu[] */
-    private $cacheFactory = [];
-
-    /** @var bool */
-    private $isCacheFactoryInitialized = false;
-
+    
     /** @var Menu */
     private $cacheHomePage;
 
@@ -255,41 +249,6 @@ class MenuRepository
 
         $this->cachePresenter[$presenterName . ':' . $actionName] = $menu;
 
-    }
-
-    /**
-     * @param $factory
-     * @param array $parameters
-     * @param bool $isSystem
-     * @return Menu
-     */
-    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
-    {
-        if (!$this->isCacheFactoryInitialized)
-        {
-            $qb = $this->menuRepository->createQueryBuilder('m')
-                ->select(['mc.parameters', 'mc.factory'])
-                ->addSelect('m AS menu')
-                ->join('m.menuContents', 'mc')
-                ->where('m.isActive = :isActive')
-                ->setParameters([
-                    'isActive' => true
-                ]);
-
-            /** @var Menu $menu */
-            foreach($qb->getQuery()->getResult() AS $mix)
-            {
-                $parametersSum = $this->menuParameterSumGenerator->hash($mix['parameters']);
-                $key = $mix['factory'] . $parametersSum . ($mix['menu']->isSystem() ? 't' : 'f');
-                $this->cacheFactory[$key] = $mix['menu'];
-            }
-
-            $this->isCacheFactoryInitialized = true;
-        }
-
-        $parametersSum = $this->menuParameterSumGenerator->hash($parameters);
-        $key = $factory . $parametersSum . ($isSystem ? 't' : 'f');
-        return array_key_exists($key, $this->cacheFactory) ? $this->cacheFactory[$key] : null;
     }
 
     /**
