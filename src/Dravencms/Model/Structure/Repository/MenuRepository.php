@@ -45,6 +45,14 @@ class MenuRepository
     }
 
     /**
+     * @return \Kdyby\Doctrine\EntityRepository
+     */
+    public function getMenuRepository()
+    {
+        return $this->menuRepository;
+    }
+
+    /**
      * @param Menu|null $parentMenu
      * @param bool $isSystem
      * @return static
