@@ -15,9 +15,9 @@
     }
   ],
   "require": {
-    "salamek/nette-cms": "@dev",
-    "dravencms/locale": "@dev",
-    "dravencms/admin": "@dev"
+    "salamek/nette-cms": "^v1.0",
+    "dravencms/locale": "^v1.0",
+    "dravencms/admin": "^v1.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
