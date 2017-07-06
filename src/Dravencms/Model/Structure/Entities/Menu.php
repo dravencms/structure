@@ -210,7 +210,7 @@ class Menu extends Nette\Object
         $isRegularExpression = false,
         $isRegularExpressionMatchArguments = false,
         $layoutName = 'layout',
-        $isContent = true
+        $isContent = false
     ) {
         $this->identifier = $identifier;
         $this->isActive = $isActive;
