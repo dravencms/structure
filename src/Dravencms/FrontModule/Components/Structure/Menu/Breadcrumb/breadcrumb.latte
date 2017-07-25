@@ -1,13 +1,14 @@
 <div class="breadcrumbs pull-right">
     <ul class="{$listClass}">
         <li n:if="$showYouAreHere" class="breadcrumbs-label">Jste zde:</li>
-        <li><a href="{$basePath}/">{$homePage->getName()}</a><i n:if="$showCarrot" class="fa fa-angle-right"></i></li>
+        <li><a href="{$basePath}/">{$homePage->getTranslation($currentLocale)->getName()}</a><i n:if="$showCarrot" class="fa fa-angle-right"></i></li>
         <li n:foreach="$breadcrumbs AS $breadcrumb" {if $thisPage == $breadcrumb} class="{$activeClass}"{/if}>
+            {var $breadcrumbTranslation = $breadcrumb->getTranslation($currentLocale)}
             {if $thisPage == $breadcrumb}
-                {$breadcrumb->getName()|truncate, 40}
+                {$breadcrumbTranslation->getName()|truncate, 40}
             {else}
                 <a{if $breadcrumb->isContent()} href="{plink $breadcrumb->getPresenter().':'.$breadcrumb->getAction()}" {/if}>
-                    {$breadcrumb->getName()|truncate, 40}
+                    {$breadcrumbTranslation->getName()|truncate, 40}
                 </a>
                 <i n:if="$showCarrot" class="fa fa-angle-right"></i>
             {/if}

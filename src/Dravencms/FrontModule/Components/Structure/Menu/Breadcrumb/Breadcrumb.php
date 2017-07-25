@@ -3,17 +3,26 @@
 namespace Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb;
 
 use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Breadcrumb extends BaseControl
 {
 
     /** @var MenuRepository */
-    public $menuRepository;
+    private $menuRepository;
 
-    public function __construct(MenuRepository $menuRepository)
+    /** @var CurrentLocale */
+    private $currentLocale;
+
+    public function __construct(
+        MenuRepository $menuRepository,
+        CurrentLocale $currentLocale
+    )
     {
+        parent::__construct();
         $this->menuRepository = $menuRepository;
+        $this->currentLocale = $currentLocale;
     }
 
     public function render(array $config = [])
@@ -33,6 +42,7 @@ class Breadcrumb extends BaseControl
         $template->breadcrumbs = $breadcrumbs;
         $template->homePage = $homePage;
         $template->thisPage = $thisPage;
+        $template->currentLocale = $this->currentLocale;
 
         $template->setFile(__DIR__ . '/breadcrumb.latte');
         $template->render();
