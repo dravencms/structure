@@ -124,7 +124,7 @@ class StructurePresenter extends SecuredPresenter
         $control->setIsSystem(false);
         $control->onDelete[] = function () {
             $this->flashMessage('Item has been deleted.', 'alert-success');
-            $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)])]);
+            $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)]);
         };
         return $control;
     }
@@ -138,7 +138,7 @@ class StructurePresenter extends SecuredPresenter
         $control->setIsSystem(true);
         $control->onDelete[] = function () {
             $this->flashMessage('Item has been deleted.', 'alert-success');
-            $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)])]);
+            $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)]);
         };
         return $control;
     }
