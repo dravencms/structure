@@ -2,13 +2,16 @@
 
 namespace Dravencms\Structure;
 
+use Nette;
 
 /**
  * Class Structure
  * @package Dravencms\Structure
  */
-class Structure extends \Nette\Object
+class Structure
 {
+    use Nette\SmartObject;
+
     public function __construct()
     {
     }

@@ -19,8 +19,9 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity
  * @ORM\Table(name="structureMenuTranslation", uniqueConstraints={@UniqueConstraint(name="slug_unique", columns={"slug_sum", "locale_id"})})
  */
-class MenuTranslation extends Nette\Object
+class MenuTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

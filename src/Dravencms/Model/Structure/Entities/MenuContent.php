@@ -16,8 +16,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="structureMenuContent")
  */
-class MenuContent extends Nette\Object
+class MenuContent
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 
