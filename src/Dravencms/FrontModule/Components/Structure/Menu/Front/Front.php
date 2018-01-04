@@ -3,7 +3,7 @@
 namespace Dravencms\FrontModule\Components\Structure\Menu\Front;
 
 use Dravencms\Components\BaseControl\BaseControl;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 
@@ -15,24 +15,31 @@ class Front extends BaseControl
     /** @var MenuTranslationRepository */
     private $menuTranslationRepository;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /** @var array */
     private $menuConfig;
 
+    /**
+     * Front constructor.
+     * @param array $menuConfig
+     * @param MenuRepository $menuRepository
+     * @param MenuTranslationRepository $menuTranslationRepository
+     * @param CurrentLocaleResolver $currentLocaleResolver
+     */
     public function __construct(
         array $menuConfig,
         MenuRepository $menuRepository,
         MenuTranslationRepository $menuTranslationRepository,
-        CurrentLocale $currentLocale
+        CurrentLocaleResolver $currentLocaleResolver
     )
     {
         parent::__construct();
         $this->menuConfig = $menuConfig;
         $this->menuRepository = $menuRepository;
         $this->menuTranslationRepository = $menuTranslationRepository;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
     public function render()

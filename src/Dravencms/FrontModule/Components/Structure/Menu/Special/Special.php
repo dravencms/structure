@@ -3,7 +3,7 @@
 namespace Dravencms\FrontModule\Components\Structure\Menu\Special;
 
 use Dravencms\Components\BaseControl\BaseControl;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
@@ -12,21 +12,21 @@ class Special extends BaseControl
     /** @var MenuRepository */
     private $menuRepository;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /**
      * Special constructor.
      * @param MenuRepository $menuRepository
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      */
     public function __construct(
         MenuRepository $menuRepository,
-        CurrentLocale $currentLocale
+        CurrentLocaleResolver $currentLocaleResolver
     )
     {
         $this->menuRepository = $menuRepository;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
     /**
