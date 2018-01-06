@@ -9,6 +9,7 @@ namespace Dravencms\AdminModule\Components\Structure\MenuGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
@@ -72,98 +73,72 @@ class MenuGrid extends BaseControl
 
     /**
      * @param $name
-     * @return \Grido\Grid
+     * @return Grid
+     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnNotFoundException
      */
     protected function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
+        $grid->setDataSource($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
 
 
         $grid->addColumnText('identifier', 'Identifier')
-            ->setCustomRender(function ($row) use($grid) {
-                /** @var $row Menu */
-                if ($row->isHomePage()) {
-                    $el = Html::el('span', $grid->getTranslator()->translate('Home page'));
-                    $el->class = 'label label-info';
-                    return $row->getIdentifier() . ' ' . $el;
-                } else {
-                    return $row->getIdentifier();
-                }
-            })
+            ->setTemplate(__DIR__.'/identifier.latte')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnBoolean('isActive', 'Active');
         $grid->addColumnBoolean('isHidden', 'Hidden');
 
-        $grid->addColumnText('position', 'Position')
-            ->setCustomRender(function($row){
-                $elDown = Html::el('a');
-                $elDown->class = "btn btn-xs";
-                $elDown->href($this->link('down!', ['id' => $row->getId()]));
-                $elDown->setHtml('<i class="fa fa-chevron-down" aria-hidden="true"></i>');
+        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
 
-                $elUp = Html::el('a');
-                $elUp->class = "btn btn-xs";
-                $elUp->href($this->link('up!', ['id' => $row->getId()]));
-                $elUp->setHtml('<i class="fa fa-chevron-up" aria-hidden="true"></i>');
-                return $elUp.$elDown;
-            });
-
-        $header = $grid->getColumn('position')->headerPrototype;
-        $header->style['width'] ='2%';
-        $header->class[] = 'center';
-        $grid->getColumn('position')->cellPrototype->class[] = 'center';
-
-        $grid->addActionHref('submenu', 'Submenu items')
+        $grid->addAction('submenu', 'Submenu items', 'default', ['structureMenuId' => 'id'])
             ->setIcon('folder-open')
-            ->setCustomHref(function ($item) {
-                return $this->presenter->link('Structure:default', ['structureMenuId' => $item->getId()]);
-            });
+            ->setTitle('Submenu items')
+            ->setClass('btn btn-xs btn-default');
 
-        $grid->addActionHref('edit', 'Edit')
-            ->setCustomHref(function($row){
-                return $this->presenter->link('Structure:edit', ['id' => $row->getId()]);
-            })
-            ->setIcon('pencil');
+        if ($this->presenter->isAllowed('structure', 'edit')) {
+            $grid->addAction('edit', '')
+                ->setIcon('pencil')
+                ->setTitle('Edit')
+                ->setClass('btn btn-xs btn-primary');
+        }
 
-        $grid->addActionHref('delete', 'Delete', 'delete!')
-            ->setCustomHref(function($row){
-                return $this->link('delete!', $row->getId());
-            })
-            ->setIcon('trash-o')
-            ->setConfirm(function ($item) {
-                return ["Are you sure you want to delete %s ?", $item->getIdentifier()];
-            });
+        if ($this->presenter->isAllowed('structure', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-        $operations = ['delete' => 'Delete'];
-        $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-            ->setConfirm('delete', 'Are you sure you want to delete %i items?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+        }
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
-
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
+
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(structure, delete)
      */
     public function handleDelete($id)
     {
