@@ -52,6 +52,11 @@
               "addRouteFactory(@routeFactory.Structure)"
             ]
           }
+        },
+        "doctrine":{
+          "metadata": {
+            "Dravencms\\Model\\Structure": "%appDir%/../vendor/dravencms/structure/src/Dravencms/Model/Structure"
+          }
         }
       },
       "scripts": {
