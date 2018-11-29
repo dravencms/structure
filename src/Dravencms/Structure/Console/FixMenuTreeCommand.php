@@ -2,7 +2,6 @@
 
 namespace Dravencms\Structure\Console;
 
-use Dravencms\Eshop\Statistic;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Kdyby\Doctrine\EntityManager;
 use Symfony\Component\Console\Command\Command;
