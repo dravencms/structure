@@ -157,7 +157,7 @@ class StructurePresenter extends SecuredPresenter
         foreach ($this->cms->getTree() AS $moduleName => $components) {
             $moduleComponents = [];
             foreach ($components AS $componentName => $component) {
-                $moduleComponents[$moduleName.'\\'.$componentName] = $componentName;
+                $moduleComponents[$moduleName.'\\'.$componentName] = $moduleName.' -> '.$componentName;
             }
             $componentArray[$moduleName] = $moduleComponents;
         }
