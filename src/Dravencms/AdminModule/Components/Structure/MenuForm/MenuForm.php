@@ -362,7 +362,7 @@ class MenuForm extends Control
                     $values->{$activeLocale->getLanguageCode()}->title,
                     $values->{$activeLocale->getLanguageCode()}->h1,
                     $slugGenerator,
-                    $customUrl,
+                    $customUrl
                 );
             }
 
