@@ -96,7 +96,15 @@ abstract class SlugPresenter extends BasePresenter
             },
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) {
-                return '<a href="' . (!empty($node['__children']) && !$node['isContent'] ? '#' : $this->link($node['presenter'].':'.$node['action'])) . '" '.(!empty($node['__children']) ? '' : '').(!is_null($node['target']) ? ' target="'.$node['target'].'"' : '').'>' . $node['translations'][0]['name'] . ' ' . (!empty($node['__children']) ? '<span class="caret"></span>' : '') . '</a>';
+                if (is_null($node['translations'][0]['customUrl']))
+                {
+                    $url = $this->link($node['presenter'].':'.$node['action']);
+                }
+                else
+                {
+                    $url = $node['translations'][0]['customUrl'];
+                }
+                return '<a href="' . (!empty($node['__children']) && !$node['isContent'] ? '#' : $url) . '" '.(!empty($node['__children']) ? '' : '').(!is_null($node['target']) ? ' target="'.$node['target'].'"' : '').'>' . $node['translations'][0]['name'] . ' ' . (!empty($node['__children']) ? '<span class="caret"></span>' : '') . '</a>';
             }
         ];
         return $this->structureMenuFrontFactory->create($menuConfig);

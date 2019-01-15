@@ -67,6 +67,12 @@ class MenuTranslation
     private $h1;
 
     /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $customUrl;
+
+    /**
      * @var Menu
      * @ORM\ManyToOne(targetEntity="Menu", inversedBy="translations")
      * @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
@@ -91,7 +97,7 @@ class MenuTranslation
      * @param $h1
      * @param callable $slugGenerator
      */
-    public function __construct(Menu $menu, Locale $locale, $name, $metaDescription, $metaKeywords, $title, $h1, callable $slugGenerator)
+    public function __construct(Menu $menu, Locale $locale, $name, $metaDescription, $metaKeywords, $title, $h1, callable $slugGenerator, $customUrl = null)
     {
         $this->name = $name;
         $this->metaDescription = $metaDescription;
@@ -100,6 +106,7 @@ class MenuTranslation
         $this->h1 = $h1;
         $this->menu = $menu;
         $this->locale = $locale;
+        $this->customUrl = $customUrl;
         $this->generateSlug($slugGenerator);
     }
 
@@ -163,6 +170,14 @@ class MenuTranslation
     public function setH1($h1)
     {
         $this->h1 = $h1;
+    }
+
+    /**
+     * @param string $customUrl
+     */
+    public function setCustomUrl($customUrl)
+    {
+        $this->customUrl = $customUrl;
     }
 
     /**
@@ -251,5 +266,13 @@ class MenuTranslation
     public function getSlugSum()
     {
         return $this->slugSum;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomUrl()
+    {
+        return $this->customUrl;
     }
 }

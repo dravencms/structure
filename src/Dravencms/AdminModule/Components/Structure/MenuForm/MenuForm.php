@@ -121,6 +121,7 @@ class MenuForm extends Control
                 $defaultValues[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
                 $defaultValues[$translation->getLocale()->getLanguageCode()]['metaDescription'] = $translation->getMetaDescription();
                 $defaultValues[$translation->getLocale()->getLanguageCode()]['metaKeywords'] = $translation->getMetaKeywords();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['customUrl'] = $translation->getCustomUrl();
             }
         }
         else{
@@ -169,6 +170,10 @@ class MenuForm extends Control
 
             $container->addText('slug')
                 ->setRequired(false);
+
+            $container->addText('customUrl')
+                ->setRequired(false)
+                ->addRule(Form::URL, 'Custom URL have incorrect format.');
         }
 
         $form->addText('metaRobots')
@@ -333,6 +338,7 @@ class MenuForm extends Control
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $slug = ($values->{$activeLocale->getLanguageCode()}->slug ? $values->{$activeLocale->getLanguageCode()}->slug : null);
+            $customUrl = ($values->{$activeLocale->getLanguageCode()}->customUrl ? $values->{$activeLocale->getLanguageCode()}->customUrl : null);
             $slugGenerator = ($values->isAutogenerateSlug ? $automaticSlugGenerator : $manualSlugGenerator($slug));
             if ($formTranslation = $this->menuTranslationRepository->getTranslation($menu, $activeLocale))
             {
@@ -341,6 +347,7 @@ class MenuForm extends Control
                 $formTranslation->setMetaKeywords($values->{$activeLocale->getLanguageCode()}->metaKeywords);
                 $formTranslation->setTitle($values->{$activeLocale->getLanguageCode()}->title);
                 $formTranslation->setH1($values->{$activeLocale->getLanguageCode()}->h1);
+                $formTranslation->setCustomUrl($customUrl);
 
                 $formTranslation->generateSlug($slugGenerator);
             }
@@ -354,7 +361,8 @@ class MenuForm extends Control
                     $values->{$activeLocale->getLanguageCode()}->metaKeywords,
                     $values->{$activeLocale->getLanguageCode()}->title,
                     $values->{$activeLocale->getLanguageCode()}->h1,
-                    $slugGenerator
+                    $slugGenerator,
+                    $customUrl,
                 );
             }
 
