@@ -14,13 +14,13 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="name">{_"Name"}</label>
+                                    <label class="control-label" n:name="name">{_"Name"}<span class="required">*</span></label>
                                     <input type="text" n:name="name" autofocus="autofocus" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
                             <div class="col-sm-6">
                                 <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="title">{_"Title"}</label>
+                                    <label class="control-label" n:name="title">{_"Title"}<span class="required">*</span></label>
                                     <input n:name="title" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="h1">{_"H1"}</label>
+                                    <label class="control-label" n:name="h1">{_"H1"}<span class="required">*</span></label>
                                     <input n:name="h1" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
@@ -49,6 +49,14 @@
                                 </div>
                             </div><!-- col-sm-->
                         </div><!-- row -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group no-margin-hr">
+                                    <label class="control-label" n:name="slug">{_"URL slug"}</label>
+                                    <input n:name="slug" class="form-control">
+                                </div>
+                            </div><!-- col-sm-->
+                        </div><!-- row -->
                     </fieldset>
                 {/formContainer}
             </div>
@@ -59,13 +67,13 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="identifier">{_"Identifier"}</label>
+                    <label class="control-label" n:name="identifier">{_"Identifier"}<span class="required">*</span></label>
                     <input n:name="identifier" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
                 <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="layoutName">{_"Layout"}</label>
+                    <label class="control-label" n:name="layoutName">{_"Layout"}<span class="required">*</span></label>
                     <select n:name="layoutName" class="form-control"></select>
                 </div>
             </div><!-- col-sm-6 -->
@@ -80,7 +88,7 @@
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
                 <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="sitemapPriority">{_"SEO - Sitemap priority"}</label>
+                    <label class="control-label" n:name="sitemapPriority">{_"SEO - Sitemap priority"}<span class="required">*</span></label>
                     <select n:name="sitemapPriority" class="form-control"></select>
                 </div>
             </div><!-- col-sm-->
@@ -163,6 +171,15 @@
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" n:name="isHomePage" class="px"> <span class="lbl">{_"Is homepage"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isAutogenerateSlug" class="px"> <span class="lbl">{_"Is autogenerate slug (Ignores URL slug input)"}</span>
                     </label>
                 </div>
             </div>

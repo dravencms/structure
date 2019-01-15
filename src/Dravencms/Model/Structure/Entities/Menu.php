@@ -189,6 +189,12 @@ class Menu
     private $target;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isAutogenerateSlug;
+
+    /**
      * Menu constructor.
      * @param callable $parameterSumGenerator
      * @param $identifier
@@ -227,7 +233,8 @@ class Menu
         $isRegularExpressionMatchArguments = false,
         $layoutName = 'layout',
         $isContent = false,
-        $target = null
+        $target = null,
+        $autogenerateSlug = true
     ) {
         $this->identifier = $identifier;
         $this->isActive = $isActive;
@@ -246,6 +253,7 @@ class Menu
         $this->layoutName = $layoutName;
         $this->isContent = $isContent;
         $this->target = $target;
+        $this->isAutogenerateSlug = $autogenerateSlug;
 
         $this->menuContents = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -453,7 +461,15 @@ class Menu
     {
         $this->target = $target;
     }
-    
+
+    /**
+     * @param bool $isAutogenerateSlug
+     */
+    public function setIsAutogenerateSlug($isAutogenerateSlug)
+    {
+        $this->isAutogenerateSlug = $isAutogenerateSlug;
+    }
+
     /**
      * @return boolean
      */
@@ -687,4 +703,13 @@ class Menu
     {
         return $this->target;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAutogenerateSlug()
+    {
+        return $this->isAutogenerateSlug;
+    }
+
 }

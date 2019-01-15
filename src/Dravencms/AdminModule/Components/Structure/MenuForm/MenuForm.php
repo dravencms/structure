@@ -111,6 +111,7 @@ class MenuForm extends Control
             $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
             $defaultValues['identifier'] = $this->menu->getIdentifier();
             $defaultValues['target'] = $this->menu->getTarget();
+            $defaultValues['isAutogenerateSlug'] = $this->menu->isAutogenerateSlug();
 
             foreach ($this->menu->getTranslations() AS $translation)
             {
@@ -128,6 +129,7 @@ class MenuForm extends Control
             $defaultValues['sitemapPriority'] = '0.5';
             $defaultValues['isShowH1'] = true;
             $defaultValues['isSitemap'] = true;
+            $defaultValues['isAutogenerateSlug'] = true;
             $defaultValues['layoutName'] = $this->cms->getDefaultLayout();
         }
 
@@ -164,6 +166,9 @@ class MenuForm extends Control
             $container->addText('metaKeywords')
                 ->setRequired(false)
                 ->addRule(Form::MAX_LENGTH, 'SEO - Keyword is too long.', 200);
+
+            $container->addText('slug')
+                ->setRequired(false);
         }
 
         $form->addText('metaRobots')
@@ -176,9 +181,11 @@ class MenuForm extends Control
             $sitemapPriorities[$str] = $str;
         }
 
-        $form->addSelect('sitemapPriority', null, $sitemapPriorities);
+        $form->addSelect('sitemapPriority', null, $sitemapPriorities)
+            ->setRequired('Please select valid sitemapPriority');
 
-        $form->addSelect('layoutName', null, $this->cms->detectLayouts());
+        $form->addSelect('layoutName', null, $this->cms->detectLayouts())
+            ->setRequired('Please select valid layout');
 
         $form->addSelect('target', null, [
             null => 'Default',
@@ -199,6 +206,7 @@ class MenuForm extends Control
         $form->addCheckbox('isRegularExpressionMatchArguments');
         $form->addCheckbox('isSitemap');
         $form->addCheckbox('isHomePage');
+        $form->addCheckbox('isAutogenerateSlug');
 
         $form->addSubmit('send');
 
@@ -268,6 +276,7 @@ class MenuForm extends Control
             $menu->setIsRegularExpressionMatchArguments($values->isRegularExpressionMatchArguments);
             $menu->setLayoutName($values->layoutName);
             $menu->setTarget($target);
+            $menu->setIsAutogenerateSlug($values->isAutogenerateSlug);
 
             $this->entityManager->persist($menu);
         }
@@ -293,7 +302,8 @@ class MenuForm extends Control
                 $values->isRegularExpressionMatchArguments,
                 $values->layoutName,
                 false,
-                $target
+                $target,
+                $values->isAutogenerateSlug
             );
 
             if ($this->parentMenu)
@@ -309,12 +319,21 @@ class MenuForm extends Control
 
         $this->entityManager->flush();
 
-        $slugGenerator = function($formTranslation){
+        $automaticSlugGenerator = function($formTranslation){
             /** @var MenuTranslation $formTranslation */
             return $this->menuSlugGenerator->slugify($formTranslation);
         };
 
+        $manualSlugGenerator = function ($slug)
+        {
+            return function($formTranslation) use ($slug){
+                return $slug;
+            };
+        };
+
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            $slug = ($values->{$activeLocale->getLanguageCode()}->slug ? $values->{$activeLocale->getLanguageCode()}->slug : null);
+            $slugGenerator = ($values->isAutogenerateSlug ? $automaticSlugGenerator : $manualSlugGenerator($slug));
             if ($formTranslation = $this->menuTranslationRepository->getTranslation($menu, $activeLocale))
             {
                 $formTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
