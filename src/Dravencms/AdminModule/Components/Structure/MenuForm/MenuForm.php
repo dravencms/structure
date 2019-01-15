@@ -110,6 +110,7 @@ class MenuForm extends Control
             $defaultValues['action'] = $this->menu->getAction();
             $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
             $defaultValues['identifier'] = $this->menu->getIdentifier();
+            $defaultValues['target'] = $this->menu->getTarget();
 
             foreach ($this->menu->getTranslations() AS $translation)
             {
@@ -179,6 +180,14 @@ class MenuForm extends Control
 
         $form->addSelect('layoutName', null, $this->cms->detectLayouts());
 
+        $form->addSelect('target', null, [
+            null => 'Default',
+            Menu::TARGET_BLANK => 'Open new window or tab',
+            Menu::TARGET_SELF => 'Open in same frame',
+            Menu::TARGET_PARENT => 'Open in parent frame',
+            Menu::TARGET_TOP => 'Open in full body of the window'
+        ]);
+
         $form->addTextarea('latteTemplate');
         $form->addText('identifier')
             ->setRequired('Please fill in an unique identifier');
@@ -238,6 +247,8 @@ class MenuForm extends Control
             $this->structureMenuRepository->resetIsHomePage();
         }
 
+        $target = ($values->target ? $values->target : null);
+
         if ($this->menu)
         {
             $menu = $this->menu;
@@ -256,6 +267,7 @@ class MenuForm extends Control
             $menu->setIsRegularExpression($values->isRegularExpression);
             $menu->setIsRegularExpressionMatchArguments($values->isRegularExpressionMatchArguments);
             $menu->setLayoutName($values->layoutName);
+            $menu->setTarget($target);
 
             $this->entityManager->persist($menu);
         }
@@ -279,7 +291,9 @@ class MenuForm extends Control
                 [],
                 $values->isRegularExpression,
                 $values->isRegularExpressionMatchArguments,
-                $values->layoutName
+                $values->layoutName,
+                false,
+                $target
             );
 
             if ($this->parentMenu)

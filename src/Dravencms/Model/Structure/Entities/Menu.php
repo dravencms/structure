@@ -23,6 +23,11 @@ use Nette;
  */
 class Menu
 {
+    const TARGET_BLANK = '_blank';
+    const TARGET_SELF = '_self';
+    const TARGET_PARENT = '_parent';
+    const TARGET_TOP = '_top';
+
     //Uncomment when issue https://github.com/Atlantic18/DoctrineExtensions/issues/1981 is fixed, use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
@@ -178,8 +183,15 @@ class Menu
     private $translations;
 
     /**
+     * @var string
+     * @ORM\Column(type="string",length=255, nullable=true)
+     */
+    private $target;
+
+    /**
      * Menu constructor.
      * @param callable $parameterSumGenerator
+     * @param $identifier
      * @param $metaRobots
      * @param bool $isActive
      * @param bool $isHidden
@@ -195,6 +207,7 @@ class Menu
      * @param bool $isRegularExpressionMatchArguments
      * @param string $layoutName
      * @param bool $isContent
+     * @param null|string $target
      */
     public function __construct(
         callable $parameterSumGenerator,
@@ -213,7 +226,8 @@ class Menu
         $isRegularExpression = false,
         $isRegularExpressionMatchArguments = false,
         $layoutName = 'layout',
-        $isContent = false
+        $isContent = false,
+        $target = null
     ) {
         $this->identifier = $identifier;
         $this->isActive = $isActive;
@@ -231,6 +245,7 @@ class Menu
         $this->isRegularExpressionMatchArguments = $isRegularExpressionMatchArguments;
         $this->layoutName = $layoutName;
         $this->isContent = $isContent;
+        $this->target = $target;
 
         $this->menuContents = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -431,6 +446,14 @@ class Menu
         $this->lft = $lft;
     }
 
+    /**
+     * @param string $target
+     */
+    public function setTarget($target)
+    {
+        $this->target = $target;
+    }
+    
     /**
      * @return boolean
      */
@@ -655,5 +678,13 @@ class Menu
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTarget()
+    {
+        return $this->target;
     }
 }
