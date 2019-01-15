@@ -83,7 +83,6 @@ class MenuGrid extends BaseControl
 
         $grid->setDataSource($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
 
-
         $grid->addColumnText('identifier', 'Identifier')
             ->setTemplate(__DIR__.'/identifier.latte')
             ->setSortable()
@@ -93,6 +92,22 @@ class MenuGrid extends BaseControl
         $grid->addColumnBoolean('isHidden', 'Hidden');
 
         $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
+/*
+        $grid->addColumnText('lft', 'lft')
+            ->setEditableCallback(function($id, $value) {
+                $m = $this->menuRepository->getOneById($id);
+                $m->setLft($value);
+                $this->entityManager->persist($m);
+                $this->entityManager->flush();
+            });
+        $grid->addColumnText('rgt', 'rgt')->setEditableCallback(function($id, $value) {
+            $m = $this->menuRepository->getOneById($id);
+            $m->setRgt($value);
+            $this->entityManager->persist($m);
+            $this->entityManager->flush();
+        });
+        $grid->addColumnText('lvl', 'lvl');*/
+
 
         $grid->addAction('submenu', 'Submenu items', 'default', ['structureMenuId' => 'id'])
             ->setIcon('folder-open')
@@ -111,7 +126,7 @@ class MenuGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-xs btn-danger')
                 ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];

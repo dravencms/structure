@@ -23,7 +23,7 @@ use Nette;
  */
 class Menu
 {
-    use Nette\SmartObject;
+    //Uncomment when issue https://github.com/Atlantic18/DoctrineExtensions/issues/1981 is fixed, use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 
@@ -403,7 +403,6 @@ class Menu
         }
 
         $this->menuContents->removeElement($menuContent);
-        //$menuContent->setMenu(null); //!FIXME NEEDED ???
 
         $this->isContent = ($this->menuContents->count() > 0);
     }
@@ -414,6 +413,22 @@ class Menu
     public function setIsContent($isContent)
     {
         $this->isContent = $isContent;
+    }
+
+    /**
+     * @param $rgt
+     */
+    public function setRgt($rgt)
+    {
+        $this->rgt = $rgt;
+    }
+
+    /**
+     * @param $lft
+     */
+    public function setLft($lft)
+    {
+        $this->lft = $lft;
     }
 
     /**

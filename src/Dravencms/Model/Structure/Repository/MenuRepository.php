@@ -229,6 +229,16 @@ class MenuRepository
     }
 
     /**
+     * @param Menu $what
+     * @param Menu $behindWhat
+     */
+    public function persistAsNextSiblingOf(Menu $what, Menu $behindWhat)
+    {
+        $this->menuRepository->persistAsNextSiblingOf($what, $behindWhat);
+    }
+
+
+    /**
      * @param Menu $menu
      * @param string $latteTemplate
      * @throws \Exception
@@ -359,5 +369,30 @@ class MenuRepository
     public function moveDown(Menu $menu, $number = 1)
     {
         $this->menuRepository->moveDown($menu, $number);
+    }
+
+    /**
+     * @param null $parentMenu
+     * @param bool $isSystem
+     * @return \Doctrine\ORM\QueryBuilder|mixed|object|null
+     */
+    public function getLastMenuItem($parentMenu = null, $isSystem = false)
+    {
+        $qb = $this->menuRepository->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.isSystem = :isSystem')
+            ->setParameter('isSystem', $isSystem);
+
+        if ($parentMenu) {
+            $qb->andWhere('m.parent = :parent')
+                ->setParameter('parent', $parentMenu);
+        } else {
+            $qb->andWhere('m.parent IS NULL');
+        }
+
+        $qb->orderBy('m.lft', 'DESC');
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }
