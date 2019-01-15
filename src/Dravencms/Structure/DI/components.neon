@@ -4,3 +4,4 @@
 - Dravencms\FrontModule\Components\Structure\Search\Bar\BarFactory
 - Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory
 - Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory
+- Dravencms\AdminModule\Components\Structure\MenuMoveForm\MenuMoveFormFactory

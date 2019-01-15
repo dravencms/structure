@@ -1,0 +1,25 @@
+<form n:name="form" class="panel form-horizontal">
+    <ul class="alert alert-danger" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="menuId">{_"Move menu item(s)"}<span class="required">*</span></label>
+                    <select n:name="menuId" class="form-control"></select>
+                </div>
+            </div><!-- col-sm-6 -->
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="newParentId">{_"move to"}<span class="required">*</span></label>
+                    <select n:name="newParentId" class="form-control"></select>
+                </div>
+            </div><!-- col-sm-6 -->
+        </div><!-- row -->
+    </div>
+    <div class="panel-footer">
+        <input type="submit" n:name="send" class="btn btn-success button" value="{_"Save"}">
+    </div>
+</form>

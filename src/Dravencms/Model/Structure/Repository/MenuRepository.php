@@ -110,6 +110,7 @@ class MenuRepository
     }
 
     /**
+     * @deprecated
      * @param Menu $menu
      * @return Menu[]
      */
@@ -128,12 +129,23 @@ class MenuRepository
     }
 
     /**
+     * @deprecated
      * @param Menu $menu
      * @return Menu[]
      */
     public function buildParentTree(Menu $menu)
     {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated, use getPath instead', E_USER_DEPRECATED);
         return array_reverse($this->buildParentTreeResolver($menu));
+    }
+
+    /**
+     * @param Menu $menu
+     * @return Menu[]
+     */
+    public function getPath(Menu $menu)
+    {
+        return $this->menuRepository->getPath($menu);
     }
 
     /**
@@ -180,6 +192,15 @@ class MenuRepository
     public function getAll()
     {
         return $this->menuRepository->findBy(['isActive' => true]);
+    }
+
+    /**
+     * @param bool $isSystem
+     * @return Menu[]
+     */
+    public function getAllByIsSystem($isSystem = true)
+    {
+        return $this->menuRepository->findBy(['isSystem' => $isSystem]);
     }
 
     /**

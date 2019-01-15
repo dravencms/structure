@@ -2,6 +2,7 @@
 
 namespace Dravencms\AdminModule\StructureModule;
 
+use Dravencms\AdminModule\Components\Structure\MenuMoveForm\MenuMoveFormFactory;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory;
 use Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory;
@@ -35,12 +36,14 @@ class StructurePresenter extends SecuredPresenter
     /** @var MenuFormFactory @inject */
     public $structureMenuFormFactory;
 
+    /** @var MenuMoveFormFactory @inject */
+    public $structureMenuMoveFormFactory;
+
     /** @var Menu */
     private $structureMenu = null;
 
     /** @var null|Menu */
     private $menuEdit = null;
-
 
     /**
      * @param $structureMenuId
@@ -95,6 +98,34 @@ class StructurePresenter extends SecuredPresenter
         }
     }
 
+    public function actionMove($id)
+    {
+        /** @var Menu $menu */
+        $menu = $this->structureMenuRepository->getOneById($id);
+        if (!$menu) {
+            $this->error();
+        }
+        $this->template->h1 = $this->translator->translate('Move menu item %identifier%', ['identifier' => $menu->getIdentifier()]);
+        $this->menuEdit = $menu;
+    }
+
+    /**
+     * @return \Dravencms\AdminModule\Components\Structure\MenuMoveForm\MenuMoveForm
+     */
+    public function createComponentStructureMenuMoveForm()
+    {
+        $component = $this->structureMenuMoveFormFactory->create($this->menuEdit);
+        $component->onSuccess[] = function ($parentMenu) {
+            $this->flashMessage('Changes has been saved.', 'alert-success');
+            $this->redirect('Structure:', ['structureMenuId' => ($parentMenu ? $parentMenu->getId(): null)]);
+        };
+
+        return $component;
+    }
+
+    /**
+     * @return \Dravencms\AdminModule\Components\Structure\MenuForm\MenuForm
+     */
     public function createComponentStructureMenuForm()
     {
         $component = $this->structureMenuFormFactory->create($this->structureMenu, $this->menuEdit);

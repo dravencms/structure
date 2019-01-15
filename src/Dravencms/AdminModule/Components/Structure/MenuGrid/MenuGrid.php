@@ -115,6 +115,12 @@ class MenuGrid extends BaseControl
             ->setClass('btn btn-xs btn-default');
 
         if ($this->presenter->isAllowed('structure', 'edit')) {
+
+            $grid->addAction('move', '')
+                ->setIcon('share')
+                ->setTitle('Move')
+                ->setClass('btn btn-xs btn-default');
+
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
                 ->setTitle('Edit')
