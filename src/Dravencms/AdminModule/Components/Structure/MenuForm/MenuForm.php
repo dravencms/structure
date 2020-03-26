@@ -318,7 +318,11 @@ class MenuForm extends Control
             else
             {
                 $lastMenuItem = $this->structureMenuRepository->getLastMenuItem();
-                $this->structureMenuRepository->persistAsNextSiblingOf($menu, $lastMenuItem);
+                if ($lastMenuItem) {
+                    $this->structureMenuRepository->persistAsNextSiblingOf($menu, $lastMenuItem);
+                } else {
+                    $this->entityManager->persist($menu);
+                }
             }
         }
 
