@@ -179,11 +179,19 @@ class MenuRepository
     /**
      * @param $id
      * @return Menu|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getOneById($id)
     {
         return $this->menuRepository->find($id);
+    }
+
+    /**
+     * @param $identifier
+     * @return Menu|null
+     */
+    public function getOneByIdentifier($identifier)
+    {
+        return $this->menuRepository->findOneBy(['identifier' => $identifier]);
     }
     
     /**
