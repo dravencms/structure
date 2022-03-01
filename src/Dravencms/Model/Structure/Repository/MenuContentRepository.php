@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -9,12 +9,11 @@ namespace Dravencms\Model\Structure\Repository;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuContent;
 use Dravencms\Structure\MenuParameterSumGenerator;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 
 class MenuContentRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|MenuContent */
     private $menuContentRepository;
 
     /** @var EntityManager */
@@ -48,7 +47,7 @@ class MenuContentRepository
      * @param array $parameters
      * @return MenuContent
      */
-    public function getOneByMenuFactoryParameters(Menu $menu, $factory, array $parameters)
+    public function getOneByMenuFactoryParameters(Menu $menu, string $factory, array $parameters): ?MenuContent
     {
         $qb = $this->menuContentRepository->createQueryBuilder('mc')
             ->select('mc')
@@ -73,7 +72,7 @@ class MenuContentRepository
      * @return MenuContent
      * @throws \Exception
      */
-    public function saveMenuContent(Menu $menu, $factory, array $parameters)
+    public function saveMenuContent(Menu $menu, string $factory, array $parameters): MenuContent
     {
         $menuContent = new MenuContent($menu, $factory, $parameters, function($parameters){
             return $this->menuParameterSumGenerator->hash($parameters);
@@ -95,7 +94,7 @@ class MenuContentRepository
      * @param bool $isSystem
      * @return MenuContent
      */
-    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
+    public function getOneByFactoryAndParametersAndIsSystem(string $factory, array $parameters = [], bool $isSystem = false): ?MenuContent
     {
         if (!$this->isCacheFactoryInitialized)
         {
@@ -127,7 +126,7 @@ class MenuContentRepository
      * @param $id
      * @return null|MenuContent
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?MenuContent
     {
         return $this->menuContentRepository->find($id);
     }
@@ -137,7 +136,7 @@ class MenuContentRepository
      * @throws \Exception
      * @return void
      */
-    public function clearMenuContent(Menu $menu)
+    public function clearMenuContent(Menu $menu): void
     {
         foreach ($menu->getMenuContents() AS $menuContent)
         {

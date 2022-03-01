@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\Structure\Console;
 
@@ -14,6 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FixMenuTreeCommand extends Command
 {
+    protected static $defaultName = 'structure:menuTree:recover';
+    protected static $defaultDescription = 'Recovers structure menu tree';
+    
     /** @var EntityManager */
     private $entityManager;
 
@@ -31,13 +34,7 @@ class FixMenuTreeCommand extends Command
         $this->menuRepository = $menuRepository;
     }
 
-    protected function configure()
-    {
-        $this->setName('structure:menuTree:recover')
-            ->setDescription('Recovers structure menu tree');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
         try {

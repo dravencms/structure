@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -15,5 +15,5 @@ interface MenuFormFactory
      * @param Menu|null $menu
      * @return MenuForm
      */
-    public function create(Menu $parentMenu = null, Menu $menu = null);
+    public function create(Menu $parentMenu = null, Menu $menu = null): MenuForm;
 }

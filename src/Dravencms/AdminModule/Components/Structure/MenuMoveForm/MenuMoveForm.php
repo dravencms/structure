@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -8,18 +8,19 @@ namespace Dravencms\AdminModule\Components\Structure\MenuMoveForm;
 
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Dravencms\Model\Structure\Entities\MenuTranslation;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\Form;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Structure\MenuSlugGenerator;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 use Dravencms\Model\Structure\Entities\Menu;
 use Salamek\Cms\Cms;
 
-class MenuMoveForm extends Control
+class MenuMoveForm extends BaseControl
 {
     /** @var BaseFormFactory */
     private $baseFormFactory;
@@ -29,6 +30,9 @@ class MenuMoveForm extends Control
 
     /** @var EntityManager */
     private $entityManager;
+    
+    /** @var User */
+    private $user;
 
     /** @var Menu */
     private $menu;
@@ -53,10 +57,11 @@ class MenuMoveForm extends Control
         BaseFormFactory $baseForm,
         MenuRepository $structureMenuRepository,
         EntityManager $entityManager,
+        User $user,
         Menu $menu
     )
     {
-        parent::__construct();
+        $this->user = $user;
         $this->baseFormFactory = $baseForm;
         $this->structureMenuRepository = $structureMenuRepository;
         $this->entityManager = $entityManager;
@@ -72,7 +77,7 @@ class MenuMoveForm extends Control
     /**
      * @return Form
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -104,7 +109,7 @@ class MenuMoveForm extends Control
     /**
      * @param Form $form
      */
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -132,7 +137,7 @@ class MenuMoveForm extends Control
      * @param Form $form
      * @throws \Exception
      */
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -156,7 +161,7 @@ class MenuMoveForm extends Control
         $this->onSuccess($moveTo);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/MenuMoveForm.latte');

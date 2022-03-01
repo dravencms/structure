@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Special;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Locale\CurrentLocaleResolver;
-use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 
 class Special extends BaseControl
@@ -32,7 +31,7 @@ class Special extends BaseControl
     /**
      * @param array $showItems
      */
-    public function render(array $showItems)
+    public function render(array $showItems): void
     {
         $template = $this->template;
         $template->menuItems = $this->menuRepository->getById($showItems, $this->currentLocale);
@@ -43,7 +42,7 @@ class Special extends BaseControl
     /**
      * @param array $showItems
      */
-    public function renderFooter(array $showItems)
+    public function renderFooter(array $showItems): void
     {
         $template = $this->template;
 

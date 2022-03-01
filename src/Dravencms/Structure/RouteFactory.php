@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -51,7 +51,7 @@ class RouteFactory implements IRouterFactory
     {
         $router = new RouteList();
 
-        $router[] = $frontEnd = new RouteList('Front');
+        $frontEnd = new RouteList('Front');
 
         try
         {
@@ -64,13 +64,15 @@ class RouteFactory implements IRouterFactory
                 $defaultLanguageCode = 'en';
             }
 
-            $frontEnd[] = new SlugRouter('[<locale='.$defaultLanguageCode.' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository);
+            $frontEnd->add(new SlugRouter('[<locale='.$defaultLanguageCode.' [a-z]{2}>/][<slug .*>]', $this->structureMenuRepository, $this->menuTranslationRepository, $this->localeRepository));
         }
         catch(TableNotFoundException $e)
         {
             //!FIXME Ignore missing table, this is only way i can find to prevent this  part of code from crashing console when database is not created
         }
 
+        $rotuer->add($frontEnd);
+        
         return $router;
     }
 }

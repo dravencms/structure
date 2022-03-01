@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -7,19 +7,20 @@
 namespace Dravencms\AdminModule\Components\Structure\MenuForm;
 
 use Dravencms\Components\BaseForm\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Structure\MenuSlugGenerator;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
+use Dravencms\Components\BaseForm\Form;
 use Dravencms\Model\Structure\Entities\Menu;
 use Salamek\Cms\Cms;
 
-class MenuForm extends Control
+class MenuForm extends BaseControl
 {
     /** @var BaseFormFactory */
     private $baseFormFactory;
@@ -33,6 +34,9 @@ class MenuForm extends Control
     /** @var EntityManager */
     private $entityManager;
 
+    /** @var User */
+    private $user;
+    
     /** @var Cms */
     private $cms;
 
@@ -60,33 +64,35 @@ class MenuForm extends Control
      * @param MenuRepository $structureMenuRepository
      * @param MenuTranslationRepository $menuTranslationRepository
      * @param EntityManager $entityManager
+     * @param User $user
      * @param Cms $cms
-     * @param Menu|null $parentMenu
-     * @param Menu|null $menu
      * @param MenuParameterSumGenerator $menuParameterSumGenerator
      * @param LocaleRepository $localeRepository
      * @param MenuSlugGenerator $menuSlugGenerator
+     * @param Menu $parentMenu
+     * @param Menu $menu
      */
     public function __construct(
         BaseFormFactory $baseForm,
         MenuRepository $structureMenuRepository,
         MenuTranslationRepository $menuTranslationRepository,
         EntityManager $entityManager,
+        User $user,
         Cms $cms,
-        Menu $parentMenu = null,
-        Menu $menu = null,
         MenuParameterSumGenerator $menuParameterSumGenerator,
         LocaleRepository $localeRepository,
-        MenuSlugGenerator $menuSlugGenerator
+        MenuSlugGenerator $menuSlugGenerator,
+        Menu $parentMenu = null,
+        Menu $menu = null
     )
     {
-        parent::__construct();
         $this->baseFormFactory = $baseForm;
         $this->structureMenuRepository = $structureMenuRepository;
         $this->menuTranslationRepository = $menuTranslationRepository;
         $this->entityManager = $entityManager;
         $this->cms = $cms;
         $this->menu = $menu;
+        $this->user = $user;
         $this->parentMenu = $parentMenu;
         $this->menuParameterSumGenerator = $menuParameterSumGenerator;
         $this->localeRepository = $localeRepository;
@@ -140,7 +146,7 @@ class MenuForm extends Control
     /**
      * @return Form
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -224,7 +230,7 @@ class MenuForm extends Control
     /**
      * @param Form $form
      */
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -252,7 +258,7 @@ class MenuForm extends Control
      * @param Form $form
      * @throws \Exception
      */
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -383,7 +389,7 @@ class MenuForm extends Control
         $this->onSuccess($menu);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

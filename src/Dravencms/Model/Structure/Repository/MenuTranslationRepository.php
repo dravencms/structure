@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,16 +8,14 @@ namespace Dravencms\Model\Structure\Repository;
 use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
-use Doctrine\ORM\Query;
 use Dravencms\Structure\MenuSlugGenerator;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
-use Tracy\Debugger;
+
 
 class MenuTranslationRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|MenuTranslation */
     private $menuTranslationRepository;
 
     /** @var MenuSlugGenerator */
@@ -54,7 +52,7 @@ class MenuTranslationRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Menu $parentMenu = null, Menu $ignoreMenu = null)
+    public function isNameFree(string $name, ILocale $locale, Menu $parentMenu = null, Menu $ignoreMenu = null): bool
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -87,7 +85,7 @@ class MenuTranslationRepository
      * @param bool $isSystem
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getMenuTranslationQueryBuilder(Menu $parentMenu = null, $isSystem = false)
+    public function getMenuTranslationQueryBuilder(Menu $parentMenu = null, bool $isSystem = false)
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -113,7 +111,7 @@ class MenuTranslationRepository
      * @param null $offset
      * @return Menu[]
      */
-    public function search($query = null, $limit = null, $offset = null)
+    public function search(string $query = null, int $limit = null, int $offset = null)
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -159,7 +157,7 @@ class MenuTranslationRepository
      * @param ILocale $locale
      * @return array
      */
-    public function getOneBySlug($slug, $requestParams = [], ILocale $locale = null)
+    public function getOneBySlug(string $slug, array $requestParams = [], ILocale $locale = null)
     {
         $found = $this->menuTranslationRepository->findOneBy(['slug' => $slug, 'locale' => $locale]);
         if ($found)
@@ -229,7 +227,7 @@ class MenuTranslationRepository
      * @return MenuTranslation
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTranslation(Menu $menu, ILocale $locale)
+    public function getTranslation(Menu $menu, ILocale $locale): ?MenuTranslation
     {
         return $this->menuTranslationRepository->findOneBy(['menu' => $menu, 'locale' => $locale]);
     }
@@ -239,7 +237,7 @@ class MenuTranslationRepository
      * @param ILocale $locale
      * @return mixed|null
      */
-    public function getSlug(Menu $menu, ILocale $locale)
+    public function getSlug(Menu $menu, ILocale $locale): string
     {
         if (!$this->isMenuTranslationSlugRuntimeCacheInitialized)
         {
@@ -268,7 +266,16 @@ class MenuTranslationRepository
      * @return MenuTranslation
      * @throws \Exception
      */
-    public function translateMenu(Menu $menu, Locale $locale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug = null)
+    public function translateMenu(
+            Menu $menu, 
+            Locale $locale, 
+            string $h1, 
+            string $metaDescription, 
+            string $metaKeywords, 
+            string $title, 
+            string $name, 
+            string $slug = null
+            ): ?MenuTranslation
     {
         if ($foundTranslation = $this->getTranslation($menu, $locale))
         {

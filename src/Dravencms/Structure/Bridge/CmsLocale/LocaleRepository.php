@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\Structure\Bridge\CmsLocale;
 
@@ -44,7 +44,7 @@ class LocaleRepository implements ILocaleRepository
     /**
      * @return Locale
      */
-    public function getCurrentLocale()
+    public function getCurrentLocale(): Locale
     {
         return new Locale($this->currentLocale);
     }
@@ -52,7 +52,7 @@ class LocaleRepository implements ILocaleRepository
     /**
      * @return Locale
      */
-    public function getDefault()
+    public function getDefault(): Locale
     {
         return new Locale($this->localeRepository->getDefault());
     }

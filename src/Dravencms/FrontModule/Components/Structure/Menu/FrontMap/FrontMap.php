@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Frontmap;
 
@@ -10,7 +10,7 @@ class Frontmap extends BaseControl
     /** @var MenuRepository @inject */
     public $menuRepository;
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
 

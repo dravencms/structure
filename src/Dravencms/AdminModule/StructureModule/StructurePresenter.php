@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\AdminModule\StructureModule;
 
 use Dravencms\AdminModule\Components\Structure\MenuMoveForm\MenuMoveFormFactory;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\AdminModule\Components\Structure\MenuForm\MenuFormFactory;
+use Dravencms\AdminModule\Components\Structure\MenuForm\MenuForm;
 use Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGridFactory;
+use Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGrid;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuRepository;
@@ -49,7 +51,7 @@ class StructurePresenter extends SecuredPresenter
      * @param $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
-    public function actionDefault($structureMenuId)
+    public function actionDefault(int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
         if ($structureMenuId) {
@@ -74,7 +76,7 @@ class StructurePresenter extends SecuredPresenter
      * @param null $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
-    public function actionEdit($id = null, $structureMenuId = null)
+    public function actionEdit(int $id = null, int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
 
@@ -98,7 +100,7 @@ class StructurePresenter extends SecuredPresenter
         }
     }
 
-    public function actionMove($id)
+    public function actionMove(int $id): void
     {
         /** @var Menu $menu */
         $menu = $this->structureMenuRepository->getOneById($id);
@@ -124,9 +126,9 @@ class StructurePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Structure\MenuForm\MenuForm
+     * @return MenuForm
      */
-    public function createComponentStructureMenuForm()
+    public function createComponentStructureMenuForm(): MenuForm
     {
         $component = $this->structureMenuFormFactory->create($this->structureMenu, $this->menuEdit);
         $component->onSuccess[] = function ($menu) {
@@ -147,9 +149,9 @@ class StructurePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGrid
+     * @return MenuGrid
      */
-    protected function createComponentMenuGrid()
+    protected function createComponentMenuGrid(): MenuGrid
     {
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(false);
@@ -161,9 +163,9 @@ class StructurePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Structure\MenuGrid\MenuGrid
+     * @return MenuGrid
      */
-    protected function createComponentMenuSystemGrid()
+    protected function createComponentMenuSystemGrid(): MenuGrid
     {
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(true);
@@ -177,7 +179,7 @@ class StructurePresenter extends SecuredPresenter
     /**
      * @param $structureMenuId
      */
-    public function handleBlocksJson($structureMenuId)
+    public function handleBlocksJson(int $structureMenuId): void
     {
         $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
         $this->payload->structure = (object)/*We work with object in JS not arrays*/
@@ -211,7 +213,7 @@ class StructurePresenter extends SecuredPresenter
      * @param $structureMenuId
      * @param array $structureTree
      */
-    public function handleStructureSave($structureMenuId, array $structureTree)
+    public function handleStructureSave(int $structureMenuId, array $structureTree): void
     {
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
 

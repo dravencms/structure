@@ -16,8 +16,8 @@
   ],
   "require": {
     "salamek/nette-cms": "^v1.0",
-    "dravencms/locale": "^v1.0",
-    "dravencms/admin": "^v1.0"
+    "dravencms/locale": ">=2.0",
+    "dravencms/admin": ">=2.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
@@ -29,40 +29,7 @@
   },
   "extra": {
     "dravencms": {
-      "configuration": {
-        "extensions": {
-          "cms": "Salamek\\Cms\\DI\\CmsExtension",
-          "structure": "Dravencms\\Structure\\DI\\StructureExtension"
-        },
-        "cms": {
-          "tempPath": "%appDir%/FrontModule/cms",
-          "presenterModule": "Front",
-          "presenterMapping": "Dravencms\\*Module\\*Presenter",
-          "parentClass": "Dravencms\\FrontModule\\SlugPresenter",
-          "layoutDir": "%appDir%/FrontModule/templates",
-          "defaultLayout": "%layout.name%",
-          "mappings": {
-            "Dravencms\\FrontModule\\Components\\*\\*\\-\\*Factory": "Dravencms\\Model\\*\\Repository\\*CmsRepository"
-          }
-        },
-        "services": {
-          "routeFactory.Structure": "Dravencms\\Structure\\RouteFactory",
-          "route": {
-            "setup": [
-              "addRouteFactory(@routeFactory.Structure)"
-            ]
-          }
-        },
-        "doctrine":{
-          "metadata": {
-            "Dravencms\\Model\\Structure": "%appDir%/../vendor/dravencms/structure/src/Dravencms/Model/Structure"
-          }
-        }
-      },
-      "scripts": {
-        "post-install": "Dravencms\\Structure\\Script\\PostInstall",
-        "pre-uninstall": "Dravencms\\Structure\\Script\\PreUninstall"
-      }
+      "configuration": "dravencms.config.neon"
     }
   }
 }

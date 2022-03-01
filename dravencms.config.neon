@@ -1,0 +1,24 @@
+extensions:
+    dravencms.cms: Dravencms\Cms\DI\CmsExtension
+    dravencms.structure: Dravencms\Structure\DI\StructureExtension
+
+
+cms:
+    tempPath: %appDir%/FrontModule/cms
+    presenterModule: "Front"
+    presenterMapping: Dravencms\*Module\*Presenter
+    parentClass: Dravencms\FrontModule\SlugPresenter
+    layoutDir: %appDir%/FrontModule/templates
+    defaultLayout: %layout.name%
+    mappings:
+        Dravencms\FrontModule\Components\*\*\-\*Factory: Dravencms\Model\*\Repository\*CmsRepository
+    
+services:
+    routeFactory.Structure: Dravencms\Structure\RouteFactory
+    route:
+        setup:
+           - addRouteFactory(@routeFactory.Structure)
+
+nettrine.orm.annotations:
+    mapping:
+        Dravencms\Model\Structure: %appDir%/../vendor/dravencms/structure/src/Dravencms/Model/Structure/Entities

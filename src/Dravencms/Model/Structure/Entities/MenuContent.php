@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,7 +7,7 @@ namespace Dravencms\Model\Structure\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -54,7 +54,7 @@ class MenuContent
      * @param array $parameters
      * @param callable $parameterSumGenerator
      */
-    public function __construct(Menu $menu, $factory, array $parameters, callable $parameterSumGenerator)
+    public function __construct(Menu $menu, string $factory, array $parameters, callable $parameterSumGenerator)
     {
         $this->setMenu($menu);
         $this->factory = $factory;
@@ -65,7 +65,7 @@ class MenuContent
      * @param $parameters
      * @param callable $parameterSumGenerator
      */
-    public function setParameters($parameters, callable $parameterSumGenerator)
+    public function setParameters(array $parameters, callable $parameterSumGenerator): void
     {
         $this->parameters = $parameters;
         $this->parametersSum = $parameterSumGenerator($parameters);
@@ -74,7 +74,7 @@ class MenuContent
     /**
      * @param Menu $menu
      */
-    public function setMenu(Menu $menu)
+    public function setMenu(Menu $menu): void
     {
         $menu->addMenuContent($this);
         $this->menu = $menu;
@@ -83,7 +83,7 @@ class MenuContent
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -91,7 +91,7 @@ class MenuContent
     /**
      * @return Menu
      */
-    public function getMenu()
+    public function getMenu(): Menu
     {
         return $this->menu;
     }
@@ -99,7 +99,7 @@ class MenuContent
     /**
      * @return string
      */
-    public function getFactory()
+    public function getFactory(): string
     {
         return $this->factory;
     }

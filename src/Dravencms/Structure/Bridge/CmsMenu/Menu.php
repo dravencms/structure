@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -24,7 +24,7 @@ class Menu implements IMenu
     /**
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->menu->getAction();
     }
@@ -32,23 +32,23 @@ class Menu implements IMenu
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->menu->getId();
     }
 
     /**
-     * @return mixed|string
+     * @return null|string
      */
-    public function getLatteTemplate()
+    public function getLatteTemplate(): ?string
     {
         return $this->menu->getLatteTemplate();
     }
 
     /**
-     * @return mixed|string
+     * @return null|string
      */
-    public function getLayoutName()
+    public function getLayoutName(): ?string
     {
         return $this->menu->getLayoutName();
     }
@@ -67,7 +67,7 @@ class Menu implements IMenu
     /**
      * @return string
      */
-    public function getMetaRobots()
+    public function getMetaRobots(): string
     {
         return $this->menu->getMetaRobots();
     }
@@ -75,7 +75,7 @@ class Menu implements IMenu
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->menu->getParameters();
     }
@@ -83,7 +83,7 @@ class Menu implements IMenu
     /**
      * @return string
      */
-    public function getPresenter()
+    public function getPresenter(): string
     {
         return $this->menu->getPresenter();
     }
@@ -91,7 +91,7 @@ class Menu implements IMenu
     /**
      * @return bool
      */
-    public function isHomePage()
+    public function isHomePage(): bool
     {
         return $this->menu->isHomePage();
     }
@@ -99,7 +99,7 @@ class Menu implements IMenu
     /**
      * @return bool|mixed
      */
-    public function isShowH1()
+    public function isShowH1(): bool
     {
         return $this->menu->isShowH1();
     }
@@ -107,12 +107,12 @@ class Menu implements IMenu
     /**
      * @return bool
      */
-    public function isSystem()
+    public function isSystem(): bool
     {
         return $this->menu->isSystem();
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->menu->getIdentifier();
     }

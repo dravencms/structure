@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -24,7 +24,7 @@ class MenuContent implements IMenuContent
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->menuContent->getParameters();
     }
@@ -32,7 +32,7 @@ class MenuContent implements IMenuContent
     /**
      * @return Menu
      */
-    public function getMenu()
+    public function getMenu(): Menu
     {
         return new Menu($this->menuContent->getMenu());
     }
@@ -40,7 +40,7 @@ class MenuContent implements IMenuContent
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->menuContent->getId();
     }
@@ -48,7 +48,7 @@ class MenuContent implements IMenuContent
     /**
      * @return string
      */
-    public function getFactory()
+    public function getFactory(): string
     {
         return $this->menuContent->getFactory();
     }

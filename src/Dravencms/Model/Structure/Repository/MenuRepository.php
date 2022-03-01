@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,14 +7,12 @@ namespace Dravencms\Model\Structure\Repository;
 
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Structure\MenuParameterSumGenerator;
-use Doctrine\ORM\Query;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class MenuRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Menu */
     private $menuRepository;
     
     /** @var EntityManager */
@@ -57,7 +55,7 @@ class MenuRepository
      * @param bool $isSystem
      * @return static
      */
-    public function getMenuQueryBuilder(Menu $parentMenu = null, $isSystem = false)
+    public function getMenuQueryBuilder(Menu $parentMenu = null, bool $isSystem = false)
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
@@ -82,7 +80,7 @@ class MenuRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Menu $ignoreMenu = null)
+    public function isIdentifierFree(string $identifier, Menu $ignoreMenu = null): bool
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
@@ -114,7 +112,7 @@ class MenuRepository
      * @param Menu $menu
      * @return Menu[]
      */
-    private function buildParentTreeResolver(Menu $menu)
+    private function buildParentTreeResolver(Menu $menu): array
     {
         $breadcrumb = [];
 
@@ -133,7 +131,7 @@ class MenuRepository
      * @param Menu $menu
      * @return Menu[]
      */
-    public function buildParentTree(Menu $menu)
+    public function buildParentTree(Menu $menu): array
     {
         trigger_error('Method ' . __METHOD__ . ' is deprecated, use getPath instead', E_USER_DEPRECATED);
         return array_reverse($this->buildParentTreeResolver($menu));
@@ -153,7 +151,7 @@ class MenuRepository
      * @param ILocale $locale
      * @return mixed
      */
-    public function getTree($options, ILocale $locale = null)
+    public function getTree(array $options, ILocale $locale = null)
     {
         $query = $this->menuRepository
             ->createQueryBuilder('node')
@@ -180,7 +178,7 @@ class MenuRepository
      * @param $id
      * @return Menu|null
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Menu
     {
         return $this->menuRepository->find($id);
     }
@@ -189,7 +187,7 @@ class MenuRepository
      * @param $identifier
      * @return Menu|null
      */
-    public function getOneByIdentifier($identifier)
+    public function getOneByIdentifier(string $identifier): ?Menu
     {
         return $this->menuRepository->findOneBy(['identifier' => $identifier]);
     }
@@ -214,7 +212,7 @@ class MenuRepository
     /**
      * @throws \Exception
      */
-    public function resetIsHomePage()
+    public function resetIsHomePage(): void
     {
         /** @var Menu $homePageMenu */
         foreach ($this->menuRepository->findBy(['isHomePage' => true]) AS $homePageMenu) {
@@ -231,7 +229,7 @@ class MenuRepository
      * @param $action
      * @return Menu|null
      */
-    public function getOneByPresenterAction($presenter, $action)
+    public function getOneByPresenterAction(string $presenter, string $action): ?Menu
     {
         if (!$this->presenterCacheInitialized) {
             $result = $this->menuRepository->findAll();
@@ -252,7 +250,7 @@ class MenuRepository
      * @param Menu $child
      * @param Menu $root
      */
-    public function persistAsLastChildOf(Menu $child, Menu $root)
+    public function persistAsLastChildOf(Menu $child, Menu $root): void
     {
         $this->menuRepository->persistAsLastChildOf($child, $root);
     }
@@ -261,7 +259,7 @@ class MenuRepository
      * @param Menu $what
      * @param Menu $behindWhat
      */
-    public function persistAsNextSiblingOf(Menu $what, Menu $behindWhat)
+    public function persistAsNextSiblingOf(Menu $what, Menu $behindWhat): void
     {
         $this->menuRepository->persistAsNextSiblingOf($what, $behindWhat);
     }
@@ -273,7 +271,7 @@ class MenuRepository
      * @throws \Exception
      * @return void
      */
-    public function saveLatteTemplate(Menu $menu, $latteTemplate)
+    public function saveLatteTemplate(Menu $menu, string $latteTemplate): void
     {
         $menu->setLatteTemplate($latteTemplate);
         $this->entityManager->persist($menu);
@@ -287,7 +285,7 @@ class MenuRepository
      * @throws \Exception
      * @return void
      */
-    public function savePresenterAction(Menu $menu, $presenterName, $actionName)
+    public function savePresenterAction(Menu $menu, string $presenterName, string $actionName): void
     {
         $menu->setPresenter($presenterName);
         $menu->setAction($actionName);
@@ -302,7 +300,7 @@ class MenuRepository
      * @param bool $isSitemap
      * @return array
      */
-    public function getSitemap($isSitemap = true)
+    public function getSitemap(bool $isSitemap = true)
     {
         return $this->menuRepository->findBy(['isSitemap' => $isSitemap]);
     }
@@ -326,21 +324,21 @@ class MenuRepository
      * @throws \Exception
      */
     public function createNewMenu(
-        $identifier,
-        $isActive = true,
-        $isHidden = false,
-        $isHomePage = false,
-        $sitemapPriority = 0.5,
-        $isSitemap = true,
-        $isShowH1 = true,
-        $presenter = null,
-        $action = null,
-        $isSystem = false,
+        string $identifier,
+        bool $isActive = true,
+        bool $isHidden = false,
+        bool $isHomePage = false,
+        float $sitemapPriority = 0.5,
+        bool $isSitemap = true,
+        bool $isShowH1 = true,
+        string $presenter = null,
+        string $action = null,
+        bool $isSystem = false,
         array $parameters = [],
-        $isRegularExpression = false,
-        $isRegularExpressionMatchArguments = false,
-        $layoutName = 'layout'
-    ) {
+        bool $isRegularExpression = false,
+        bool $isRegularExpressionMatchArguments = false,
+        string $layoutName = 'layout'
+    ): Menu {
         $newMenu = new Menu(function ($parameters) {
             return $this->menuParameterSumGenerator->hash($parameters);
         },
@@ -367,9 +365,9 @@ class MenuRepository
     }
 
     /**
-     * @return Menu
+     * @return null|Menu
      */
-    public function getHomePage()
+    public function getHomePage(): ?Menu
     {
         if (!$this->cacheHomePage) {
             $this->cacheHomePage = $this->menuRepository->findOneBy(['isHomePage' => true]);
@@ -384,7 +382,7 @@ class MenuRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Exception
      */
-    public function moveUp(Menu $menu, $number = 1)
+    public function moveUp(Menu $menu, int $number = 1): void
     {
         $this->menuRepository->moveUp($menu, $number);
     }
@@ -395,17 +393,17 @@ class MenuRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Exception
      */
-    public function moveDown(Menu $menu, $number = 1)
+    public function moveDown(Menu $menu, int $number = 1): void
     {
         $this->menuRepository->moveDown($menu, $number);
     }
 
     /**
-     * @param null $parentMenu
+     * @param null|Menu $parentMenu
      * @param bool $isSystem
-     * @return \Doctrine\ORM\QueryBuilder|mixed|object|null
+     * @return null|Menu
      */
-    public function getLastMenuItem($parentMenu = null, $isSystem = false)
+    public function getLastMenuItem(Menu $parentMenu = null, bool $isSystem = false): ?Menu
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')

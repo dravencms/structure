@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,9 +7,17 @@ namespace Dravencms\FrontModule;
 
 
 use Dravencms\FrontModule\Components\Locale\Locale\Switcher\SwitcherFactory;
+use Dravencms\FrontModule\Components\Locale\Locale\Switcher\Switcher;
 use Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\BreadcrumbFactory;
+use Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb\Breadcrumb;
 use Dravencms\FrontModule\Components\Structure\Menu\Front\FrontFactory;
+use Dravencms\FrontModule\Components\Structure\Menu\Front\Front;
 use Dravencms\FrontModule\Components\Structure\Menu\Special\SpecialFactory;
+use Dravencms\FrontModule\Components\Structure\Menu\Special\Special;
+use Dravencms\FrontModule\Components\Structure\Search\Bar\BarFactory;
+use Dravencms\FrontModule\Components\Structure\Search\Bar\Bar;
+use WebLoader\Nette\CssLoader;
+use WebLoader\Nette\JavaScriptLoader;
 use Dravencms\Locale\TLocalizedPresenter;
 use Salamek\Cms\Cms;
 
@@ -32,38 +40,38 @@ abstract class SlugPresenter extends BasePresenter
     /** @var BreadcrumbFactory @inject */
     public $structureMenuBreadcrumbFactory;
 
-    /** @var \Dravencms\FrontModule\Components\Structure\Search\Bar\BarFactory @inject */
+    /** @var BarFactory @inject */
     public $structureSearchBarFactory;
 
     /**
-     * @return Components\Structure\Search\Bar\Bar
+     * @return Bar
      */
-    public function createComponentStructureSearchBar()
+    public function createComponentStructureSearchBar(): Bar
     {
         return $this->structureSearchBarFactory->create();
     }
 
     /**
-     * @return Components\Structure\Menu\Breadcrumb\Breadcrumb
+     * @return Breadcrumb
      */
-    public function createComponentStructureMenuBreadcrumb()
+    public function createComponentStructureMenuBreadcrumb(): Breadcrumb
     {
         return $this->structureMenuBreadcrumbFactory->create();
     }
 
     /**
-     * @return Components\Structure\Menu\Special\Special
+     * @return Special
      */
-    public function createComponentStructureMenuSpecial()
+    public function createComponentStructureMenuSpecial(): Special
     {
         return $this->structureMenuSpecialFactory->create();
     }
 
 
     /**
-     * @return Components\Structure\Menu\Front\Front
+     * @return Front
      */
-    public function createComponentStructureMenuFront()
+    public function createComponentStructureMenuFront(): Front
     {
         $menuConfig = [
             'decorate' => true,
@@ -111,9 +119,9 @@ abstract class SlugPresenter extends BasePresenter
     }
 
     /**
-     * @return Components\Locale\Locale\Switcher\Switcher
+     * @return Switcher
      */
-    public function createComponentLocaleLocaleSwitcher()
+    public function createComponentLocaleLocaleSwitcher(): Switcher
     {
         return $this->localeLocaleSwitcherFactory->create();
     }
@@ -121,15 +129,15 @@ abstract class SlugPresenter extends BasePresenter
     /**
      * @return \WebLoader\Nette\CssLoader
      */
-    public function createComponentCss()
+    public function createComponentCss(): CssLoader
     {
         return $this->webLoader->createCssLoader($this->getLayout() ? $this->getLayout(): $this->cmsFactory->getDefaultLayout());
     }
 
     /**
-     * @return \WebLoader\Nette\JavaScriptLoader
+     * @return JavaScriptLoader
      */
-    public function createComponentJs()
+    public function createComponentJs(): JavaScriptLoader
     {
         return $this->webLoader->createJavaScriptLoader($this->getLayout() ? $this->getLayout(): $this->cmsFactory->getDefaultLayout());
     }

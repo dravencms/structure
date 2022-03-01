@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -17,7 +17,7 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
      *
      * @param ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $child = new Menu('Web structure and content', ':Admin:Structure:Structure', 'fa-code-fork', $this->getReference('user-acl-operation-structure-edit'));
         $manager->persist($child);
@@ -27,12 +27,12 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
 
         $manager->flush();
     }
+    
     /**
      * Get the order of this fixture
-     *
-     * @return integer
+     * @return array
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return ['Dravencms\Model\Structure\Fixtures\AclOperationFixtures'];
     }

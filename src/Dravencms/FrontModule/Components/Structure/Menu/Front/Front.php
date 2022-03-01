@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Front;
 
@@ -35,14 +35,13 @@ class Front extends BaseControl
         CurrentLocaleResolver $currentLocaleResolver
     )
     {
-        parent::__construct();
         $this->menuConfig = $menuConfig;
         $this->menuRepository = $menuRepository;
         $this->menuTranslationRepository = $menuTranslationRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
 

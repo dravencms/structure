@@ -1,10 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Search\Overview;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Structure\Repository\MenuRepository;
-use Dravencms\Model\Structure\Repository\SearchRepository;
 use IPub\VisualPaginator\Components\Control;
 use Salamek\Cms\ICmsActionOption;
 
@@ -18,13 +17,12 @@ class Overview extends BaseControl
 
     public function __construct(ICmsActionOption $cmsActionOption, MenuRepository $menuRepository)
     {
-        parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->menuRepository = $menuRepository;
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
 
@@ -47,7 +45,7 @@ class Overview extends BaseControl
     /**
      * @return Control
      */
-    protected function createComponentVisualPaginator()
+    protected function createComponentVisualPaginator(): Control
     {
         // Init visual paginator
         $control = new Control();

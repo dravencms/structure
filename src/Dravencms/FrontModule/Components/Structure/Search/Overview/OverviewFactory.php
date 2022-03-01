@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -27,5 +27,5 @@ interface OverviewFactory
      * @param ICmsActionOption $cmsActionOption
      * @return Overview
      */
-    public function create(ICmsActionOption $cmsActionOption);
+    public function create(ICmsActionOption $cmsActionOption): Overview;
 }

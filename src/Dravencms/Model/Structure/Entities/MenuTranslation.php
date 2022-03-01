@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -97,7 +97,17 @@ class MenuTranslation
      * @param $h1
      * @param callable $slugGenerator
      */
-    public function __construct(Menu $menu, Locale $locale, $name, $metaDescription, $metaKeywords, $title, $h1, callable $slugGenerator, $customUrl = null)
+    public function __construct(
+            Menu $menu, 
+            Locale $locale, 
+            string $name, 
+            string $metaDescription, 
+            string $metaKeywords, 
+            string $title, 
+            string $h1, 
+            callable $slugGenerator, 
+            string $customUrl = null
+            )
     {
         $this->name = $name;
         $this->metaDescription = $metaDescription;
@@ -113,7 +123,7 @@ class MenuTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -121,12 +131,12 @@ class MenuTranslation
     /**
      * @param string $slugSum
      */
-    public function setSlugSum($slugSum)
+    public function setSlugSum(string $slugSum): void
     {
         $this->slugSum = $slugSum;
     }
 
-    public function generateSlug(callable  $slugGenerator)
+    public function generateSlug(callable  $slugGenerator): void
     {
         $this->setSlug($slugGenerator($this));
     }
@@ -134,7 +144,7 @@ class MenuTranslation
     /**
      * @param string $slug
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug): void
     {
         $this->slug = $slug;
         $this->setSlugSum(md5($slug));
@@ -143,7 +153,7 @@ class MenuTranslation
     /**
      * @param string $metaDescription
      */
-    public function setMetaDescription($metaDescription)
+    public function setMetaDescription(string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
     }
@@ -151,7 +161,7 @@ class MenuTranslation
     /**
      * @param string $metaKeywords
      */
-    public function setMetaKeywords($metaKeywords)
+    public function setMetaKeywords(string $metaKeywords): void
     {
         $this->metaKeywords = $metaKeywords;
     }
@@ -159,7 +169,7 @@ class MenuTranslation
     /**
      * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -167,15 +177,15 @@ class MenuTranslation
     /**
      * @param string $h1
      */
-    public function setH1($h1)
+    public function setH1(string $h1): void
     {
         $this->h1 = $h1;
     }
 
     /**
-     * @param string $customUrl
+     * @param null|string $customUrl
      */
-    public function setCustomUrl($customUrl)
+    public function setCustomUrl(string $customUrl = null): void
     {
         $this->customUrl = $customUrl;
     }
@@ -183,7 +193,7 @@ class MenuTranslation
     /**
      * @param Menu $menu
      */
-    public function setMenu($menu)
+    public function setMenu(Menu $menu): void
     {
         $this->menu = $menu;
     }
@@ -191,7 +201,7 @@ class MenuTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale($locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -199,15 +209,15 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -215,7 +225,7 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->metaDescription;
     }
@@ -223,7 +233,7 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->metaKeywords;
     }
@@ -231,7 +241,7 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -239,7 +249,7 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getH1()
+    public function getH1(): string
     {
         return $this->h1;
     }
@@ -247,7 +257,7 @@ class MenuTranslation
     /**
      * @return Menu
      */
-    public function getMenu()
+    public function getMenu(): Menu
     {
         return $this->menu;
     }
@@ -255,7 +265,7 @@ class MenuTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
@@ -263,15 +273,15 @@ class MenuTranslation
     /**
      * @return string
      */
-    public function getSlugSum()
+    public function getSlugSum(): string
     {
         return $this->slugSum;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getCustomUrl()
+    public function getCustomUrl(): ?string
     {
         return $this->customUrl;
     }

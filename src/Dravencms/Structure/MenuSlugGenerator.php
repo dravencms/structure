@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -12,7 +12,7 @@ use Nette\Utils\Strings;
 
 class MenuSlugGenerator
 {
-    public function slugify(MenuTranslation $menuTranslation)
+    public function slugify(MenuTranslation $menuTranslation): string
     {
         $slugParts = [];
         $menu = $menuTranslation->getMenu();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -25,15 +25,15 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->menuTranslation->getName();
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->menuTranslation->getSlug();
     }
@@ -41,7 +41,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->menuTranslation->getId();
     }
@@ -49,7 +49,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return string
      */
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         return $this->menuTranslation->getMetaDescription();
     }
@@ -57,7 +57,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return string
      */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): string
     {
         return $this->menuTranslation->getMetaKeywords();
     }
@@ -65,7 +65,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->menuTranslation->getTitle();
     }
@@ -73,7 +73,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return string
      */
-    public function getH1()
+    public function getH1(): string
     {
         return $this->menuTranslation->getH1();
     }
@@ -81,7 +81,7 @@ class MenuTranslation implements IMenuTranslation
     /**
      * @return IMenu
      */
-    public function getIMenu()
+    public function getIMenu(): Menu
     {
         return new Menu($this->menuTranslation->getMenu());
     }

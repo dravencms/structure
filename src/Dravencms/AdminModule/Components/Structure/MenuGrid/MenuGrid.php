@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -13,8 +13,8 @@ use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
-use Nette\Utils\Html;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 class MenuGrid extends BaseControl
 {
@@ -28,6 +28,9 @@ class MenuGrid extends BaseControl
 
     /** @var EntityManager */
     private $entityManager;
+    
+    /** @var User */
+    private $user;
 
     /** @var Menu */
     private $parentMenu = null;
@@ -51,11 +54,11 @@ class MenuGrid extends BaseControl
         MenuRepository $menuRepository,
         MenuTranslationRepository $menuTranslationRepository,
         BaseGridFactory $baseGridFactory,
+        User $user,
         EntityManager $entityManager
     )
     {
-        parent::__construct();
-
+        $this->user = $user;
         $this->baseGridFactory = $baseGridFactory;
         $this->menuTranslationRepository = $menuTranslationRepository;
         $this->parentMenu = $parentMenu;
@@ -66,7 +69,7 @@ class MenuGrid extends BaseControl
     /**
      * @param bool $isSystem
      */
-    public function setIsSystem($isSystem = true)
+    public function setIsSystem(bool $isSystem = true): void
     {
         $this->isSystem = $isSystem;
     }
@@ -76,7 +79,7 @@ class MenuGrid extends BaseControl
      * @return Grid
      * @throws \Ublaboo\DataGrid\Exception\DataGridColumnNotFoundException
      */
-    protected function createComponentGrid($name)
+    protected function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -92,29 +95,13 @@ class MenuGrid extends BaseControl
         $grid->addColumnBoolean('isHidden', 'Hidden');
 
         $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
-/*
-        $grid->addColumnText('lft', 'lft')
-            ->setEditableCallback(function($id, $value) {
-                $m = $this->menuRepository->getOneById($id);
-                $m->setLft($value);
-                $this->entityManager->persist($m);
-                $this->entityManager->flush();
-            });
-        $grid->addColumnText('rgt', 'rgt')->setEditableCallback(function($id, $value) {
-            $m = $this->menuRepository->getOneById($id);
-            $m->setRgt($value);
-            $this->entityManager->persist($m);
-            $this->entityManager->flush();
-        });
-        $grid->addColumnText('lvl', 'lvl');*/
-
 
         $grid->addAction('submenu', 'Submenu items', 'default', ['structureMenuId' => 'id'])
             ->setIcon('folder-open')
             ->setTitle('Submenu items')
             ->setClass('btn btn-xs btn-default');
 
-        if ($this->presenter->isAllowed('structure', 'edit')) {
+        if ($this->user->isAllowed('structure', 'edit')) {
 
             $grid->addAction('move', '')
                 ->setIcon('share')
@@ -127,13 +114,13 @@ class MenuGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('structure', 'delete'))
+        if ($this->user->isAllowed('structure', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
@@ -150,7 +137,7 @@ class MenuGrid extends BaseControl
     /**
      * @param array $ids
      */
-    public function gridGroupActionDelete(array $ids)
+    public function gridGroupActionDelete(array $ids): void
     {
         $this->handleDelete($ids);
     }
@@ -161,7 +148,7 @@ class MenuGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(structure, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $aclOperations = $this->menuRepository->getById($id);
         foreach ($aclOperations AS $aclOperation)
@@ -174,19 +161,19 @@ class MenuGrid extends BaseControl
         $this->onDelete($this->parentMenu);
     }
 
-    public function handleUp($id)
+    public function handleUp(int $id): void
     {
         $menuItem = $this->menuRepository->getOneById($id);
         $this->menuRepository->moveUp($menuItem, 1);
     }
 
-    public function handleDown($id)
+    public function handleDown(int $id): void
     {
         $menuItem = $this->menuRepository->getOneById($id);
         $this->menuRepository->moveDown($menuItem, 1);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/MenuGrid.latte');

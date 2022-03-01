@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -23,7 +23,9 @@ class MenuContentRepository implements IMenuContentRepository
      * @param \Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository
      * @param \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository
      */
-    public function __construct(\Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository, \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository)
+    public function __construct(
+            \Dravencms\Model\Structure\Repository\MenuContentRepository $menuContentRepository, 
+            \Dravencms\Model\Structure\Repository\MenuRepository $menuRepository)
     {
         $this->menuContentRepository = $menuContentRepository;
         $this->menuRepository = $menuRepository;
@@ -35,7 +37,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @param array $parameters
      * @return array
      */
-    public function getOneByMenuFactoryParameters(IMenu $menu, $factory, array $parameters)
+    public function getOneByMenuFactoryParameters(IMenu $menu, string $factory, array $parameters): ?MenuContent
     {
         $menuNative = $this->menuRepository->getOneById($menu->getId());
         $menuContentNative = $this->menuContentRepository->getOneByMenuFactoryParameters($menuNative, $factory, $parameters);
@@ -50,7 +52,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @return MenuContent
      * @throws \Exception
      */
-    public function saveMenuContent(IMenu $menu, $factory, array $parameters)
+    public function saveMenuContent(IMenu $menu, string $factory, array $parameters): MenuContent
     {
         $menuNative = $this->menuRepository->getOneById($menu->getId());
 
@@ -61,7 +63,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @param $id
      * @return null|object
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?MenuContent
     {
         $nativeMenuContent = $this->menuContentRepository->getOneById($id);
         return ($nativeMenuContent ? new MenuContent($nativeMenuContent) : null);
@@ -72,7 +74,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @throws \Exception
      * @return void
      */
-    public function clearMenuContent(IMenu $menu)
+    public function clearMenuContent(IMenu $menu): void
     {
         $menuNative = $this->menuRepository->getOneById($menu->getId());
 
@@ -85,7 +87,7 @@ class MenuContentRepository implements IMenuContentRepository
      * @param bool $isSystem
      * @return Menu|null
      */
-    public function getOneByFactoryAndParametersAndIsSystem($factory, array $parameters = [], $isSystem = false)
+    public function getOneByFactoryAndParametersAndIsSystem(string $factory, array $parameters = [], bool $isSystem = false): ?MenuContent
     {
         $found = $this->menuContentRepository->getOneByFactoryAndParametersAndIsSystem($factory, $parameters, $isSystem);
         if (!$found)

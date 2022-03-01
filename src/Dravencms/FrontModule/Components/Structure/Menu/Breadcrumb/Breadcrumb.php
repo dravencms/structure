@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Menu\Breadcrumb;
 
@@ -25,12 +25,11 @@ class Breadcrumb extends BaseControl
         CurrentLocaleResolver $currentLocaleResolver
     )
     {
-        parent::__construct();
         $this->menuRepository = $menuRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
-    public function render(array $config = [])
+    public function render(array $config = []): void
     {
         $template = $this->template;
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\Structure\Bridge\CmsLocale;
 
@@ -24,7 +24,7 @@ class Locale implements ILocale
     /**
      * @return string
      */
-    public function getLanguageCode()
+    public function getLanguageCode(): string
     {
         return $this->locale->getLanguageCode();
     }

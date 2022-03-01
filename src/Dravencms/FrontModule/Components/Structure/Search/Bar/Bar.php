@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Structure\Search\Bar;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
-use Nette\Application\UI\Form;
+use Dravencms\Components\BaseForm\Form;
 use Salamek\Cms\Cms;
 
 class Bar extends BaseControl
@@ -17,12 +17,11 @@ class Bar extends BaseControl
 
     public function __construct(BaseFormFactory $baseFormFactory, Cms $cms)
     {
-        parent::__construct();
         $this->baseFormFactory = $baseFormFactory;
         $this->cms = $cms;
     }
 
-    public function render(array $config = [])
+    public function render(array $config = []): void
     {
         $template = $this->template;
 
@@ -32,7 +31,7 @@ class Bar extends BaseControl
         $template->render();
     }
 
-    public function createComponentForm()
+    public function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -49,7 +48,7 @@ class Bar extends BaseControl
     /**
      * @param Form $form
      */
-    public function onSuccessForm(Form $form)
+    public function onSuccessForm(Form $form): void
     {
         $values = $form->getValues();
         $menu = $this->cms->findComponentActionPresenter('Structure\\Search\\Overview');

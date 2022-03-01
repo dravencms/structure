@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -34,7 +34,7 @@ class MenuRepository implements IMenuRepository
      * @param $id
      * @return Menu
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Menu
     {
         return new Menu($this->menuRepository->getOneById($id));
     }
@@ -44,7 +44,7 @@ class MenuRepository implements IMenuRepository
      * @param $action
      * @return Menu
      */
-    public function getOneByPresenterAction($presenter, $action)
+    public function getOneByPresenterAction(string $presenter, string $action): ?Menu
     {
         return new Menu($this->menuRepository->getOneByPresenterAction($presenter, $action));
     }
@@ -77,21 +77,21 @@ class MenuRepository implements IMenuRepository
      * @return Menu
      */
     public function createNewMenu(
-        $identifier,
-        $isActive = true,
-        $isHidden = false,
-        $isHomePage = false,
-        $sitemapPriority = 0.5,
-        $isSitemap = true,
-        $isShowH1 = true,
-        $presenter = null,
-        $action = null,
-        $isSystem = false,
+        string $identifier,
+        bool $isActive = true,
+        bool $isHidden = false,
+        bool $isHomePage = false,
+        float $sitemapPriority = 0.5,
+        bool $isSitemap = true,
+        bool $isShowH1 = true,
+        string $presenter = null,
+        string $action = null,
+        bool $isSystem = false,
         array $parameters = [],
-        $isRegularExpression = false,
-        $isRegularExpressionMatchArguments = false,
-        $layoutName = 'layout'
-    ) {
+        bool $isRegularExpression = false,
+        bool $isRegularExpressionMatchArguments = false,
+        string $layoutName = 'layout'
+    ): Menu {
         return new Menu($this->menuRepository->createNewMenu($identifier, $isActive, $isHidden, $isHomePage, $sitemapPriority, $isSitemap,
             $isShowH1, $presenter, $action, $isSystem, $parameters, $isRegularExpression, $isRegularExpressionMatchArguments, $layoutName));
     }
@@ -101,7 +101,7 @@ class MenuRepository implements IMenuRepository
      * @param string $latteTemplate
      * @return void
      */
-    public function saveLatteTemplate(IMenu $menu, $latteTemplate)
+    public function saveLatteTemplate(IMenu $menu, string $latteTemplate): void
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $this->menuRepository->saveLatteTemplate($nativeMenu, $latteTemplate);
@@ -113,7 +113,7 @@ class MenuRepository implements IMenuRepository
      * @param $actionName
      * @return void
      */
-    public function savePresenterAction(IMenu $menu, $presenterName, $actionName)
+    public function savePresenterAction(IMenu $menu, string $presenterName, string $actionName): void
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $this->menuRepository->savePresenterAction($nativeMenu, $presenterName, $actionName);

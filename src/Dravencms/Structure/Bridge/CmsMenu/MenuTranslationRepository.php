@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -45,7 +45,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      * @param ILocale|null $locale
      * @return MenuTranslation
      */
-    public function getOneByMenu(IMenu $menu, ILocale $locale = null)
+    public function getOneByMenu(IMenu $menu, ILocale $locale = null): ?MenuTranslation
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
@@ -58,7 +58,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      * @param ILocale|null $locale
      * @return mixed|null
      */
-    public function getSlugByMenu(IMenu $menu, ILocale $locale = null)
+    public function getSlugByMenu(IMenu $menu, ILocale $locale = null): ?string
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
@@ -71,7 +71,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      * @param ILocale|null $locale
      * @return MenuTranslation
      */
-    public function getOneBySlug($slug, $parameters = [], ILocale $locale = null)
+    public function getOneBySlug(string $slug, array $parameters = [], ILocale $locale = null): ?MenuTranslation
     {
         $nativeLocale = $this->localeRepository->getLocaleCache($locale->getLanguageCode());
         list($nativeTranslation, $parameters) = $this->menuTranslationRepository->getOneBySlug($slug, $parameters, $nativeLocale);
@@ -89,7 +89,7 @@ class MenuTranslationRepository implements IMenuTranslationRepository
      * @param $slug
      * @return void
      */
-    public function translateMenu(IMenu $menu, ILocale $locale, $h1, $metaDescription, $metaKeywords, $title, $name, $slug = null)
+    public function translateMenu(IMenu $menu, ILocale $locale, string $h1, string $metaDescription, string $metaKeywords, string $title, string $name, string $slug = null): void
     {
         $nativeMenu = $this->menuRepository->getOneById($menu->getId());
         $nativeLocale= $this->localeRepository->getLocaleCache($locale->getLanguageCode());

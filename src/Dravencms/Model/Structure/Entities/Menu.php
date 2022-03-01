@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
-use Nette;
+use Dravencms\Database\Attributes\Identifier;
 
 /**
  * Class Menu
@@ -217,24 +216,24 @@ class Menu
      */
     public function __construct(
         callable $parameterSumGenerator,
-        $identifier,
-        $metaRobots,
-        $isActive = true,
-        $isHidden = false,
-        $isHomePage = false,
-        $sitemapPriority = 0.5,
-        $isSitemap = true,
-        $isShowH1 = true,
-        $presenter = null,
-        $action = null,
-        $isSystem = false,
+        string $identifier,
+        string $metaRobots,
+        bool $isActive = true,
+        bool $isHidden = false,
+        bool $isHomePage = false,
+        float $sitemapPriority = 0.5,
+        bool $isSitemap = true,
+        bool $isShowH1 = true,
+        string $presenter = null,
+        string $action = null,
+        bool $isSystem = false,
         array $parameters = [],
-        $isRegularExpression = false,
-        $isRegularExpressionMatchArguments = false,
-        $layoutName = 'layout',
-        $isContent = false,
-        $target = null,
-        $autogenerateSlug = true
+        bool $isRegularExpression = false,
+        bool $isRegularExpressionMatchArguments = false,
+        string $layoutName = 'layout',
+        bool $isContent = false,
+        string $target = null,
+        bool $autogenerateSlug = true
     ) {
         $this->identifier = $identifier;
         $this->isActive = $isActive;
@@ -263,17 +262,15 @@ class Menu
      * @param Menu|null $parent
      * @return $this
      */
-    public function setParent(Menu $parent = null)
+    public function setParent(Menu $parent = null): void
     {
         $this->parent = $parent;
-
-        return $this;
     }
 
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -281,7 +278,7 @@ class Menu
     /**
      * @param boolean $isHomePage
      */
-    public function setIsHomePage($isHomePage)
+    public function setIsHomePage(bool $isHomePage): void
     {
         $this->isHomePage = $isHomePage;
     }
@@ -289,7 +286,7 @@ class Menu
     /**
      * @param boolean $isHidden
      */
-    public function setIsHidden($isHidden)
+    public function setIsHidden(bool $isHidden): void
     {
         $this->isHidden = $isHidden;
     }
@@ -297,7 +294,7 @@ class Menu
     /**
      * @param boolean $isActive
      */
-    public function setIsActive($isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
@@ -305,7 +302,7 @@ class Menu
     /**
      * @param string $metaRobots
      */
-    public function setMetaRobots($metaRobots)
+    public function setMetaRobots(string $metaRobots): void
     {
         $this->metaRobots = $metaRobots;
     }
@@ -313,7 +310,7 @@ class Menu
     /**
      * @param float $sitemapPriority
      */
-    public function setSitemapPriority($sitemapPriority)
+    public function setSitemapPriority(float $sitemapPriority): void
     {
         $this->sitemapPriority = $sitemapPriority;
     }
@@ -321,7 +318,7 @@ class Menu
     /**
      * @param boolean $isSitemap
      */
-    public function setIsSitemap($isSitemap)
+    public function setIsSitemap(bool $isSitemap): void
     {
         $this->isSitemap = $isSitemap;
     }
@@ -329,31 +326,31 @@ class Menu
     /**
      * @param boolean $isShowH1
      */
-    public function setIsShowH1($isShowH1)
+    public function setIsShowH1(bool $isShowH1): void
     {
         $this->isShowH1 = $isShowH1;
     }
 
     /**
-     * @param string $latteTemplate
+     * @param null|string $latteTemplate
      */
-    public function setLatteTemplate($latteTemplate)
+    public function setLatteTemplate(string $latteTemplate = null): void
     {
         $this->latteTemplate = $latteTemplate;
     }
 
     /**
-     * @param string $presenter
+     * @param null|string $presenter
      */
-    public function setPresenter($presenter)
+    public function setPresenter(string $presenter = null): void
     {
         $this->presenter = $presenter;
     }
 
     /**
-     * @param string $action
+     * @param null|string $action
      */
-    public function setAction($action)
+    public function setAction(string $action = null): void
     {
         $this->action = $action;
     }
@@ -361,7 +358,7 @@ class Menu
     /**
      * @param boolean $isSystem
      */
-    public function setIsSystem($isSystem)
+    public function setIsSystem(bool $isSystem): void
     {
         $this->isSystem = $isSystem;
     }
@@ -370,7 +367,7 @@ class Menu
      * @param array $parameters
      * @param callable $parameterSumGenerator
      */
-    public function setParameters($parameters, callable $parameterSumGenerator)
+    public function setParameters(array $parameters, callable $parameterSumGenerator): void
     {
         $this->parameters = $parameters;
         $this->parametersSum = $parameterSumGenerator($parameters);
@@ -379,7 +376,7 @@ class Menu
     /**
      * @param boolean $isRegularExpression
      */
-    public function setIsRegularExpression($isRegularExpression)
+    public function setIsRegularExpression(bool $isRegularExpression): void
     {
         $this->isRegularExpression = $isRegularExpression;
     }
@@ -387,7 +384,7 @@ class Menu
     /**
      * @param boolean $isRegularExpressionMatchArguments
      */
-    public function setIsRegularExpressionMatchArguments($isRegularExpressionMatchArguments)
+    public function setIsRegularExpressionMatchArguments(bool $isRegularExpressionMatchArguments): void
     {
         $this->isRegularExpressionMatchArguments = $isRegularExpressionMatchArguments;
     }
@@ -395,7 +392,7 @@ class Menu
     /**
      * @param string $layoutName
      */
-    public function setLayoutName($layoutName)
+    public function setLayoutName(string $layoutName): void
     {
         $this->layoutName = $layoutName;
     }
@@ -403,7 +400,7 @@ class Menu
     /**
      * @param MenuContent $menuContent
      */
-    public function addMenuContent(MenuContent $menuContent)
+    public function addMenuContent(MenuContent $menuContent): void
     {
         if ($this->menuContents->contains($menuContent))
         {
@@ -418,7 +415,7 @@ class Menu
     /**
      * @param MenuContent $menuContent
      */
-    public function removeMenuContent(MenuContent $menuContent)
+    public function removeMenuContent(MenuContent $menuContent): void
     {
         if (!$this->menuContents->contains($menuContent))
         {
@@ -433,7 +430,7 @@ class Menu
     /**
      * @param boolean $isContent
      */
-    public function setIsContent($isContent)
+    public function setIsContent(bool $isContent): void
     {
         $this->isContent = $isContent;
     }
@@ -441,7 +438,7 @@ class Menu
     /**
      * @param $rgt
      */
-    public function setRgt($rgt)
+    public function setRgt(int $rgt): void
     {
         $this->rgt = $rgt;
     }
@@ -449,15 +446,15 @@ class Menu
     /**
      * @param $lft
      */
-    public function setLft($lft)
+    public function setLft(int $lft): void
     {
         $this->lft = $lft;
     }
 
     /**
-     * @param string $target
+     * @param null|string $target
      */
-    public function setTarget($target)
+    public function setTarget(string $target = null): void
     {
         $this->target = $target;
     }
@@ -465,7 +462,7 @@ class Menu
     /**
      * @param bool $isAutogenerateSlug
      */
-    public function setIsAutogenerateSlug($isAutogenerateSlug)
+    public function setIsAutogenerateSlug(bool $isAutogenerateSlug): void
     {
         $this->isAutogenerateSlug = $isAutogenerateSlug;
     }
@@ -473,21 +470,21 @@ class Menu
     /**
      * @return boolean
      */
-    public function isHomePage()
+    public function isHomePage(): bool
     {
         return $this->isHomePage;
     }
 
     /**
-     * @return Menu
+     * @return null|Menu
      */
-    public function getParent()
+    public function getParent(): ?Menu
     {
         return $this->parent;
     }
 
     /**
-     * @return Menu
+     * @return Menu[]
      */
     public function getChildren()
     {
@@ -495,17 +492,17 @@ class Menu
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getLvl()
+    public function getLvl(): int
     {
         return $this->lvl;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getLatteTemplate()
+    public function getLatteTemplate(): ?string
     {
         return $this->latteTemplate;
     }
@@ -513,7 +510,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isHidden()
+    public function isHidden(): bool
     {
         return $this->isHidden;
     }
@@ -521,7 +518,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -529,7 +526,7 @@ class Menu
     /**
      * @return string
      */
-    public function getLayoutName()
+    public function getLayoutName(): string
     {
         return $this->layoutName;
     }
@@ -537,7 +534,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isIsHidden()
+    public function isIsHidden(): bool
     {
         return $this->isHidden;
     }
@@ -545,7 +542,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isIsActive()
+    public function isIsActive(): bool
     {
         return $this->isActive;
     }
@@ -553,7 +550,7 @@ class Menu
     /**
      * @return string
      */
-    public function getMetaRobots()
+    public function getMetaRobots(): string
     {
         return $this->metaRobots;
     }
@@ -561,7 +558,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isIsHomePage()
+    public function isIsHomePage(): bool
     {
         return $this->isHomePage;
     }
@@ -569,7 +566,7 @@ class Menu
     /**
      * @return float
      */
-    public function getSitemapPriority()
+    public function getSitemapPriority(): float
     {
         return $this->sitemapPriority;
     }
@@ -577,7 +574,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isSitemap()
+    public function isSitemap(): bool
     {
         return $this->isSitemap;
     }
@@ -585,23 +582,23 @@ class Menu
     /**
      * @return boolean
      */
-    public function isShowH1()
+    public function isShowH1(): bool
     {
         return $this->isShowH1;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getPresenter()
+    public function getPresenter(): ?string
     {
         return $this->presenter;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getAction()
+    public function getAction(): ?string
     {
         return $this->action;
     }
@@ -609,7 +606,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isSystem()
+    public function isSystem(): bool
     {
         return $this->isSystem;
     }
@@ -617,7 +614,7 @@ class Menu
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -625,7 +622,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isRegularExpression()
+    public function isRegularExpression(): bool
     {
         return $this->isRegularExpression;
     }
@@ -633,7 +630,7 @@ class Menu
     /**
      * @return boolean
      */
-    public function isRegularExpressionMatchArguments()
+    public function isRegularExpressionMatchArguments(): bool
     {
         return $this->isRegularExpressionMatchArguments;
     }
@@ -649,23 +646,23 @@ class Menu
     /**
      * @return boolean
      */
-    public function isContent()
+    public function isContent(): bool
     {
         return $this->isContent;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getLft()
+    public function getLft(): int
     {
         return $this->lft;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getRgt()
+    public function getRgt(): int
     {
         return $this->rgt;
     }
@@ -682,7 +679,7 @@ class Menu
      * @param ILocale $locale
      * @return MenuTranslation
      */
-    public function getTranslation(ILocale $locale)
+    public function getTranslation(ILocale $locale): ?MenuTranslation
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
         return $this->getTranslations()->matching($criteria)->first();
@@ -691,15 +688,15 @@ class Menu
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getTarget()
+    public function getTarget(): ?string
     {
         return $this->target;
     }
@@ -707,7 +704,7 @@ class Menu
     /**
      * @return bool
      */
-    public function isAutogenerateSlug()
+    public function isAutogenerateSlug(): bool
     {
         return $this->isAutogenerateSlug;
     }
