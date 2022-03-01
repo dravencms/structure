@@ -8,7 +8,7 @@ The best way to install dravencms/structure is using  [Composer](http://getcompo
 
 
 ```sh
-$ composer require dravencms/structure:@dev
+$ composer require dravencms/structure
 ```
 
 Then you have to register extension in `config.neon`.
