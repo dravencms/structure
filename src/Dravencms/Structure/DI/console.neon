@@ -1,1 +1,2 @@
 - Dravencms\Structure\Console\FixMenuTreeCommand
+- Dravencms\Structure\Console\GeneratePresentersCommand

@@ -15,7 +15,6 @@
     }
   ],
   "require": {
-    "salamek/nette-cms": "^v1.0",
     "dravencms/locale": ">=2.0",
     "dravencms/admin": ">=2.0"
   },

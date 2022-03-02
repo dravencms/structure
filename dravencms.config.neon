@@ -1,15 +1,14 @@
 extensions:
-    dravencms.cms: Dravencms\Cms\DI\CmsExtension
     dravencms.structure: Dravencms\Structure\DI\StructureExtension
 
 
-cms:
+dravencms.structure:
     tempPath: %appDir%/FrontModule/cms
     presenterModule: "Front"
     presenterMapping: Dravencms\*Module\*Presenter
     parentClass: Dravencms\FrontModule\SlugPresenter
     layoutDir: %appDir%/FrontModule/templates
-    defaultLayout: %layout.name%
+    defaultLayout: 'layout'
     mappings:
         Dravencms\FrontModule\Components\*\*\-\*Factory: Dravencms\Model\*\Repository\*CmsRepository
     
