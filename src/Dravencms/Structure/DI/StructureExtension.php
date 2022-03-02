@@ -6,7 +6,8 @@ use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Dravencms\Structure\Structure;
 use Nette\DI\CompilerExtension;
 use Dravencms\Structure\ICmsComponentRepository;
-use Salamek\Structure\Filters\Latte;
+use Dravencms\Structure\Filters\Latte;
+use Nette\Utils\Strings;
 
 
 /**
@@ -159,7 +160,7 @@ class StructureExtension extends CompilerExtension
      * @param string $class
      * @return array|null
      */
-    private function findComponentMapping(string $class): ?string
+    private function findComponentMapping(string $class): ?array
     {
         $config = $this->getConfig();
         foreach($config['mappings'] AS $mappingComponent => $mappingRepository)

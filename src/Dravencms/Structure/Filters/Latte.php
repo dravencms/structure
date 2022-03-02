@@ -3,7 +3,7 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace Salamek\Structure\Filters;
+namespace Dravencms\Structure\Filters;
 
 use Dravencms\Structure\Structure;
 

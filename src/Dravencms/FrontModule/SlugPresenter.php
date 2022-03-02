@@ -19,13 +19,13 @@ use Dravencms\FrontModule\Components\Structure\Search\Bar\Bar;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\JavaScriptLoader;
 use Dravencms\Locale\TLocalizedPresenter;
-use Salamek\Cms\Cms;
+use Dravencms\Structure\Structure;
 
 abstract class SlugPresenter extends BasePresenter
 {
     use TLocalizedPresenter;
     
-    /** @var Cms @inject */
+    /** @var Structure @inject */
     public $cmsFactory;
 
     /** @var SwitcherFactory @inject */
