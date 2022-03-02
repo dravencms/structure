@@ -2,7 +2,7 @@
 
 namespace Dravencms\Structure\Console;
 
-use Dravencms\Structure\Cms;
+use Dravencms\Structure\Structure;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,9 +18,9 @@ class GeneratePresentersCommand extends Command
     protected static $defaultDescription = 'Generates presenters for all menu content';
     
     /**
-     * @var Cms
+     * @var Structure
      */
-    private $cms;
+    private $structure;
     
     /**
      * @var MenuRepository
@@ -28,13 +28,13 @@ class GeneratePresentersCommand extends Command
     private $menuRepository;
 
     public function __construct(
-        Cms $cms,
+        Structure $structure,
         MenuRepository $menuRepository
     )
     {
         parent::__construct(null);
 
-        $this->cms = $cms;
+        $this->structure = $structure;
         $this->menuRepository = $menuRepository;
     }
     
@@ -43,7 +43,7 @@ class GeneratePresentersCommand extends Command
         try {
             foreach($this->menuRepository->getAll() AS $menu)
             {
-                $this->cms->generateMenuPage($menu);
+                $this->structure->generateMenuPage($menu);
             }
             $output->writeLn('All presenters successfully generated');
             return 0; // zero return code means everything is ok

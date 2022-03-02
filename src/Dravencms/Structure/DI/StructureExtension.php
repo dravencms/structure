@@ -8,6 +8,8 @@ use Nette\DI\CompilerExtension;
 use Dravencms\Structure\ICmsComponentRepository;
 use Dravencms\Structure\Filters\Latte;
 use Nette\Utils\Strings;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
 
 /**
@@ -18,13 +20,30 @@ class StructureExtension extends CompilerExtension
 {
     const TAG_COMPONENT = 'salamek.cms.component';
     
+    public function getConfigSchema(): Schema
+    {
+        return Expect::structure([
+            'tempPath' => Expect::string()->required(),
+            'layoutDir' => Expect::string()->required(),
+            'parentClass' => Expect::string()->required(),
+            'defaultLayout' => Expect::string()->required(),
+            'presenterModule' => Expect::string()->required(),
+            'presenterMapping' => Expect::string()->required(),
+            'mappings' => Expect::arrayOf(Expect::string(), Expect::string())->required(),
+            'templateOverrides' => Expect::arrayOf(Expect::string(), Expect::string())
+        ]);
+    }
+
+    
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
-
+        $config = (array) $this->getConfig();
+     
         $builder->addDefinition($this->prefix('structure'))
-            ->setFactory(Structure::class);
-
+            ->setFactory(Structure::class, [$config['tempPath'], $config['presenterModule'], $config['presenterMapping'], $config['layoutDir'], $config['parentClass'], $config['mappings'], $config['defaultLayout']])
+            ->addSetup('setTemplateOverrides', [$config['templateOverrides']]);
+        
         $builder->addDefinition($this->prefix('filters'))
             ->setFactory(Latte::class)
             ->setAutowired(false);
@@ -145,7 +164,7 @@ class StructureExtension extends CompilerExtension
     private function findRepositoryMapping(string $class): ?array
     {
         $config = $this->getConfig();
-        foreach($config['mappings'] AS $mappingComponent => $mappingRepository)
+        foreach($config->mappings AS $mappingComponent => $mappingRepository)
         {
             $match = $this->matchMapping($mappingRepository, $class);
             if ($match)
@@ -163,7 +182,7 @@ class StructureExtension extends CompilerExtension
     private function findComponentMapping(string $class): ?array
     {
         $config = $this->getConfig();
-        foreach($config['mappings'] AS $mappingComponent => $mappingRepository)
+        foreach($config->mappings AS $mappingComponent => $mappingRepository)
         {
             $match = $this->matchMapping($mappingComponent, $class);
             if ($match)

@@ -19,7 +19,7 @@
  */
 namespace Dravencms\FrontModule\Components\Structure\Search\Overview;
 
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 interface OverviewFactory
 {

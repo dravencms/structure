@@ -18,7 +18,7 @@ use Dravencms\Database\EntityManager;
 use Nette\Security\User;
 use Dravencms\Components\BaseForm\Form;
 use Dravencms\Model\Structure\Entities\Menu;
-use Salamek\Cms\Cms;
+use Dravencms\Structure\Structure;
 
 class MenuForm extends BaseControl
 {
@@ -37,8 +37,8 @@ class MenuForm extends BaseControl
     /** @var User */
     private $user;
     
-    /** @var Cms */
-    private $cms;
+    /** @var Structure */
+    private $structure;
 
     /** @var null|Menu */
     private $menu = null;
@@ -78,7 +78,7 @@ class MenuForm extends BaseControl
         MenuTranslationRepository $menuTranslationRepository,
         EntityManager $entityManager,
         User $user,
-        Cms $cms,
+        Structure $structure,
         MenuParameterSumGenerator $menuParameterSumGenerator,
         LocaleRepository $localeRepository,
         MenuSlugGenerator $menuSlugGenerator,
@@ -90,7 +90,7 @@ class MenuForm extends BaseControl
         $this->structureMenuRepository = $structureMenuRepository;
         $this->menuTranslationRepository = $menuTranslationRepository;
         $this->entityManager = $entityManager;
-        $this->cms = $cms;
+        $this->structure = $structure;
         $this->menu = $menu;
         $this->user = $user;
         $this->parentMenu = $parentMenu;
@@ -137,7 +137,7 @@ class MenuForm extends BaseControl
             $defaultValues['isShowH1'] = true;
             $defaultValues['isSitemap'] = true;
             $defaultValues['isAutogenerateSlug'] = true;
-            $defaultValues['layoutName'] = $this->cms->getDefaultLayout();
+            $defaultValues['layoutName'] = $this->structure->getDefaultLayout();
         }
 
         $this['form']->setDefaults($defaultValues);
@@ -195,7 +195,7 @@ class MenuForm extends BaseControl
         $form->addSelect('sitemapPriority', null, $sitemapPriorities)
             ->setRequired('Please select valid sitemapPriority');
 
-        $form->addSelect('layoutName', null, $this->cms->detectLayouts())
+        $form->addSelect('layoutName', null, $this->structure->detectLayouts())
             ->setRequired('Please select valid layout');
 
         $form->addSelect('target', null, [

@@ -5,7 +5,7 @@ namespace Dravencms\FrontModule\Components\Structure\Search\Overview;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use IPub\VisualPaginator\Components\Control;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 class Overview extends BaseControl
 {
