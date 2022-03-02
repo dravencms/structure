@@ -6,7 +6,7 @@
 namespace Dravencms\Structure;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Dravencms\Base\IRouterFactory;
+use Dravencms\Application\IRouterFactory;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Nette\Application\Routers\RouteList;
