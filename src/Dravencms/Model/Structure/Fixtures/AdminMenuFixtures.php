@@ -8,7 +8,7 @@ namespace Dravencms\Model\Structure\Fixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\Admin\Entities\Menu;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInterface
 {

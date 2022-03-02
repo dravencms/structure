@@ -14,7 +14,6 @@ use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Structure\MenuSlugGenerator;
-use Kdyby\Doctrine\EntityManager;
 use Dravencms\Database\EntityManager;
 use Nette\Security\User;
 use Dravencms\Model\Structure\Entities\Menu;

@@ -5,9 +5,9 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
+use Dravencms\Structure\CmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
+use Dravencms\Structure\ICmsComponentRepository;
 
 class SearchCmsRepository implements ICmsComponentRepository
 {

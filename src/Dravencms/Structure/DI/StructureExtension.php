@@ -2,9 +2,11 @@
 
 namespace Dravencms\Structure\DI;
 
+use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Dravencms\Structure\Structure;
 use Nette\DI\CompilerExtension;
 use Dravencms\Structure\ICmsComponentRepository;
+use Salamek\Structure\Filters\Latte;
 
 
 /**
@@ -22,6 +24,10 @@ class StructureExtension extends CompilerExtension
         $builder->addDefinition($this->prefix('structure'))
             ->setFactory(Structure::class);
 
+        $builder->addDefinition($this->prefix('filters'))
+            ->setFactory(Latte::class)
+            ->setAutowired(false);
+        
         $this->loadCmsComponents();
         $this->loadCmsModels();
 
@@ -102,7 +108,8 @@ class StructureExtension extends CompilerExtension
     public function beforeCompile()
     {
         $builder = $this->getContainerBuilder();
-        $cms = $builder->getDefinition($this->prefix('cms'));
+        
+        $structure = $builder->getDefinition($this->prefix('structure'));
         
 
         foreach ($builder->findByType(ICmsComponentRepository::class) AS $serviceName => $service) {
@@ -110,7 +117,7 @@ class StructureExtension extends CompilerExtension
             if ($match)
             {
                 list($module, $component, $action) = $match;
-                $cms->addSetup('addComponentRepository', ['@' . $serviceName, $module, $component, $service->getClass()]);
+                $structure->addSetup('addComponentRepository', ['@' . $serviceName, $module, $component, $service->getClass()]);
             }
         }
         
@@ -120,34 +127,14 @@ class StructureExtension extends CompilerExtension
             if ($match)
             {
                 list($module, $component, $action) = $match;
-                $cms->addSetup('addComponent', ['@' . $serviceName, $module, $component, $action, $service->getImplement()]);
+                $structure->addSetup('addComponent', ['@' . $serviceName, $module, $component, $action, $service->getImplement()]);
             }
         }
-
-        $registerToLatte = function (Nette\DI\ServiceDefinition $def) {
-            $def->addSetup('?->onCompile[] = function($engine) { Salamek\Cms\Macros\Latte::install($engine->getCompiler()); }', ['@self']);
-
-            if (method_exists('Latte\Engine', 'addProvider')) { // Nette 2.4
-                $def->addSetup('addProvider', ['cms', $this->prefix('@cms')])
-                    ->addSetup('addFilter', ['cmsLink', [$this->prefix('@helpers'), 'cmsLinkFilterAware']]);
-            } else {
-                $def->addSetup('addFilter', ['getCms', [$this->prefix('@helpers'), 'getCms']])
-                    ->addSetup('addFilter', ['cmsLink', [$this->prefix('@helpers'), 'cmsLink']]);
-            }
-        };
-
-        $latteFactoryService = $builder->getByType('Nette\Bridges\ApplicationLatte\ILatteFactory');
-        if (!$latteFactoryService || !self::isOfType($builder->getDefinition($latteFactoryService)->getClass(), 'Latte\engine')) {
-            $latteFactoryService = 'nette.latteFactory';
-        }
-
-        if ($builder->hasDefinition($latteFactoryService) && self::isOfType($builder->getDefinition($latteFactoryService)->getClass(), 'Latte\Engine')) {
-            $registerToLatte($builder->getDefinition($latteFactoryService));
-        }
-
-        if ($builder->hasDefinition('nette.latte')) {
-            $registerToLatte($builder->getDefinition('nette.latte'));
-        }
+        
+        $latteFactoryService = $builder->getDefinitionByType(LatteFactory::class)->getResultDefinition();
+        $latteFactoryService->addSetup('addFilter', ['cmsLink', [$this->prefix('@filters'), 'cmsLinkFilterAware']]);
+        $latteFactoryService->addSetup('addFilter', ['getCms', [$this->prefix('@filters'), 'getCms']]);
+        $latteFactoryService->addSetup('Salamek\Structure\Macros\Latte::install(?->getCompiler())', ['@self']);
     }
     
      /**
