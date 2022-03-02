@@ -13,7 +13,8 @@ use Dravencms\Structure\ICmsComponentRepository;
  */
 class StructureExtension extends CompilerExtension
 {
-
+    const TAG_COMPONENT = 'salamek.cms.component';
+    
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
@@ -47,7 +48,7 @@ class StructureExtension extends CompilerExtension
         $builder = $this->getContainerBuilder();
         foreach ($this->loadFromFile(__DIR__ . '/cmsComponents.neon') as $i => $command) {
             $cli = $builder->addFactoryDefinition($this->prefix('cmsComponent.' . $i))
-                ->addTag(CmsExtension::TAG_COMPONENT);
+                ->addTag(self::TAG_COMPONENT);
             if (is_string($command)) {
                 $cli->setImplement($command);
             } else {
