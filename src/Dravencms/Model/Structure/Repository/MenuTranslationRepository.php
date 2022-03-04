@@ -157,7 +157,7 @@ class MenuTranslationRepository
      * @param ILocale $locale
      * @return array
      */
-    public function getOneBySlug(string $slug, array $requestParams = [], ILocale $locale = null)
+    public function getOneBySlug(string $slug = null, array $requestParams = [], ILocale $locale = null)
     {
         $found = $this->menuTranslationRepository->findOneBy(['slug' => $slug, 'locale' => $locale]);
         if ($found)

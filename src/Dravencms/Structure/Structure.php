@@ -255,7 +255,7 @@ class Structure
         ];
     }
 
-    public function addComponent(string $cmsComponentFactory, string $module, string $component, string $action, string $implement): void
+    public function addComponent($cmsComponentFactory, string $module, string $component, string $action, string $implement): void
     {
         //Check if repository exists for component
         if (array_key_exists($module, $this->tree) && array_key_exists($component, $this->tree[$module]) && array_key_exists('repository', $this->tree[$module][$component]))

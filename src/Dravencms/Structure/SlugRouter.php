@@ -8,9 +8,8 @@ use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Nette;
-use Nette\Application\IRouter;
+use Nette\Routing\Router;
 use Nette\Application\Request;
-use Nette\Application\Routers;
 use Nette\SmartObject;
 use Nette\Utils\Strings;
 
@@ -19,7 +18,7 @@ use Nette\Utils\Strings;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class SlugRouter implements IRouter
+class SlugRouter implements Router
 {
     use SmartObject;
 
@@ -358,7 +357,7 @@ class SlugRouter implements IRouter
      * @param Nette\Http\IRequest $httpRequest
      * @return Request|null
      */
-    public function match(Nette\Http\IRequest $httpRequest)
+    public function match(Nette\Http\IRequest $httpRequest): ?array
     {
         // 1) URL MASK
         $url = $httpRequest->getUrl();
@@ -464,11 +463,12 @@ class SlugRouter implements IRouter
 
         // Find presenter
         /** @var MenuTranslation $pageInfo */
+        
         list($pageInfo, $advancedParams) = $this->menuTranslationRepository->getOneBySlug($params['slug'], $params, $foundLocale);
         if (!$pageInfo) {
             return null;
         }
-
+        
         if ($advancedParams) {
             foreach ($advancedParams AS $k => $v) {
                 $params[$k] = $v;
@@ -484,20 +484,8 @@ class SlugRouter implements IRouter
 
         $params['action'] = $pageInfo->getAction();
 
-        // 5) BUILD Request
-        if (!isset($params[self::PRESENTER_KEY])) {
-            throw new Nette\InvalidStateException('Missing presenter in route definition.');
-        } elseif (!is_string($params[self::PRESENTER_KEY])) {
-            return null;
-        }
-        $presenter = $params[self::PRESENTER_KEY];
-        unset($params[self::PRESENTER_KEY]);
-
-        if (isset($this->metadata[self::MODULE_KEY])) {
-            $presenter = (isset($params[self::MODULE_KEY]) ? $params[self::MODULE_KEY] . ':' : '') . $presenter;
-            unset($params[self::MODULE_KEY]);
-        }
-
+        return $params;
+        /*
         return new Request(
             $presenter,
             $httpRequest->getMethod(),
@@ -505,7 +493,7 @@ class SlugRouter implements IRouter
             $httpRequest->getPost(),
             $httpRequest->getFiles(),
             [Request::SECURED => $httpRequest->isSecured()]
-        );
+        );*/
     }
 
     /**
@@ -513,7 +501,7 @@ class SlugRouter implements IRouter
      *
      * @return string|NULL
      */
-    public function constructUrl(Nette\Application\Request $appRequest, Nette\Http\Url $refUrl)
+    public function constructUrl(array $params, Nette\Http\UrlScript $refUrl): ?string
     {
         $pageInfo = $this->structureMenuRepository->getOneByPresenterAction(($this->module ? ':' . $this->module . ':' : '') . $appRequest->getPresenterName(),
             $appRequest->parameters['action']);

@@ -71,7 +71,7 @@ class RouteFactory implements IRouterFactory
             //!FIXME Ignore missing table, this is only way i can find to prevent this  part of code from crashing console when database is not created
         }
 
-        $rotuer->add($frontEnd);
+        $router->add($frontEnd);
         
         return $router;
     }
