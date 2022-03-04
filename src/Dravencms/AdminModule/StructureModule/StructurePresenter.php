@@ -12,9 +12,9 @@ use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette;
-use Salamek\Cms\TCms;
+use Dravencms\Structure\TCms;
 
 /**
  * Homepage presenter.
@@ -63,7 +63,7 @@ class StructurePresenter extends SecuredPresenter
 
             $this->structureMenu = $structureMenu;
             $this->template->menu = $structureMenu;
-            $this->template->mapping = $this->cms->getLayoutMapping($structureMenu->getLayoutName());
+            $this->template->mapping = $this->structure->getLayoutMapping($structureMenu->getLayoutName());
 
             $this->template->h1 .= ' - ' . $this->structureMenu->getIdentifier();
         }
@@ -133,7 +133,7 @@ class StructurePresenter extends SecuredPresenter
         $component = $this->structureMenuFormFactory->create($this->structureMenu, $this->menuEdit);
         $component->onSuccess[] = function ($menu) {
             $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
-            $this->cms->generateMenuPage($cmsMenu);
+            $this->structure->generateMenuPage($cmsMenu);
 
             /** @var Menu $structureMenu */
             if ($this->menuEdit) {
@@ -183,11 +183,11 @@ class StructurePresenter extends SecuredPresenter
     {
         $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
         $this->payload->structure = (object)/*We work with object in JS not arrays*/
-        $this->cms->parsePageLayout($structureMenu->getLatteTemplate());
+        $this->structure->parsePageLayout($structureMenu->getLatteTemplate());
 
 
         $componentArray = [];
-        foreach ($this->cms->getTree() AS $moduleName => $components) {
+        foreach ($this->structure->getTree() AS $moduleName => $components) {
             $moduleComponents = [];
             foreach ($components AS $componentName => $component) {
                 $moduleComponents[$moduleName.'\\'.$componentName] = $moduleName.' -> '.$componentName;
@@ -205,7 +205,7 @@ class StructurePresenter extends SecuredPresenter
     public function handleComponentJson($componentClass)
     {
         $this->payload->actions = (object)/*We work with object in JS not arrays*/
-        $this->cms->getActionArray($componentClass);
+        $this->structure->getActionArray($componentClass);
         $this->sendPayload();
     }
 
@@ -219,7 +219,7 @@ class StructurePresenter extends SecuredPresenter
 
         $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
 
-        $this->cms->saveStructureTree($cmsMenu, $structureTree);
+        $this->structure->saveStructureTree($cmsMenu, $structureTree);
         $this->payload->structureTree = $structureTree;
         $this->sendPayload();
     }

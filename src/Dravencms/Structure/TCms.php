@@ -5,16 +5,18 @@
 
 namespace Dravencms\Structure;
 
+use Dravencms\Structure\Structure;
+
 trait TCms
 {
-    /** @var Cms */
-    private $cms;
+    /** @var Structure */
+    private $structure;
 
     /**
-     * @param Cms $cms
+     * @param Structure $structure
      */
-    public function injectCms(Cms $cms)
+    public function injectCms(Structure $structure)
     {
-        $this->cms = $cms;
+        $this->structure = $structure;
     }
 }
