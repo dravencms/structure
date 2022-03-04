@@ -502,11 +502,12 @@ class SlugRouter implements Router
      * @return string|NULL
      */
     public function constructUrl(array $params, Nette\Http\UrlScript $refUrl): ?string
-    {
-        $pageInfo = $this->structureMenuRepository->getOneByPresenterAction(($this->module ? ':' . $this->module . ':' : '') . $appRequest->getPresenterName(),
-            $appRequest->parameters['action']);
+    {        
+        $pageInfo = $this->structureMenuRepository->getOneByPresenterAction(
+            ($this->module ? ':' . $this->module . ':' : '') . $params[self::PRESENTER_KEY],
+            $params['action']
+        );
 
-        $params = $appRequest->parameters;
         if ($pageInfo && $pageInfo->isHomePage() == true) {
             $params['slug'] = null;
         } else {
@@ -527,74 +528,8 @@ class SlugRouter implements Router
             }
         }
 
-        $appRequest->setParameters($params);
-
         if ($this->flags & self::ONE_WAY) {
             return null;
-        }
-
-        $params = $appRequest->getParameters();
-        $metadata = $this->metadata;
-
-        $presenter = $appRequest->getPresenterName();
-        $params[self::PRESENTER_KEY] = $presenter;
-
-        if (isset($metadata[null][self::FILTER_OUT])) {
-            $params = call_user_func($metadata[null][self::FILTER_OUT], $params);
-            if ($params === null) {
-                return null;
-            }
-        }
-
-        if (isset($metadata[self::MODULE_KEY])) { // try split into module and [submodule:]presenter parts
-            $module = $metadata[self::MODULE_KEY];
-            if (isset($module['fixity']) && strncmp($presenter, $module[self::VALUE] . ':', strlen($module[self::VALUE]) + 1) === 0) {
-                $a = strlen($module[self::VALUE]);
-            } else {
-                $a = strrpos($presenter, ':');
-            }
-            if ($a === false) {
-                $params[self::MODULE_KEY] = isset($module[self::VALUE]) ? '' : null;
-            } else {
-                $params[self::MODULE_KEY] = substr($presenter, 0, $a);
-                $params[self::PRESENTER_KEY] = substr($presenter, $a + 1);
-            }
-        }
-
-        foreach ($metadata as $name => $meta) {
-            if (!isset($params[$name])) {
-                continue; // retains NULL values
-            }
-
-            if (isset($meta['fixity'])) {
-                if ($params[$name] === false) {
-                    $params[$name] = '0';
-                } elseif (is_scalar($params[$name])) {
-                    $params[$name] = (string)$params[$name];
-                }
-
-                if ($params[$name] === $meta[self::VALUE]) { // remove default values; NULL values are retain
-                    unset($params[$name]);
-                    continue;
-
-                } elseif ($meta['fixity'] === self::CONSTANT) {
-                    return null; // missing or wrong parameter '$name'
-                }
-            }
-
-            if (is_scalar($params[$name]) && isset($meta['filterTable2'][$params[$name]])) {
-                $params[$name] = $meta['filterTable2'][$params[$name]];
-
-            } elseif (isset($meta['filterTable2']) && !empty($meta[self::FILTER_STRICT])) {
-                return null;
-
-            } elseif (isset($meta[self::FILTER_OUT])) {
-                $params[$name] = call_user_func($meta[self::FILTER_OUT], $params[$name]);
-            }
-
-            if (isset($meta[self::PATTERN]) && !preg_match($meta[self::PATTERN], rawurldecode($params[$name]))) {
-                return null; // pattern not match
-            }
         }
 
         // compositing path

@@ -14,8 +14,8 @@ use Dravencms\Locale\CurrentLocaleResolver;
 
 trait TCmsPresenter
 {
-    /** @var Cms */
-    private $cms;
+    /** @var Structure */
+    private $structure;
 
     /** @var MenuRepository */
     private $menuRepository;
@@ -27,11 +27,11 @@ trait TCmsPresenter
     private $menuTranslationRepository;
 
     /**
-     * @param Cms $cms
+     * @param Structure $structure
      */
-    public function injectCms(Cms $cms): void
+    public function injectCms(Structure $structure): void
     {
-        $this->cms = $cms;
+        $this->structure = $structure;
     }
 
     /**
@@ -72,7 +72,7 @@ trait TCmsPresenter
         $this->setLayout($menu->getLayoutName());
 
 
-        $translated = $this->menuTranslationRepository->getOneByMenu($menu, $this->currentLocaleResolver->getCurrentLocale());
+        $translated = $this->menuTranslationRepository->getTranslation($menu, $this->currentLocaleResolver->getCurrentLocale());
 
         $this->template->identifier = $menu->getIdentifier();
         $this->template->metaDescription = $translated->getMetaDescription();
@@ -101,9 +101,9 @@ trait TCmsPresenter
         $dir = is_dir("$dir/templates") ? $dir : dirname($dir);
         $list = parent::formatLayoutTemplateFiles();
         do {
-            $list[] = $this->cms->getLayoutDir()."/@$layout.latte";
+            $list[] = $this->structure->getLayoutDir()."/@$layout.latte";
             $dir = dirname($dir);
-        } while ($dir && ($name = substr($name, 0, strrpos($name, ':'))));
+        } while ($dir && ($name = substr($name, 0, intVal(strrpos($name, ':')))));
         return $list;
     }
     
@@ -114,7 +114,7 @@ trait TCmsPresenter
      */
     public function cmsLink(string $name, array $parameters = []): string
     {
-        $menu = $this->cms->findComponentActionPresenter($name, $parameters);
+        $menu = $this->structure->findComponentActionPresenter($name, $parameters);
         return $this->link($menu->getPresenter().':'.$menu->getAction());
     }
 
@@ -124,7 +124,7 @@ trait TCmsPresenter
      */
     public function cmsRedirect(string $name, array $parameters = []): string
     {
-        $menu = $this->cms->findComponentActionPresenter($name, $parameters);
+        $menu = $this->structure->findComponentActionPresenter($name, $parameters);
         $this->redirect($menu->getPresenter().':'.$menu->getAction());
     }
 }

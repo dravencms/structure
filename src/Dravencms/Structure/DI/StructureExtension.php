@@ -152,9 +152,9 @@ class StructureExtension extends CompilerExtension
         }
         
         $latteFactoryService = $builder->getDefinitionByType(LatteFactory::class)->getResultDefinition();
-        $latteFactoryService->addSetup('addFilter', ['cmsLink', [$this->prefix('@filters'), 'cmsLinkFilterAware']]);
-        $latteFactoryService->addSetup('addFilter', ['getCms', [$this->prefix('@filters'), 'getCms']]);
-        $latteFactoryService->addSetup('Salamek\Structure\Macros\Latte::install(?->getCompiler())', ['@self']);
+        $latteFactoryService->addSetup('addFilter', ['cmsLink', [$this->prefix('@filters'), 'cmsLink']]);
+        //$latteFactoryService->addSetup('addFilter', ['getCms', [$this->prefix('@filters'), 'getCms']]);
+        $latteFactoryService->addSetup('Dravencms\Structure\Macros\Latte::install(?->getCompiler())', ['@self']);
     }
     
      /**
