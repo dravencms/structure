@@ -787,7 +787,7 @@ class Structure
             $componentList[$menuContent->getId()] = $componentName;
             $method = $class->addMethod('createComponent'.$componentName)
                 ->setFinal(true)
-                ->addBody('$cmsComponentConfiguration = new \Salamek\Cms\CmsActionOption(?, '.var_export($menuContent->getParameters(), true).');', [$menuContent->getFactory()]);
+                ->addBody('$cmsComponentConfiguration = new \Dravencms\Structure\CmsActionOption(?, '.var_export($menuContent->getParameters(), true).');', [$menuContent->getFactory()]);
 
             if (array_key_exists($menuContent->getFactory(), $this->templateOverrides))
             {

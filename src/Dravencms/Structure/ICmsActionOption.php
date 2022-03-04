@@ -13,19 +13,19 @@ interface ICmsActionOption
      * @param string $identifier
      * @return void
      */
-    public function setIdentifier($identifier);
+    public function setIdentifier(string $identifier): void;
 
     /**
      * @param string $metaRobots
      * @return void
      */
-    public function setMetaRobots($metaRobots);
+    public function setMetaRobots(string $metaRobots): void;
 
     /**
      * @param array $parameters
      * @return void
      */
-    public function setParameters(array $parameters);
+    public function setParameters(array $parameters): void;
 
     /**
      * @param ICmsActionOptionTranslation $cmsActionOptionTranslation
@@ -36,23 +36,23 @@ interface ICmsActionOption
     /**
      * @return string
      */
-    public function getMetaRobots();
+    public function getMetaRobots(): string;
 
     /**
      * @return array
      */
-    public function getParameters();
+    public function getParameters(): array;
 
     /**
      * @param $name
      * @return mixed
      */
-    public function getParameter($name);
+    public function getParameter(string $name);
 
     /**
      * @return string
      */
-    public function getIdentifier();
+    public function getIdentifier(): string;
 
     /**
      * @return ICmsActionOptionTranslation[]
@@ -63,5 +63,5 @@ interface ICmsActionOption
      * @param $default
      * @return string
      */
-    public function getTemplatePath($default);
+    public function getTemplatePath(string $default);
 }

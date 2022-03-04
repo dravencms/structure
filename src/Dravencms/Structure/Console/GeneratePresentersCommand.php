@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GeneratePresentersCommand extends Command
 {
-    protected static $defaultName = 'cms:presenters:generate';
+    protected static $defaultName = 'structure:presenters:generate';
     protected static $defaultDescription = 'Generates presenters for all menu content';
     
     /**
