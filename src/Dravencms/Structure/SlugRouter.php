@@ -158,46 +158,49 @@ class SlugRouter implements Router
      */
     public function constructUrl(array $params, Nette\Http\UrlScript $refUrl): ?string
     {        
+        if ($this->flags & self::ONE_WAY) {
+            return null;
+        }
+        
         $url = $refUrl->getBaseUrl();
         $pageInfo = $this->structureMenuRepository->getOneByPresenterAction(
             ($this->module ? ':' . $this->module . ':' : '') . $params[self::PRESENTER_KEY],
             $params['action']
         );
         
-        if ($pageInfo && $pageInfo->isHomePage() == true) {
-            $params['slug'] = null;
-        } else {
-            if ($pageInfo) {
+        if ($pageInfo) {
 
-                $locale = $params['locale'];
-                $foundLocale = $this->localeRepository->getLocaleCache($locale);
-                if (!$foundLocale)
-                {
-                    $foundLocale = $this->localeRepository->getDefault();
-                }
-
-                $params['slug'] = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
-                
-                if ($foundLocale->isDefault()) {
-                    $url .= $params['slug'];
-                } else {
-                    $url .= $foundLocale->getCode().'/'.$params['slug'];
-                }
-                
-                
-            } else {
-                return null;
+            $locale = $params['locale'];
+            $foundLocale = $this->localeRepository->getLocaleCache($locale);
+            if (!$foundLocale)
+            {
+                $foundLocale = $this->localeRepository->getDefault();
             }
-        }
-        
 
-        if ($this->flags & self::ONE_WAY) {
+            if ($pageInfo->isHomePage()) {
+                if ($foundLocale->isDefault()) {
+                    $url .= '';
+                } else {
+                    $url .= $foundLocale->getLanguageCode();
+                }
+            } else {
+                $slug = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
+
+                if ($foundLocale->isDefault()) {
+                    $url .= $slug;
+                } else {
+                    $url .= $foundLocale->getLanguageCode().'/'.$slug;
+                }
+            }
+        } else {
             return null;
         }
         
         
         unset($params['action']);
         unset($params['presenter']);
+        unset($params['locale']);
+        unset($params['slug']);
 
         $sep = ini_get('arg_separator.input');
         $query = http_build_query($params, '', $sep ? $sep[0] : '&');
