@@ -89,7 +89,7 @@ class SlugRouter implements Router
     private function getEnabledLocaleCodes(): array {
         if (empty($this->enabledLocaleCodesRuntimeCache)) {
             foreach ($this->localeRepository->getActive() AS $activeLocale) {
-                $this->enabledLocaleCodesRuntimeCache[] = $activeLocale->getCode();
+                $this->enabledLocaleCodesRuntimeCache[] = $activeLocale->getLanguageCode();
             }
         }
         
@@ -107,13 +107,16 @@ class SlugRouter implements Router
         $path = $url->getPath();
         
         $params = $httpRequest->getQuery();
-        
         $matches = [];
         // Match path with locale
         if (preg_match('/^\/('.implode('|', $this->getEnabledLocaleCodes()).')\/(\S+)$/i', $path, $matches)) {
             // Url has locale
-            $params['locale']= $matches[0];
-            $params['slug'] = $matches[1];
+            $params['locale']= $matches[1];
+            $params['slug'] = $matches[2];
+        } else if (preg_match('/^\/('.implode('|', $this->getEnabledLocaleCodes()).')$/i', $path, $matches)) {
+            // Url has locale but no slug
+            $params['locale']= $matches[1];
+            $params['slug'] = null;
         } else if (preg_match('/^\/(\S+)/i', $path, $matches)) {
             // There is something that is not allowed locale, make it all slug and go for default
             $params['locale']= $this->defaultLocaleCode;
