@@ -14,8 +14,8 @@ use Dravencms\Locale\CurrentLocaleResolver;
 
 trait TCmsPresenter
 {
-    /** @var Cms */
-    private $cms;
+    /** @var Structure */
+    private $structure;
 
     /** @var MenuRepository */
     private $menuRepository;
@@ -27,11 +27,11 @@ trait TCmsPresenter
     private $menuTranslationRepository;
 
     /**
-     * @param Cms $cms
+     * @param Structure $structure
      */
-    public function injectCms(Cms $cms): void
+    public function injectCms(Structure $structure): void
     {
-        $this->cms = $cms;
+        $this->structure = $structure;
     }
 
     /**
@@ -114,7 +114,7 @@ trait TCmsPresenter
      */
     public function cmsLink(string $name, array $parameters = []): string
     {
-        $menu = $this->cms->findComponentActionPresenter($name, $parameters);
+        $menu = $this->structure->findComponentActionPresenter($name, $parameters);
         return $this->link($menu->getPresenter().':'.$menu->getAction());
     }
 
@@ -124,7 +124,7 @@ trait TCmsPresenter
      */
     public function cmsRedirect(string $name, array $parameters = []): string
     {
-        $menu = $this->cms->findComponentActionPresenter($name, $parameters);
+        $menu = $this->structure->findComponentActionPresenter($name, $parameters);
         $this->redirect($menu->getPresenter().':'.$menu->getAction());
     }
 }
