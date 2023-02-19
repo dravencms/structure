@@ -453,10 +453,10 @@ class Structure
     }
 
     /**
-     * @param $mapping
+     * @param array $mapping
      * @return string
      */
-    private function buildLayoutMapping(string $mapping): string
+    private function buildLayoutMapping(array $mapping): string
     {
         $templateEl = Html::el('div');
         foreach ($mapping['public'] AS $row) {
@@ -850,6 +850,7 @@ class Structure
 
         $componentActionInfo = $componentRepository->getActionOption($action, $parameters);
         $identifier = $componentActionInfo->getIdentifier().'-'.md5(microtime(true).$action.json_encode($parameters));
+
         $menu = $this->menuRepository->createNewMenu(
             $identifier,
             true,
