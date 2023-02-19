@@ -52,9 +52,6 @@ class MenuForm extends BaseControl
     /** @var LocaleRepository */
     private $localeRepository;
 
-    /** @var MenuSlugGenerator */
-    private $menuSlugGenerator;
-
     /** @var null|callable */
     public $onSuccess = null;
 
@@ -68,7 +65,6 @@ class MenuForm extends BaseControl
      * @param Cms $cms
      * @param MenuParameterSumGenerator $menuParameterSumGenerator
      * @param LocaleRepository $localeRepository
-     * @param MenuSlugGenerator $menuSlugGenerator
      * @param Menu $parentMenu
      * @param Menu $menu
      */
@@ -81,7 +77,6 @@ class MenuForm extends BaseControl
         Structure $structure,
         MenuParameterSumGenerator $menuParameterSumGenerator,
         LocaleRepository $localeRepository,
-        MenuSlugGenerator $menuSlugGenerator,
         Menu $parentMenu = null,
         Menu $menu = null
     )
@@ -96,7 +91,6 @@ class MenuForm extends BaseControl
         $this->parentMenu = $parentMenu;
         $this->menuParameterSumGenerator = $menuParameterSumGenerator;
         $this->localeRepository = $localeRepository;
-        $this->menuSlugGenerator = $menuSlugGenerator;
 
         $defaultValues = [];
         if ($this->menu)
@@ -334,22 +328,9 @@ class MenuForm extends BaseControl
 
         $this->entityManager->flush();
 
-        $automaticSlugGenerator = function($formTranslation){
-            /** @var MenuTranslation $formTranslation */
-            return $this->menuSlugGenerator->slugify($formTranslation);
-        };
-
-        $manualSlugGenerator = function ($slug)
-        {
-            return function($formTranslation) use ($slug){
-                return $slug;
-            };
-        };
-
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $slug = ($values->{$activeLocale->getLanguageCode()}->slug ? $values->{$activeLocale->getLanguageCode()}->slug : null);
             $customUrl = ($values->{$activeLocale->getLanguageCode()}->customUrl ? $values->{$activeLocale->getLanguageCode()}->customUrl : null);
-            $slugGenerator = ($values->isAutogenerateSlug ? $automaticSlugGenerator : $manualSlugGenerator($slug));
             if ($formTranslation = $this->menuTranslationRepository->getTranslation($menu, $activeLocale))
             {
                 $formTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
@@ -358,8 +339,6 @@ class MenuForm extends BaseControl
                 $formTranslation->setTitle($values->{$activeLocale->getLanguageCode()}->title);
                 $formTranslation->setH1($values->{$activeLocale->getLanguageCode()}->h1);
                 $formTranslation->setCustomUrl($customUrl);
-
-                $formTranslation->generateSlug($slugGenerator);
             }
             else
             {
@@ -371,10 +350,13 @@ class MenuForm extends BaseControl
                     $values->{$activeLocale->getLanguageCode()}->metaKeywords,
                     $values->{$activeLocale->getLanguageCode()}->title,
                     $values->{$activeLocale->getLanguageCode()}->h1,
-                    $slugGenerator,
+                    null,
                     $customUrl
                 );
             }
+
+            $uniqueSlug = $this->menuTranslationRepository->slugify($formTranslation, $slug);
+            $formTranslation->setSlug($uniqueSlug);
 
             $this->entityManager->persist($formTranslation);
         }
