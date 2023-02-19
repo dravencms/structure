@@ -10,7 +10,7 @@ namespace Dravencms\Structure;
 
 use Dravencms\Model\Locale\Entities\Locale;
 
-class CmsActionOptionTranslation
+class CmsActionOptionTranslation implements ICmsActionOptionTranslation
 {
     /** @var Locale */
     private $locale;
@@ -94,7 +94,7 @@ class CmsActionOptionTranslation
      * @param null $slug
      * @return void
      */
-    public function setSlug(slug $slug = null): void
+    public function setSlug(string $slug = null): void
     {
         $this->slug = $slug;
     }
