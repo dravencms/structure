@@ -13,7 +13,6 @@ use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Structure\MenuParameterSumGenerator;
 use Dravencms\Model\Structure\Repository\MenuRepository;
-use Dravencms\Structure\MenuSlugGenerator;
 use Dravencms\Database\EntityManager;
 use Nette\Security\User;
 use Dravencms\Components\BaseForm\Form;
