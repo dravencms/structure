@@ -855,7 +855,7 @@ class Structure
             true,
             true,
             false,
-            '0.4',
+            0.4,
             true,
             false,
             null,
