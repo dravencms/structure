@@ -8,11 +8,11 @@
 
 namespace Dravencms\Structure;
 
-use Dravencms\Model\Locale\Entities\Locale;
+use Dravencms\Model\Locale\Entities\ILocale;
 
 class CmsActionOptionTranslation implements ICmsActionOptionTranslation
 {
-    /** @var Locale */
+    /** @var ILocale */
     private $locale;
 
     /** @var string */
@@ -39,7 +39,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
      * @param $metaKeywords
      * @param $slug
      */
-    public function __construct(Locale $locale, string $name, string $title, string $metaDescription, string $metaKeywords, string $slug = null)
+    public function __construct(ILocale $locale, string $name, string $title, string $metaDescription, string $metaKeywords, string $slug = null)
     {
         $this->locale = $locale;
         $this->name = $name;
@@ -51,9 +51,9 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
 
 
     /**
-     * @param Locale $locale
+     * @param ILocale $locale
      */
-    public function setLocale(Locale $locale): void
+    public function setLocale(ILocale $locale): void
     {
         $this->locale = $locale;
     }
@@ -134,7 +134,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
     /**
      * @return mixed
      */
-    public function getLocale(): Locale
+    public function getLocale(): ILocale
     {
         return $this->locale;
     }
