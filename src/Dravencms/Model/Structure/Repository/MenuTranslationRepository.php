@@ -297,13 +297,6 @@ class MenuTranslationRepository
         return $foundTranslation;
     }
 
-    /**
-     * Make sure that our slug is unique
-     */
-    public function makeSlugUnique(string $slug): string {
-        return $slug;
-    }
-
     public function slugify(MenuTranslation $menuTranslation, string $forceSlug = null): string
     {
         $slug = ($forceSlug ? $forceSlug : $this->slugifyMenuTranslation($menuTranslation));
