@@ -11,15 +11,13 @@ use Dravencms\Model\Structure\Entities\MenuTranslation;
 use Dravencms\Structure\MenuSlugGenerator;
 use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
+use Nette\Utils\Strings;
 
 
 class MenuTranslationRepository
 {
     /** @var \Doctrine\Persistence\ObjectRepository|MenuTranslation */
     private $menuTranslationRepository;
-
-    /** @var MenuSlugGenerator */
-    private $menuSlugGenerator;
 
     /** @var EntityManager */
     private $entityManager;
@@ -34,12 +32,10 @@ class MenuTranslationRepository
      * @param MenuSlugGenerator $menuSlugGenerator
      */
     public function __construct(
-        EntityManager $entityManager,
-        MenuSlugGenerator $menuSlugGenerator
+        EntityManager $entityManager
     )
     {
         $this->entityManager = $entityManager;
-        $this->menuSlugGenerator = $menuSlugGenerator;
         $this->menuTranslationRepository = $entityManager->getRepository(MenuTranslation::class);
     }
 
@@ -287,14 +283,9 @@ class MenuTranslationRepository
         }
         else
         {
-            $foundTranslation = new MenuTranslation($menu, $locale, $name, $metaDescription, $metaKeywords, $title, $h1, function($menuTranslation){
-                return $this->menuSlugGenerator->slugify($menuTranslation);
-            });
-        }
-
-        if ($slug)
-        {
-            $foundTranslation->setSlug($slug);
+            $foundTranslation = new MenuTranslation($menu, $locale, $name, $metaDescription, $metaKeywords, $title, $h1);
+            $uniqueSlug = $this->slugify($foundTranslation, $slug);
+            $foundTranslation->setSlug($uniqueSlug);
         }
 
         $this->entityManager->persist($foundTranslation);
@@ -304,6 +295,53 @@ class MenuTranslationRepository
         $this->menuTranslationSlugRuntimeCache[$foundTranslation->getMenu()->getId().$foundTranslation->getLocale()->getLanguageCode()] = $foundTranslation->getSlug();
 
         return $foundTranslation;
+    }
+
+    /**
+     * Make sure that our slug is unique
+     */
+    public function makeSlugUnique(string $slug): string {
+        return $slug;
+    }
+
+    public function slugify(MenuTranslation $menuTranslation, string $forceSlug = null): string
+    {
+        $slug = ($forceSlug ? $forceSlug : $this->slugifyMenuTranslation($menuTranslation));
+
+        // Make sure the slug is unique
+        $uniqueSlug = $slug;
+        do {
+            $matches = [];
+            if (\preg_match('/-(\d+)$/', $uniqueSlug, $matches)) {
+                $suffix = intval($matches[1]) + 1;
+                $uniqueSlug = preg_replace('/^(\S+)-(\d+)$/', '${1}-'.$suffix, $uniqueSlug);
+            } else {
+                $uniqueSlug = $slug.'-1';
+            }
+        } while ($this->menuTranslationRepository->findOneBy(['slug' => $uniqueSlug, 'locale' => $menuTranslation->getLocale()]));
+
+        return $uniqueSlug;
+    }
+
+    private function slugifyMenuTranslation(MenuTranslation $menuTranslation): string {
+        $slugParts = [];
+        $menu = $menuTranslation->getMenu();
+        if ($menu->getParent())
+        {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $menuTranslation->getLocale()));
+            $results = $menu->getParent()->getTranslations()->matching($criteria);
+            //We should get only single result
+            if (count($results))
+            {
+                /** @var MenuTranslation $result */
+                $result = $results[0];
+                $slugParts[] = $result->getSlug();
+            }
+        }
+
+        $slugParts[] = Strings::webalize($menuTranslation->getName());
+        
+        return implode('/', $slugParts);
     }
 
     /**
