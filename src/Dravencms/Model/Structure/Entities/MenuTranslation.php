@@ -95,17 +95,18 @@ class MenuTranslation
      * @param $metaKeywords
      * @param $title
      * @param $h1
-     * @param callable $slugGenerator
+     * @param string $slug
+     * @param string $customUrl
      */
     public function __construct(
-            Menu $menu, 
-            Locale $locale, 
-            string $name, 
-            string $metaDescription, 
-            string $metaKeywords, 
-            string $title, 
-            string $h1, 
-            callable $slugGenerator, 
+            Menu $menu,
+            Locale $locale,
+            string $name,
+            string $metaDescription,
+            string $metaKeywords,
+            string $title,
+            string $h1,
+            string $slug = null,
             string $customUrl = null
             )
     {
@@ -117,7 +118,7 @@ class MenuTranslation
         $this->menu = $menu;
         $this->locale = $locale;
         $this->customUrl = $customUrl;
-        $this->generateSlug($slugGenerator);
+        if ($slug) $this->setSlug($slug);
     }
 
     /**
