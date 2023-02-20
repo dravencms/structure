@@ -18,7 +18,7 @@
                             {$col['name']}
                             <input type="number" min="0" placeholder="Rows" class="form-control rows" data-block="{$col['name']}" value="0">
                             <select class="form-control cols" data-block="{$col['name']}">
-                                {var $options = array(1, 2, 3, 4, 6, 12);}
+                                {var $options = array(1, 2, 3, 4, 6, 12)}
                                 <option n:foreach="$options AS $o" value="{$o}">{$o}</option>
                             </select>
                         </div>
