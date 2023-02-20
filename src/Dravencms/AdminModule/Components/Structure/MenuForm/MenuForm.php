@@ -126,7 +126,7 @@ class MenuForm extends BaseControl
         else{
             $defaultValues['metaRobots'] = 'index, follow';
             $defaultValues['isActive'] = true;
-            $defaultValues['sitemapPriority'] = '0.5';
+            $defaultValues['sitemapPriority'] = 0.5;
             $defaultValues['isShowH1'] = true;
             $defaultValues['isSitemap'] = true;
             $defaultValues['isAutogenerateSlug'] = true;
@@ -261,6 +261,8 @@ class MenuForm extends BaseControl
 
         $target = ($values->target ? $values->target : null);
 
+        $sitemapPriority = floatval($values->sitemapPriority);
+
         if ($this->menu)
         {
             $menu = $this->menu;
@@ -273,7 +275,7 @@ class MenuForm extends BaseControl
             {
                 $menu->setIsHomePage(true);
             }
-            $menu->setSitemapPriority($values->sitemapPriority);
+            $menu->setSitemapPriority($sitemapPriority);
             $menu->setIsSitemap($values->isSitemap);
             $menu->setIsShowH1($values->isShowH1);
             $menu->setIsRegularExpression($values->isRegularExpression);
@@ -295,7 +297,7 @@ class MenuForm extends BaseControl
                 $values->isActive,
                 $values->isHidden,
                 $values->isHomePage,
-                $values->sitemapPriority,
+                $sitemapPriority,
                 $values->isSitemap,
                 $values->isShowH1,
                 null,
