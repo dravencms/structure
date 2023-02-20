@@ -372,7 +372,7 @@ class Structure
 
                         $matches = [];
                         if (preg_match($regexp, $child->nodeValue, $matches)) {
-                            $menuContentId = $matches[1];
+                            $menuContentId = intval($matches[1]);
                             $menuContent = $this->contentRepository->getOneById($menuContentId);
                             
                             if ($menuContent) {
