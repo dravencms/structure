@@ -217,9 +217,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
 
-        $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
-
-        $this->structure->saveStructureTree($cmsMenu, $structureTree);
+        $this->structure->saveStructureTree($menu, $structureTree);
         $this->payload->structureTree = $structureTree;
         $this->sendPayload();
     }
