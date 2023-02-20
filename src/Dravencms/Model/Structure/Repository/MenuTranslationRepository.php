@@ -5,6 +5,7 @@
 
 namespace Dravencms\Model\Structure\Repository;
 
+use Doctrine\Common\Collections\Criteria;
 use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Entities\MenuTranslation;
@@ -321,6 +322,7 @@ class MenuTranslationRepository
         $menu = $menuTranslation->getMenu();
         if ($menu->getParent())
         {
+            // @TODO rewrite this to use normal query
             $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $menuTranslation->getLocale()));
             $results = $menu->getParent()->getTranslations()->matching($criteria);
             //We should get only single result
