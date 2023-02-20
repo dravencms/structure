@@ -132,8 +132,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $component = $this->structureMenuFormFactory->create($this->structureMenu, $this->menuEdit);
         $component->onSuccess[] = function ($menu) {
-            $cmsMenu = new \Dravencms\Structure\Bridge\CmsMenu\Menu($menu);
-            $this->structure->generateMenuPage($cmsMenu);
+            $this->structure->generateMenuPage($menu);
 
             /** @var Menu $structureMenu */
             if ($this->menuEdit) {
