@@ -172,9 +172,13 @@ class SlugRouter implements Router
         );
         
         if ($pageInfo) {
-
-            $locale = $params['locale'];
-            $foundLocale = $this->localeRepository->getLocaleCache($locale);
+            if (array_key_exists('locale', $params)) {
+                $locale = $params['locale'];
+                $foundLocale = $this->localeRepository->getLocaleCache($locale);
+            } else {
+                $foundLocale = null;
+            }
+            
             if (!$foundLocale)
             {
                 $foundLocale = $this->localeRepository->getDefault();
@@ -187,6 +191,7 @@ class SlugRouter implements Router
                     $url .= $foundLocale->getLanguageCode();
                 }
             } else {
+                echo $pageInfo->getId();
                 $slug = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
 
                 if ($foundLocale->isDefault()) {
