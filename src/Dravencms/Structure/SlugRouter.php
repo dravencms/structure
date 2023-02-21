@@ -191,7 +191,6 @@ class SlugRouter implements Router
                     $url .= $foundLocale->getLanguageCode();
                 }
             } else {
-                echo $pageInfo->getId();
                 $slug = $this->menuTranslationRepository->getSlug($pageInfo, $foundLocale);
 
                 if ($foundLocale->isDefault()) {
