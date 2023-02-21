@@ -1,2 +1,3 @@
 - Dravencms\Structure\Console\FixMenuTreeCommand
 - Dravencms\Structure\Console\GeneratePresentersCommand
+- Dravencms\Structure\Console\FixIncorrectStructureCommand
