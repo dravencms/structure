@@ -9,6 +9,7 @@
 namespace Dravencms\Structure;
 
 use Dravencms\Model\Locale\Entities\ILocale;
+use Nette\Utils\Strings;
 
 class CmsActionOptionTranslation implements ICmsActionOptionTranslation
 {
@@ -42,10 +43,10 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
     public function __construct(ILocale $locale, string $name, string $title, string $metaDescription, string $metaKeywords, string $slug = null)
     {
         $this->locale = $locale;
-        $this->name = $name;
-        $this->title = $title;
-        $this->metaDescription = $metaDescription;
-        $this->metaKeywords = $metaKeywords;
+        $this->setName($name);
+        $this->setTitle($title);
+        $this->setMetaDescription($metaDescription);
+        $this->setMetaKeywords($metaKeywords);
         $this->slug = $slug;
     }
 
@@ -63,7 +64,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
      */
     public function setName(string $name): void
     {
-        $this->name = $name;
+        $this->name = Strings::truncate($name, 255);
     }
 
     /**
@@ -71,7 +72,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
      */
     public function setTitle(string $title): void
     {
-        $this->title = $title;
+        $this->title = Strings::truncate($title, 255);
     }
 
     /**
@@ -79,7 +80,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
      */
     public function setMetaDescription(string $metaDescription): void
     {
-        $this->metaDescription = $metaDescription;
+        $this->metaDescription = Strings::truncate($metaDescription, 255);
     }
 
     /**
@@ -87,7 +88,7 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
      */
     public function setMetaKeywords(string $metaKeywords): void
     {
-        $this->metaKeywords = $metaKeywords;
+        $this->metaKeywords = Strings::truncate($metaKeywords, 255);
     }
     
     /**
@@ -148,3 +149,4 @@ class CmsActionOptionTranslation implements ICmsActionOptionTranslation
     }
 
 }
+
