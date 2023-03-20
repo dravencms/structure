@@ -304,7 +304,8 @@ class MenuTranslationRepository
 
         // Make sure the slug is unique
         $uniqueSlug = $slug;
-        do {
+        
+        while($this->menuTranslationRepository->findOneBy(['slug' => $uniqueSlug, 'locale' => $menuTranslation->getLocale()])) {
             $matches = [];
             if (\preg_match('/-(\d+)$/', $uniqueSlug, $matches)) {
                 $suffix = intval($matches[1]) + 1;
@@ -312,7 +313,7 @@ class MenuTranslationRepository
             } else {
                 $uniqueSlug = $slug.'-1';
             }
-        } while ($this->menuTranslationRepository->findOneBy(['slug' => $uniqueSlug, 'locale' => $menuTranslation->getLocale()]));
+        }
 
         return $uniqueSlug;
     }
