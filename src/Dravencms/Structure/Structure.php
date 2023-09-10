@@ -340,7 +340,7 @@ class Structure
     {
         $contentArray = [];
         $dom = new \DOMDocument('1.0', 'utf-8');
-        $block = mb_convert_encoding($block, 'HTML-ENTITIES', "UTF-8");
+        $block = htmlspecialchars_decode(mb_encode_numericentity(htmlentities(trim($block), ENT_QUOTES, 'UTF-8'), [0x80, 0x10FFFF, 0, ~0], 'UTF-8'));
         @$dom->loadHTML($block);
 
         $xpathBlock = new \DOMXPath($dom);
