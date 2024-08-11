@@ -129,7 +129,7 @@ abstract class SlugPresenter extends BasePresenter
     /**
      * @return \WebLoader\Nette\CssLoader
      */
-    public function createComponentCss(): CssLoader
+    public function createComponentLayoutCss(): CssLoader
     {
         return $this->webLoader->createCssLoader($this->getLayout() ? $this->getLayout(): $this->cmsFactory->getDefaultLayout());
     }
@@ -137,7 +137,7 @@ abstract class SlugPresenter extends BasePresenter
     /**
      * @return JavaScriptLoader
      */
-    public function createComponentJs(): JavaScriptLoader
+    public function createComponentLayoutJs(): JavaScriptLoader
     {
         return $this->webLoader->createJavaScriptLoader($this->getLayout() ? $this->getLayout(): $this->cmsFactory->getDefaultLayout());
     }
