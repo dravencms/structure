@@ -19,10 +19,10 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
      */
     public function load(ObjectManager $manager): void
     {
-        $child = new Menu('Web structure and content', ':Admin:Structure:Structure', 'fa-code-fork', $this->getReference('user-acl-operation-structure-edit'));
+        $child = new Menu('Web structure and content', ':Admin:Structure:Structure', 'fa-code-fork', $this->getReference('user-acl-operation-structure-edit', \Dravencms\Model\User\Entities\AclOperation::class));
         $manager->persist($child);
 
-        $child = new Menu('Site items', null, 'fa-cubes', $this->getReference('user-acl-operation-structure-edit'));
+        $child = new Menu('Site items', null, 'fa-cubes', $this->getReference('user-acl-operation-structure-edit', \Dravencms\Model\User\Entities\AclOperation::class));
         $manager->persist($child);
 
         $manager->flush();
