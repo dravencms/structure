@@ -10,6 +10,9 @@ use Dravencms\Structure\Filters\Latte;
 use Nette\Utils\Strings;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
+use Dravencms\Seo\Robots\RobotsProviderInterface;
+use Dravencms\Seo\Sitemap\SitemapProviderInterface;
+use Dravencms\Structure\Seo\StructureSeoProvider;
 
 
 /**
@@ -54,6 +57,14 @@ class StructureExtension extends CompilerExtension
         $this->loadComponents();
         $this->loadModels();
         $this->loadConsole();
+
+        if (
+            interface_exists(SitemapProviderInterface::class)
+            && interface_exists(RobotsProviderInterface::class)
+        ) {
+            $builder->addDefinition($this->prefix('seoProvider'))
+                ->setFactory(StructureSeoProvider::class);
+        }
     }
     
     protected function loadCmsModels(): void
