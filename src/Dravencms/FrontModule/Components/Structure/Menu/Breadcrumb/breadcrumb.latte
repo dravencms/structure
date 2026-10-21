@@ -2,7 +2,7 @@
     <ul class="{$listClass}">
         <li n:if="$showYouAreHere" class="breadcrumbs-label">Jste zde:</li>
         <li><a href="{$basePath}/">{$homePage->getTranslation($currentLocale)->getName()}</a><i n:if="$showCarrot" class="fa fa-angle-right"></i></li>
-        <li n:foreach="$breadcrumbs AS $breadcrumb" {if $thisPage == $breadcrumb} class="{$activeClass}"{/if}>
+        <li n:foreach="$breadcrumbs as $breadcrumb" {if $thisPage == $breadcrumb} class="{$activeClass}"{/if}>
             {var $breadcrumbTranslation = $breadcrumb->getTranslation($currentLocale)}
             {if $thisPage == $breadcrumb}
                 {$breadcrumbTranslation->getName()|truncate, 40}

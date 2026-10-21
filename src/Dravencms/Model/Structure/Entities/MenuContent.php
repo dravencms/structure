@@ -6,16 +6,16 @@
 namespace Dravencms\Model\Structure\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class MenuContent
  * @package App\Model\Structure\Entities
- * @ORM\Entity
- * @ORM\Table(name="structureMenuContent")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "structureMenuContent")]
 class MenuContent
 {
     use Nette\SmartObject;
@@ -24,27 +24,27 @@ class MenuContent
 
     /**
      * @var Menu
-     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="menuContents")
-     * @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Menu", inversedBy: "menuContents")]
+    #[ORM\JoinColumn(name: "menu_id", referencedColumnName: "id")]
     private $menu;
     
     /**
      * @var string
-     * @ORM\Column(type="string",length=255, nullable=true)
      */
+    #[ORM\Column(type: "string",length: 255, nullable: true)]
     private $factory;
 
     /**
      * @var array
-     * @ORM\Column(type="json_array", nullable=true)
      */
+    #[ORM\Column(type: "json", nullable: true)]
     private $parameters;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=32, nullable=true)
      */
+    #[ORM\Column(type: "string",length: 32, nullable: true)]
     private $parametersSum;
 
     /**

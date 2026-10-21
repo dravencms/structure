@@ -8,7 +8,7 @@ namespace Dravencms\Model\Structure\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -16,9 +16,10 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 /**
  * Class MenuTranslation
  * @package App\Model\Structure\Entities
- * @ORM\Entity
- * @ORM\Table(name="structureMenuTranslation", uniqueConstraints={@UniqueConstraint(name="slug_unique", columns={"slug_sum", "locale_id"})})
  */
+#[ORM\Entity]
+#[ORM\UniqueConstraint(name: "slug_unique", columns: ["slug_sum", "locale_id"])]
+#[ORM\Table(name: "structureMenuTranslation")]
 class MenuTranslation
 {
     use Nette\SmartObject;
@@ -27,63 +28,61 @@ class MenuTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $name;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private $slug;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=32)
      */
+    #[ORM\Column(type: "string",length: 32)]
     private $slugSum;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $metaDescription;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $metaKeywords;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $title;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $h1;
 
     /**
      * @var string
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: "text", nullable: true)]
     private $customUrl;
 
     /**
      * @var Menu
-     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="translations")
-     * @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Menu", inversedBy: "translations")]
+    #[ORM\JoinColumn(name: "menu_id", referencedColumnName: "id")]
     private $menu;
 
     /**
      * @var Locale
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\Locale\Entities\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\Locale\Entities\Locale")]
+    #[ORM\JoinColumn(name: "locale_id", referencedColumnName: "id")]
     private $locale;
 
     /**
@@ -106,8 +105,8 @@ class MenuTranslation
             string $metaKeywords,
             string $title,
             string $h1,
-            string $slug = null,
-            string $customUrl = null
+            ?string $slug = null,
+            ?string $customUrl = null
             )
     {
         $this->name = $name;
@@ -186,7 +185,7 @@ class MenuTranslation
     /**
      * @param null|string $customUrl
      */
-    public function setCustomUrl(string $customUrl = null): void
+    public function setCustomUrl(?string $customUrl = null): void
     {
         $this->customUrl = $customUrl;
     }

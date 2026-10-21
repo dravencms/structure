@@ -11,15 +11,15 @@
         <div class="layout-editor" data-uri="{link blocksJson! $structureMenuId}" data-curi="{link componentJson!}" data-suri="{link structureSave! $menu->getId()}">
             <div class="message-box">
             </div>
-            <div class="row" n:foreach="$mapping['public'] AS $row">
-                <div n:foreach="$row AS $col" class="col-sm-{$col['blocks']} block-{$col['name']}">
+            <div class="row" n:foreach="$mapping['public'] as $row">
+                <div n:foreach="$row as $col" class="col-sm-{$col['blocks']} block-{$col['name']}">
                     <div class="col">
                         <div class="col-name">
                             {$col['name']}
                             <input type="number" min="0" placeholder="Rows" class="form-control rows" data-block="{$col['name']}" value="0">
                             <select class="form-control cols" data-block="{$col['name']}">
                                 {var $options = array(1, 2, 3, 4, 6, 12)}
-                                <option n:foreach="$options AS $o" value="{$o}">{$o}</option>
+                                <option n:foreach="$options as $o" value="{$o}">{$o}</option>
                             </select>
                         </div>
                         <div class="col-content-editable">

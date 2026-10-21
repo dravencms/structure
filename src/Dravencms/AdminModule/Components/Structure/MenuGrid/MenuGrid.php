@@ -14,7 +14,7 @@ use Dravencms\Model\Structure\Entities\Menu;
 use Dravencms\Model\Structure\Repository\MenuRepository;
 use Dravencms\Model\Structure\Repository\MenuTranslationRepository;
 use Dravencms\Database\EntityManager;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 class MenuGrid extends BaseControl
@@ -51,7 +51,7 @@ class MenuGrid extends BaseControl
      * @param EntityManager $entityManager
      */
     public function __construct(
-        Menu $parentMenu = null,
+        ?Menu $parentMenu,
         MenuRepository $menuRepository,
         MenuTranslationRepository $menuTranslationRepository,
         BaseGridFactory $baseGridFactory,
@@ -78,7 +78,7 @@ class MenuGrid extends BaseControl
     /**
      * @param $name
      * @return Grid
-     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnNotFoundException
+     * @throws \Contributte\Datagrid\Exception\DataGridColumnNotFoundException
      */
     protected function createComponentGrid(string $name): Grid
     {
@@ -147,8 +147,8 @@ class MenuGrid extends BaseControl
     /**
      * @param $id
      * @throws \Exception
-     * @isAllowed(structure, delete)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'delete')]
     public function handleDelete($id): void
     {
         $aclOperations = $this->menuRepository->getById($id);

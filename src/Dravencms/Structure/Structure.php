@@ -744,7 +744,7 @@ class Structure
         }
         else
         {
-            $compiledTemplate = sprintf('{block #%s}', $this->defaultBlockName);
+            $compiledTemplate = sprintf('{block %s}', $this->defaultBlockName);
         }
 
 
@@ -799,7 +799,7 @@ class Structure
         }
 
         $filePath = $path.'/'.$presenterName.'.php';
-        file_put_contents($filePath, '<?php'.PHP_EOL.'namespace '.$this->getModuleNamespace().';'.PHP_EOL.(string) $class);
+        file_put_contents($filePath, '<?php declare(strict_types=1);'.PHP_EOL.'namespace '.$this->getModuleNamespace().';'.PHP_EOL.(string) $class);
         require_once ($filePath); //We need to require new presenter ASAP
 
         $this->menuRepository->savePresenterAction($menu, ($this->presenterModule ? ':'.$this->presenterModule.':' : '').$this->presenterPrefix.$menu->getId(), 'default');

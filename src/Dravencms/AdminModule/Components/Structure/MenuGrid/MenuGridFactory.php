@@ -13,5 +13,5 @@ interface MenuGridFactory
      * @param Menu $parentMenu
      * @return MenuGrid
      */
-    public function create(Menu $parentMenu = null): MenuGrid;
+    public function create(?Menu $parentMenu = null): MenuGrid;
 }

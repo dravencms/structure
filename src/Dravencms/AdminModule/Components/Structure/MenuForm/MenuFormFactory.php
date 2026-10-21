@@ -15,5 +15,5 @@ interface MenuFormFactory
      * @param Menu|null $menu
      * @return MenuForm
      */
-    public function create(Menu $parentMenu = null, Menu $menu = null): MenuForm;
+    public function create(?Menu $parentMenu = null, ?Menu $menu = null): MenuForm;
 }

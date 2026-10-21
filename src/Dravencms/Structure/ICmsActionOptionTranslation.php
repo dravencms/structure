@@ -44,7 +44,7 @@ interface ICmsActionOptionTranslation
      * @param null|string $slug
      * @return mixed
      */
-    public function setSlug(string $slug = null): void;
+    public function setSlug(?string $slug = null): void;
 
     /**
      * @return string

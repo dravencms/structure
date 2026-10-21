@@ -164,7 +164,7 @@ class StructureExtension extends CompilerExtension
         
         $latteFactoryService = $builder->getDefinitionByType(LatteFactory::class)->getResultDefinition();
         $latteFactoryService->addSetup('addFilter', ['cmsLink', [$this->prefix('@filters'), 'cmsLink']]);
-        $latteFactoryService->addSetup('Dravencms\Structure\Macros\Latte::install(?->getCompiler())', ['@self']);
+        $latteFactoryService->addSetup('addExtension', [new \Nette\DI\Definitions\Statement(\Dravencms\Structure\Macros\Latte::class)]);
     }
     
      /**

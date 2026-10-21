@@ -51,7 +51,7 @@ class StructurePresenter extends SecuredPresenter
      * @param $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
-    public function actionDefault(int $structureMenuId = null): void
+    public function actionDefault(?int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
         if ($structureMenuId) {
@@ -76,7 +76,7 @@ class StructurePresenter extends SecuredPresenter
      * @param null $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
-    public function actionEdit(int $id = null, int $structureMenuId = null): void
+    public function actionEdit(?int $id = null, ?int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('Web structure and content');
 

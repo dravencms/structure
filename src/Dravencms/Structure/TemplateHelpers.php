@@ -12,22 +12,22 @@ use Nette;
 
 /**
  * Class TemplateHelpers
- * @package Salamek\Cms
+ * @package Salamek\Structure
  */
 class TemplateHelpers
 {
     use Nette\SmartObject;
 
     /**
-     * @var Cms
+     * @var Structure
      */
     private $cms;
 
     /**
      * TemplateHelpers constructor.
-     * @param Cms $cms
+     * @param Structure $cms
      */
-    public function __construct(Cms $cms): void
+    public function __construct(Structure $cms)
     {
         $this->cms = $cms;
     }
@@ -47,9 +47,9 @@ class TemplateHelpers
 
 
     /**
-     * @return Cms
+     * @return Structure
      */
-    public function getCms(): Cms
+    public function getCms(): Structure
     {
         return $this->cms;
     }

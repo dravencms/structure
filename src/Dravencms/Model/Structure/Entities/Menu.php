@@ -10,16 +10,16 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 
 /**
  * Class Menu
  * @package App\Model\Structure\Entities
- * @Gedmo\Tree(type="nested")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
- * @ORM\Table(name="structureMenu")
  */
+#[Gedmo\Tree(type: "nested")]
+#[ORM\Entity(repositoryClass: "Gedmo\Tree\Entity\Repository\NestedTreeRepository")]
+#[ORM\Table(name: "structureMenu")]
 class Menu
 {
     const TARGET_BLANK = '_blank';
@@ -33,164 +33,154 @@ class Menu
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
      */
+    #[ORM\Column(type: "string", length: 255, nullable: false, unique: true)]
     private $identifier;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isHidden;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $metaRobots;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isHomePage;
 
     /**
      * @var double
-     * @ORM\Column(type="float", nullable=true)
      */
+    #[ORM\Column(type: "float", nullable: true)]
     private $sitemapPriority;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isSitemap;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isShowH1;
 
     /**
      * @var string
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: "text", nullable: true)]
     private $latteTemplate;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=500,nullable=true)
      */
+    #[ORM\Column(type: "string",length: 500,nullable: true)]
     private $presenter;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=500,nullable=true)
      */
+    #[ORM\Column(type: "string",length: 500,nullable: true)]
     private $action;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isSystem;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isContent;
 
     /**
      * @var array
-     * @ORM\Column(type="json_array", nullable=false)
      */
+    #[ORM\Column(type: "json", nullable: false)]
     private $parameters;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=32, nullable=true)
      */
+    #[ORM\Column(type: "string",length: 32, nullable: true)]
     private $parametersSum;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isRegularExpression;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isRegularExpressionMatchArguments;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $layoutName;
 
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer")
-     */
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: "lft", type: "integer")]
     private $lft;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer")
-     */
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: "rgt", type: "integer")]
     private $rgt;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer")
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: "lvl", type: "integer")]
     private $lvl;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: "Menu", inversedBy: "children")]
+    #[ORM\JoinColumn(name: "parent_id", referencedColumnName: "id", onDelete: "SET NULL")]
     private $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Menu", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: "Menu", mappedBy: "parent")]
     private $children;
 
     /**
      * @var ArrayCollection|MenuContent[]
-     * @ORM\OneToMany(targetEntity="MenuContent", mappedBy="menu",cascade={"remove"})
      */
+    #[ORM\OneToMany(targetEntity: "MenuContent", mappedBy: "menu",cascade: ["remove"])]
     private $menuContents;
 
     /**
      * @var ArrayCollection|MenuTranslation[]
-     * @ORM\OneToMany(targetEntity="MenuTranslation", mappedBy="menu",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "MenuTranslation", mappedBy: "menu",cascade: ["persist", "remove"])]
     private $translations;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255, nullable=true)
      */
+    #[ORM\Column(type: "string",length: 255, nullable: true)]
     private $target;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isAutogenerateSlug;
 
     /**
@@ -224,15 +214,15 @@ class Menu
         float $sitemapPriority = 0.5,
         bool $isSitemap = true,
         bool $isShowH1 = true,
-        string $presenter = null,
-        string $action = null,
+        ?string $presenter = null,
+        ?string $action = null,
         bool $isSystem = false,
         array $parameters = [],
         bool $isRegularExpression = false,
         bool $isRegularExpressionMatchArguments = false,
         string $layoutName = 'layout',
         bool $isContent = false,
-        string $target = null,
+        ?string $target = null,
         bool $autogenerateSlug = true
     ) {
         $this->identifier = $identifier;
@@ -262,7 +252,7 @@ class Menu
      * @param Menu|null $parent
      * @return $this
      */
-    public function setParent(Menu $parent = null): void
+    public function setParent(?Menu $parent = null): void
     {
         $this->parent = $parent;
     }
@@ -334,7 +324,7 @@ class Menu
     /**
      * @param null|string $latteTemplate
      */
-    public function setLatteTemplate(string $latteTemplate = null): void
+    public function setLatteTemplate(?string $latteTemplate = null): void
     {
         $this->latteTemplate = $latteTemplate;
     }
@@ -342,7 +332,7 @@ class Menu
     /**
      * @param null|string $presenter
      */
-    public function setPresenter(string $presenter = null): void
+    public function setPresenter(?string $presenter = null): void
     {
         $this->presenter = $presenter;
     }
@@ -350,7 +340,7 @@ class Menu
     /**
      * @param null|string $action
      */
-    public function setAction(string $action = null): void
+    public function setAction(?string $action = null): void
     {
         $this->action = $action;
     }
@@ -454,7 +444,7 @@ class Menu
     /**
      * @param null|string $target
      */
-    public function setTarget(string $target = null): void
+    public function setTarget(?string $target = null): void
     {
         $this->target = $target;
     }

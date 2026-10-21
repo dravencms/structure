@@ -11,13 +11,19 @@ dravencms.structure:
     defaultLayout: 'layout'
     mappings:
         Dravencms\FrontModule\Components\*\*\-\*Factory: Dravencms\Model\*\Repository\*CmsRepository
-    
+
 services:
     routeFactory.Structure: Dravencms\Structure\RouteFactory
     route:
         setup:
            - addRouteFactory(@routeFactory.Structure)
 
-nettrine.orm.annotations:
-    mapping:
-        Dravencms\Model\Structure: %appDir%/../vendor/dravencms/structure/src/Dravencms/Model/Structure/Entities
+nettrine.orm:
+    managers:
+        default:
+            mapping:
+                DravencmsModelStructure :
+                    type: attributes
+                    directories:
+                        - %appDir%/../vendor/dravencms/structure/src/Dravencms/Model/Structure/Entities
+                    namespace: Dravencms\Model\Structure

@@ -55,7 +55,7 @@ class MenuRepository
      * @param bool $isSystem
      * @return static
      */
-    public function getMenuQueryBuilder(Menu $parentMenu = null, bool $isSystem = false)
+    public function getMenuQueryBuilder(?Menu $parentMenu = null, bool $isSystem = false)
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
@@ -80,7 +80,7 @@ class MenuRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree(string $identifier, Menu $ignoreMenu = null): bool
+    public function isIdentifierFree(string $identifier, ?Menu $ignoreMenu = null): bool
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
@@ -151,7 +151,7 @@ class MenuRepository
      * @param ILocale $locale
      * @return mixed
      */
-    public function getTree(array $options, ILocale $locale = null)
+    public function getTree(array $options, ?ILocale $locale = null)
     {
         $query = $this->menuRepository
             ->createQueryBuilder('node')
@@ -331,8 +331,8 @@ class MenuRepository
         float $sitemapPriority = 0.5,
         bool $isSitemap = true,
         bool $isShowH1 = true,
-        string $presenter = null,
-        string $action = null,
+        ?string $presenter = null,
+        ?string $action = null,
         bool $isSystem = false,
         array $parameters = [],
         bool $isRegularExpression = false,
@@ -403,7 +403,7 @@ class MenuRepository
      * @param bool $isSystem
      * @return null|Menu
      */
-    public function getLastMenuItem(Menu $parentMenu = null, bool $isSystem = false): ?Menu
+    public function getLastMenuItem(?Menu $parentMenu = null, bool $isSystem = false): ?Menu
     {
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')

@@ -49,7 +49,7 @@ class MenuTranslationRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ILocale $locale, Menu $parentMenu = null, Menu $ignoreMenu = null): bool
+    public function isNameFree(string $name, ILocale $locale, ?Menu $parentMenu = null, ?Menu $ignoreMenu = null): bool
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -82,7 +82,7 @@ class MenuTranslationRepository
      * @param bool $isSystem
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getMenuTranslationQueryBuilder(Menu $parentMenu = null, bool $isSystem = false)
+    public function getMenuTranslationQueryBuilder(?Menu $parentMenu = null, bool $isSystem = false)
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -108,7 +108,7 @@ class MenuTranslationRepository
      * @param null $offset
      * @return Menu[]
      */
-    public function search(string $query = null, int $limit = null, int $offset = null)
+    public function search(?string $query = null, ?int $limit = null, ?int $offset = null)
     {
         $qb = $this->menuTranslationRepository->createQueryBuilder('t')
             ->select('t')
@@ -154,7 +154,7 @@ class MenuTranslationRepository
      * @param ILocale $locale
      * @return array
      */
-    public function getOneBySlug(string $slug = null, array $requestParams = [], ILocale $locale = null)
+    public function getOneBySlug(?string $slug = null, array $requestParams = [], ?ILocale $locale = null)
     {
         $found = $this->menuTranslationRepository->findOneBy(['slug' => $slug, 'locale' => $locale]);
         if ($found)
@@ -271,7 +271,7 @@ class MenuTranslationRepository
             string $metaKeywords, 
             string $title, 
             string $name, 
-            string $slug = null
+            ?string $slug = null
             ): ?MenuTranslation
     {
         if ($foundTranslation = $this->getTranslation($menu, $locale))
@@ -298,7 +298,7 @@ class MenuTranslationRepository
         return $foundTranslation;
     }
 
-    public function slugify(MenuTranslation $menuTranslation, string $forceSlug = null): string
+    public function slugify(MenuTranslation $menuTranslation, ?string $forceSlug = null): string
     {
         $slug = ($forceSlug ? $forceSlug : $this->slugifyMenuTranslation($menuTranslation));
 

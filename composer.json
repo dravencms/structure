@@ -16,7 +16,10 @@
   ],
   "require": {
     "dravencms/locale": ">=2.0",
-    "dravencms/admin": ">=2.0"
+    "dravencms/admin": ">=2.0",
+    "php": "^8.4",
+    "dravencms/database": "^0.2.4",
+    "latte/latte": "^3.1"
   },
   "suggest": {
     "dravencms/seo": "Adds Structure menu entries to sitemap.xml and robots.txt"

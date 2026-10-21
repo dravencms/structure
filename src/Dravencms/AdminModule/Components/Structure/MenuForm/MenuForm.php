@@ -76,8 +76,8 @@ class MenuForm extends BaseControl
         Structure $structure,
         MenuParameterSumGenerator $menuParameterSumGenerator,
         LocaleRepository $localeRepository,
-        Menu $parentMenu = null,
-        Menu $menu = null
+        ?Menu $parentMenu = null,
+        ?Menu $menu = null
     )
     {
         $this->baseFormFactory = $baseForm;
