@@ -54,13 +54,9 @@ class MenuContentRepository
             ->where('mc.menu = :menu')
             ->andWhere('mc.factory = :factory')
             ->andWhere('mc.parametersSum = :parametersSum')
-            ->setParameters(
-                [
-                    'menu' => $menu,
-                    'factory' => $factory,
-                    'parametersSum' => $this->menuParameterSumGenerator->hash($parameters)
-                ]
-            );
+            ->setParameter('menu', $menu)
+            ->setParameter('factory', $factory)
+            ->setParameter('parametersSum', $this->menuParameterSumGenerator->hash($parameters));
 
         return $qb->getQuery()->getOneOrNullResult();
     }
@@ -102,9 +98,7 @@ class MenuContentRepository
                 ->select('mc')
                 ->join('mc.menu', 'm')
                 ->where('m.isActive = :isActive')
-                ->setParameters([
-                    'isActive' => true
-                ]);
+                ->setParameter('isActive', true);
 
             /** @var MenuContent $menuContent */
             foreach($qb->getQuery()->getResult() AS $menuContent)

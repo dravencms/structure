@@ -85,9 +85,7 @@ class MenuRepository
         $qb = $this->menuRepository->createQueryBuilder('m')
             ->select('m')
             ->where('m.identifier = :identifier')
-            ->setParameters([
-                'identifier' => $identifier,
-            ]);
+            ->setParameter('identifier', $identifier);
 
         if ($ignoreMenu) {
             $qb->andWhere('m != :ignoreMenu')
@@ -162,13 +160,9 @@ class MenuRepository
             ->where('node.isHidden = :isHidden')
             ->andWhere('node.isActive = :isActive')
             ->andWhere('t.locale = :locale')
-            ->setParameters(
-                [
-                    'isHidden' => false,
-                    'isActive' => true,
-                    'locale' => $locale
-                ]
-            )
+            ->setParameter('isHidden', false)
+            ->setParameter('isActive', true)
+            ->setParameter('locale', $locale)
             ->getQuery();
 
         return $this->menuRepository->buildTree($query->getArrayResult(), $options);

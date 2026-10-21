@@ -56,10 +56,8 @@ class MenuTranslationRepository
             ->join('t.menu', 'm')
             ->where('t.name = :name')
             ->andWhere('t.locale = :locale')
-            ->setParameters([
-                'name' => $name,
-                'locale' => $locale,
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('locale', $locale);
 
         if ($parentMenu) {
             $qb->andWhere('m.parent = :parent')
@@ -115,12 +113,8 @@ class MenuTranslationRepository
             ->join('t.menu', 'm')
             ->where('m.isActive = :isActive')
             ->andWhere('m.isContent = :isContent')
-            ->setParameters(
-                [
-                    'isActive' => true,
-                    'isContent' => true
-                ]
-            );
+            ->setParameter('isActive', true)
+            ->setParameter('isContent', true);
 
         if ($query)
         {
@@ -167,10 +161,8 @@ class MenuTranslationRepository
             ->join('t.menu', 'm')
             ->where('t.locale = :locale')
             ->andWhere('m.isRegularExpression = :isRegularExpression')
-            ->setParameters([
-                'isRegularExpression' => true,
-                'locale' => $locale
-            ]);
+            ->setParameter('isRegularExpression', true)
+            ->setParameter('locale', $locale);
         /** @var MenuTranslation $regexpRow */
         foreach ($qb->getQuery()->getResult() AS $regexpRow) {
             if ($regexpRow->getMenu()->isRegularExpressionMatchArguments() && !empty($requestParams)) {
@@ -203,10 +195,8 @@ class MenuTranslationRepository
                 ->join('t.menu', 'm')
                 ->where('t.locale = :locale')
                 ->andWhere('m.isHomePage = :isHomePage')
-                ->setParameters([
-                    'isHomePage' => true,
-                    'locale' => $locale
-                ]);
+                ->setParameter('isHomePage', true)
+                ->setParameter('locale', $locale);
             $result = $qb->getQuery()->getOneOrNullResult();
             if ($result)
             {
