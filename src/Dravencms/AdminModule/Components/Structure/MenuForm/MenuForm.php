@@ -90,50 +90,6 @@ class MenuForm extends BaseControl
         $this->parentMenu = $parentMenu;
         $this->menuParameterSumGenerator = $menuParameterSumGenerator;
         $this->localeRepository = $localeRepository;
-
-        $defaultValues = [];
-        if ($this->menu)
-        {
-            $defaultValues['metaRobots'] = $this->menu->getMetaRobots();
-            $defaultValues['sitemapPriority'] = $this->menu->getSitemapPriority();
-            $defaultValues['layoutName'] = $this->menu->getLayoutName();
-
-            $defaultValues['isHidden'] = $this->menu->isHidden();
-            $defaultValues['isActive'] = $this->menu->isActive();
-            $defaultValues['isShowH1'] = $this->menu->isShowH1();
-            $defaultValues['isRegularExpression'] = $this->menu->isRegularExpression();
-            $defaultValues['isRegularExpressionMatchArguments'] = $this->menu->isRegularExpressionMatchArguments();
-            $defaultValues['isSitemap'] = $this->menu->isSitemap();
-            $defaultValues['isHomePage'] = $this->menu->isHomePage();
-            $defaultValues['presenter'] = $this->menu->getPresenter();
-            $defaultValues['action'] = $this->menu->getAction();
-            $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
-            $defaultValues['identifier'] = $this->menu->getIdentifier();
-            $defaultValues['target'] = $this->menu->getTarget();
-            $defaultValues['isAutogenerateSlug'] = $this->menu->isAutogenerateSlug();
-
-            foreach ($this->menu->getTranslations() AS $translation)
-            {
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['slug'] = $translation->getSlug();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['h1'] = $translation->getH1();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaDescription'] = $translation->getMetaDescription();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaKeywords'] = $translation->getMetaKeywords();
-                $defaultValues[$translation->getLocale()->getLanguageCode()]['customUrl'] = $translation->getCustomUrl();
-            }
-        }
-        else{
-            $defaultValues['metaRobots'] = 'index, follow';
-            $defaultValues['isActive'] = true;
-            $defaultValues['sitemapPriority'] = 0.5;
-            $defaultValues['isShowH1'] = true;
-            $defaultValues['isSitemap'] = true;
-            $defaultValues['isAutogenerateSlug'] = true;
-            $defaultValues['layoutName'] = $this->structure->getDefaultLayout();
-        }
-
-        $this['form']->setDefaults($defaultValues);
     }
 
     /**
@@ -192,7 +148,7 @@ class MenuForm extends BaseControl
             ->setRequired('Please select valid layout');
 
         $form->addSelect('target', null, [
-            null => 'Default',
+            '' => 'Default',
             Menu::TARGET_BLANK => 'Open new window or tab',
             Menu::TARGET_SELF => 'Open in same frame',
             Menu::TARGET_PARENT => 'Open in parent frame',
@@ -216,6 +172,50 @@ class MenuForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        $defaultValues = [];
+        if ($this->menu)
+        {
+            $defaultValues['metaRobots'] = $this->menu->getMetaRobots();
+            $defaultValues['sitemapPriority'] = $this->menu->getSitemapPriority();
+            $defaultValues['layoutName'] = $this->menu->getLayoutName();
+
+            $defaultValues['isHidden'] = $this->menu->isHidden();
+            $defaultValues['isActive'] = $this->menu->isActive();
+            $defaultValues['isShowH1'] = $this->menu->isShowH1();
+            $defaultValues['isRegularExpression'] = $this->menu->isRegularExpression();
+            $defaultValues['isRegularExpressionMatchArguments'] = $this->menu->isRegularExpressionMatchArguments();
+            $defaultValues['isSitemap'] = $this->menu->isSitemap();
+            $defaultValues['isHomePage'] = $this->menu->isHomePage();
+            $defaultValues['presenter'] = $this->menu->getPresenter();
+            $defaultValues['action'] = $this->menu->getAction();
+            $defaultValues['latteTemplate'] = $this->menu->getLatteTemplate();
+            $defaultValues['identifier'] = $this->menu->getIdentifier();
+            $defaultValues['target'] = $this->menu->getTarget();
+            $defaultValues['isAutogenerateSlug'] = $this->menu->isAutogenerateSlug();
+
+            foreach ($this->menu->getTranslations() AS $translation)
+            {
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['slug'] = $translation->getSlug();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['h1'] = $translation->getH1();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaDescription'] = $translation->getMetaDescription();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['metaKeywords'] = $translation->getMetaKeywords();
+                $defaultValues[$translation->getLocale()->getLanguageCode()]['customUrl'] = $translation->getCustomUrl();
+            }
+        }
+        else{
+            $defaultValues['metaRobots'] = 'index, follow';
+            $defaultValues['isActive'] = true;
+            $defaultValues['sitemapPriority'] = 0.5;
+            $defaultValues['isShowH1'] = true;
+            $defaultValues['isSitemap'] = true;
+            $defaultValues['isAutogenerateSlug'] = true;
+            $defaultValues['layoutName'] = $this->structure->getDefaultLayout();
+        }
+
+        $form->setDefaults($defaultValues);
 
         return $form;
     }

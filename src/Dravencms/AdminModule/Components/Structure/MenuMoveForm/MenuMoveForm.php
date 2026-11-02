@@ -65,12 +65,6 @@ class MenuMoveForm extends BaseControl
         $this->structureMenuRepository = $structureMenuRepository;
         $this->entityManager = $entityManager;
         $this->menu = $menu;
-
-        $defaultValues = [];
-        $defaultValues['menuId'] = $this->menu->getId();
-
-
-        $this['form']->setDefaults($defaultValues);
     }
 
     /**
@@ -95,12 +89,18 @@ class MenuMoveForm extends BaseControl
         $form->addMultiSelect('menuId', null, $menuItems)
             ->setRequired(true);
 
-        $form->addSelect('newParentId', null, [null => '--root--'] + $menuItems);
+        $form->addSelect('newParentId', null, ['' => '--root--'] + $menuItems);
 
         $form->addSubmit('send');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        $defaultValues = [];
+        $defaultValues['menuId'] = $this->menu->getId();
+
+
+        $form->setDefaults($defaultValues);
 
         return $form;
     }
