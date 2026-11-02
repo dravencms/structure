@@ -100,19 +100,19 @@ class MenuGrid extends BaseControl
         $grid->addAction('submenu', 'Submenu items', 'default', ['structureMenuId' => 'id'])
             ->setIcon('folder-open')
             ->setTitle('Submenu items')
-            ->setClass('btn btn-xs btn-default');
+            ->setClass('btn btn-sm btn-outline-secondary');
 
         if ($this->user->isAllowed('structure', 'edit')) {
 
             $grid->addAction('move', '')
                 ->setIcon('share')
                 ->setTitle('Move')
-                ->setClass('btn btn-xs btn-default');
+                ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
                 ->setTitle('Edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('structure', 'delete'))
@@ -120,7 +120,7 @@ class MenuGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
-                ->setClass('btn btn-xs btn-danger')
+                ->setClass('btn btn-sm btn-danger')
                 ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];

@@ -1,10 +1,10 @@
-<form n:name="form" class="panel form-horizontal">
+<form n:name="form" class="card">
     <ul class="alert alert-danger" n:if="$form->hasErrors()">
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
-    <div class="panel-body">
+    <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
-            <li n:foreach="$activeLocales as $activeLocale" role="presentation" n:class="$activeLocale->isDefault() ? active"><a href="#{$activeLocale->getLanguageCode()}" aria-controls="home" role="tab" data-toggle="tab"><span class="flag-icon flag-icon-{$activeLocale->getCountry()->getCode()|lower}"></span> {$activeLocale->getName()}</a></li>
+            <li n:foreach="$activeLocales as $activeLocale" role="presentation" class="nav-item"><a n:class="$activeLocale->isDefault() ? active, nav-link" href="#{$activeLocale->getLanguageCode()}" aria-controls="home" role="tab" data-bs-toggle="tab"><span class="flag-icon flag-icon-{$activeLocale->getCountry()->getCode()|lower}"></span> {$activeLocale->getName()}</a></li>
         </ul>
         <div class="tab-content">
             <div n:foreach="$activeLocales as $activeLocale" role="tabpanel" n:class="$activeLocale->isDefault() ? active, tab-pane" id="{$activeLocale->getLanguageCode()}">
@@ -13,14 +13,14 @@
                         <legend>{$activeLocale->getName()}</legend>
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="name">{_"Name"}<span class="required">*</span></label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="name">{_"Name"}<span class="required">*</span></label>
                                     <input type="text" n:name="name" autofocus="autofocus" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="title">{_"Title"}<span class="required">*</span></label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="title">{_"Title"}<span class="required">*</span></label>
                                     <input n:name="title" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
@@ -28,8 +28,8 @@
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="h1">{_"H1"}<span class="required">*</span></label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="h1">{_"H1"}<span class="required">*</span></label>
                                     <input n:name="h1" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
@@ -37,28 +37,28 @@
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="metaDescription">{_"SEO - Description"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="metaDescription">{_"SEO - Description"}</label>
                                     <input n:name="metaDescription" class="form-control">
                                 </div>
                             </div><!-- col-sm-6 -->
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="metaKeywords">{_"SEO - Keyword"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="metaKeywords">{_"SEO - Keyword"}</label>
                                     <input n:name="metaKeywords" class="form-control">
                                 </div>
                             </div><!-- col-sm-->
                         </div><!-- row -->
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="slug">{_"URL slug"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="slug">{_"URL slug"}</label>
                                     <input n:name="slug" class="form-control">
                                 </div>
                             </div><!-- col-sm-->
                             <div class="col-sm-6">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="customUrl">{_"Custom absolute URL"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="customUrl">{_"Custom absolute URL"}</label>
                                     <input n:name="customUrl" class="form-control">
                                 </div>
                             </div><!-- col-sm-->
@@ -70,14 +70,14 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="identifier">{_"Identifier"}<span class="required">*</span></label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="identifier">{_"Identifier"}<span class="required">*</span></label>
                     <input n:name="identifier" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="layoutName">{_"Layout"}<span class="required">*</span></label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="layoutName">{_"Layout"}<span class="required">*</span></label>
                     <select n:name="layoutName" class="form-control"></select>
                 </div>
             </div><!-- col-sm-6 -->
@@ -85,14 +85,14 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="metaRobots">{_"SEO - Robots"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="metaRobots">{_"SEO - Robots"}</label>
                     <input n:name="metaRobots" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="sitemapPriority">{_"SEO - Sitemap priority"}<span class="required">*</span></label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="sitemapPriority">{_"SEO - Sitemap priority"}<span class="required">*</span></label>
                     <select n:name="sitemapPriority" class="form-control"></select>
                 </div>
             </div><!-- col-sm-->
@@ -100,8 +100,8 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="target">{_"Open mode"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="target">{_"Open mode"}</label>
                     <select n:name="target" class="form-control"></select>
                 </div>
             </div><!-- col-sm-6 -->
@@ -109,8 +109,8 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="latteTemplate">{_"Latte template"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="latteTemplate">{_"Latte template"}</label>
                     <textarea n:name="latteTemplate" class="form-control codemirror" data-codemirror-mode="htmlmixed"></textarea>
                 </div>
             </div><!-- col-sm-12 -->
@@ -118,78 +118,78 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isActive" class="px"> <span class="lbl">{_"Active"}</span>
+                        <input type="checkbox" n:name="isActive" class="form-check-input"> <span class="form-check-label">{_"Active"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isHidden" class="px"> <span class="lbl">{_"Hidden"}</span>
+                        <input type="checkbox" n:name="isHidden" class="form-check-input"> <span class="form-check-label">{_"Hidden"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isShowH1" class="px"> <span class="lbl">{_"Show main title"}</span>
+                        <input type="checkbox" n:name="isShowH1" class="form-check-input"> <span class="form-check-label">{_"Show main title"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isRegularExpression" class="px"> <span class="lbl">{_"Is regular expression"}</span>
+                        <input type="checkbox" n:name="isRegularExpression" class="form-check-input"> <span class="form-check-label">{_"Is regular expression"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isRegularExpressionMatchArguments" class="px"> <span class="lbl">{_"Is ARGS used in regular expression"}</span>
+                        <input type="checkbox" n:name="isRegularExpressionMatchArguments" class="form-check-input"> <span class="form-check-label">{_"Is ARGS used in regular expression"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isSitemap" class="px"> <span class="lbl">{_"Is sitemap"}</span>
+                        <input type="checkbox" n:name="isSitemap" class="form-check-input"> <span class="form-check-label">{_"Is sitemap"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isHomePage" class="px"> <span class="lbl">{_"Is homepage"}</span>
+                        <input type="checkbox" n:name="isHomePage" class="form-check-input"> <span class="form-check-label">{_"Is homepage"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isAutogenerateSlug" class="px"> <span class="lbl">{_"Is autogenerate slug (Ignores URL slug input)"}</span>
+                        <input type="checkbox" n:name="isAutogenerateSlug" class="form-check-input"> <span class="form-check-label">{_"Is autogenerate slug (Ignores URL slug input)"}</span>
                     </label>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel-footer">
+    <div class="card-footer">
         <input type="submit" n:name="send" class="btn btn-success button" value="{_"Save"}">
     </div>
 </form>
