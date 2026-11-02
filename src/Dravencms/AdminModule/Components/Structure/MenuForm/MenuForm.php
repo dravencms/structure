@@ -104,36 +104,36 @@ class MenuForm extends BaseControl
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('name')
-                ->setRequired('Please enter menu item name.')
-                ->addRule(Form::MAX_LENGTH, 'Name is too long.', 200);
+                ->setRequired('structure.admin.validation.nameRequired')
+                ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.nameTooLong', 200);
 
             $container->addText('h1')
-                ->addRule(Form::MAX_LENGTH, 'Main title is too long.', 200)
-                ->setRequired('Please enter H1.');
+                ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.h1TooLong', 200)
+                ->setRequired('structure.admin.validation.h1Required');
 
             $container->addText('title')
-                ->addRule(Form::MAX_LENGTH, 'Title is too long.', 200)
-                ->setRequired('Please enter title.');
+                ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.titleTooLong', 200)
+                ->setRequired('structure.admin.validation.titleRequired');
 
             $container->addText('metaDescription')
                 ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'SEO - Description is too long.', 250);
+                ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.descriptionTooLong', 250);
 
             $container->addText('metaKeywords')
                 ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'SEO - Keyword is too long.', 200);
+                ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.keywordsTooLong', 200);
 
             $container->addText('slug')
                 ->setRequired(false);
 
             $container->addText('customUrl')
                 ->setRequired(false)
-                ->addRule(Form::URL, 'Custom URL have incorrect format.');
+                ->addRule(Form::URL, 'structure.admin.validation.customUrlInvalid');
         }
 
         $form->addText('metaRobots')
             ->setRequired(false)
-            ->addRule(Form::MAX_LENGTH, 'SEO - Robots is too long.', 200);
+            ->addRule(Form::MAX_LENGTH, 'structure.admin.validation.robotsTooLong', 200);
 
         $sitemapPriorities = [];
         for ($pri = 0.0; $pri <= 1.0; $pri += 0.1) {
@@ -142,22 +142,22 @@ class MenuForm extends BaseControl
         }
 
         $form->addSelect('sitemapPriority', null, $sitemapPriorities)
-            ->setRequired('Please select valid sitemapPriority');
+            ->setRequired('structure.admin.validation.priorityRequired');
 
         $form->addSelect('layoutName', null, $this->structure->detectLayouts())
-            ->setRequired('Please select valid layout');
+            ->setRequired('structure.admin.validation.layoutRequired');
 
         $form->addSelect('target', null, [
-            '' => 'Default',
-            Menu::TARGET_BLANK => 'Open new window or tab',
-            Menu::TARGET_SELF => 'Open in same frame',
-            Menu::TARGET_PARENT => 'Open in parent frame',
-            Menu::TARGET_TOP => 'Open in full body of the window'
+            '' => 'structure.admin.option.default',
+            Menu::TARGET_BLANK => 'structure.admin.option.blank',
+            Menu::TARGET_SELF => 'structure.admin.option.self',
+            Menu::TARGET_PARENT => 'structure.admin.option.parent',
+            Menu::TARGET_TOP => 'structure.admin.option.top'
         ]);
 
         $form->addTextarea('latteTemplate');
         $form->addText('identifier')
-            ->setRequired('Please fill in an unique identifier');
+            ->setRequired('structure.admin.validation.identifierRequired');
 
         $form->addCheckbox('isHidden');
         $form->addCheckbox('isActive');
@@ -168,7 +168,7 @@ class MenuForm extends BaseControl
         $form->addCheckbox('isHomePage');
         $form->addCheckbox('isAutogenerateSlug');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'structure.admin.action.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -230,20 +230,20 @@ class MenuForm extends BaseControl
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->menuTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->parentMenu, $this->menu))
             {
-                $form->addError('Menu item with this name already exists!');
+                $form->addError('structure.admin.validation.nameTaken');
             }
 
             if (!isset($values->basic)) {
                 $cnt = explode(',', $values->{$activeLocale->getLanguageCode()}->metaKeywords);
                 if (count($cnt) > 20) {
-                    $form->addError('Seo keywords is too long, only 10 words are allowed');
+                    $form->addError('structure.admin.validation.keywordCount');
                 }
             }
         }
 
         if (!$this->structureMenuRepository->isIdentifierFree($values->identifier, $this->menu))
         {
-            $form->addError('Menu item with this identifier already exists!');
+            $form->addError('structure.admin.validation.identifierTaken');
         }
     }
 

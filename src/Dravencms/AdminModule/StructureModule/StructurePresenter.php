@@ -53,7 +53,7 @@ class StructurePresenter extends SecuredPresenter
      */
     public function actionDefault(?int $structureMenuId = null): void
     {
-        $this->template->h1 = $this->translator->translate('Web structure and content');
+        $this->template->h1 = $this->translator->translate('structure.admin.title.structure');
         if ($structureMenuId) {
             /** @var MenuTranslation $structureMenu */
             $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
@@ -65,7 +65,7 @@ class StructurePresenter extends SecuredPresenter
             $this->template->menu = $structureMenu;
             $this->template->mapping = $this->structure->getLayoutMapping($structureMenu->getLayoutName());
 
-            $this->template->h1 .= ' - ' . $this->structureMenu->getIdentifier();
+            $this->template->h1 = $this->translator->translate('structure.admin.title.structureFor', ['identifier' => $this->structureMenu->getIdentifier()]);
         }
 
         $this->template->structureMenuId = $structureMenuId;
@@ -78,7 +78,7 @@ class StructurePresenter extends SecuredPresenter
      */
     public function actionEdit(?int $id = null, ?int $structureMenuId = null): void
     {
-        $this->template->h1 = $this->translator->translate('Web structure and content');
+        $this->template->h1 = $this->translator->translate('structure.admin.title.structure');
 
         if ($structureMenuId)
         {
@@ -93,10 +93,10 @@ class StructurePresenter extends SecuredPresenter
             } 
 
             $this->menuEdit = $menu;
-            $this->template->h1 .= ' - ' . $menu->getIdentifier();
+            $this->template->h1 = $this->translator->translate('structure.admin.title.structureFor', ['identifier' => $menu->getIdentifier()]);
 
         } else {
-            $this->template->h1 .= ' - ' . $this->translator->translate('New menu item');
+            $this->template->h1 = $this->translator->translate('structure.admin.title.newHeading');
         }
     }
 
@@ -107,7 +107,7 @@ class StructurePresenter extends SecuredPresenter
         if (!$menu) {
             $this->error();
         }
-        $this->template->h1 = $this->translator->translate('Move menu item %identifier%', ['identifier' => $menu->getIdentifier()]);
+        $this->template->h1 = $this->translator->translate('structure.admin.title.moveMenuItem', ['identifier' => $menu->getIdentifier()]);
         $this->menuEdit = $menu;
     }
 
@@ -118,7 +118,7 @@ class StructurePresenter extends SecuredPresenter
     {
         $component = $this->structureMenuMoveFormFactory->create($this->menuEdit);
         $component->onSuccess[] = function ($parentMenu) {
-            $this->flashMessage('Changes has been saved.', 'alert-success');
+            $this->flashMessage($this->translator->translate('structure.admin.flash.saved'), 'alert-success');
             $this->redirect('Structure:', ['structureMenuId' => ($parentMenu ? $parentMenu->getId(): null)]);
         };
 
@@ -136,10 +136,10 @@ class StructurePresenter extends SecuredPresenter
 
             /** @var Menu $structureMenu */
             if ($this->menuEdit) {
-                $this->flashMessage('Changes has been saved.', 'alert-success');
+                $this->flashMessage($this->translator->translate('structure.admin.flash.saved'), 'alert-success');
                 $this->redirect('Structure:edit', ['id' => $menu->getId()]);
             } else {
-                $this->flashMessage('New menu item has been saved.', 'alert-success');
+                $this->flashMessage($this->translator->translate('structure.admin.flash.created'), 'alert-success');
                 $this->redirect('Structure:', ($this->structureMenu ? $this->structureMenu->getId() : null));
             }
         };
@@ -155,7 +155,7 @@ class StructurePresenter extends SecuredPresenter
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(false);
         $control->onDelete[] = function () {
-            $this->flashMessage('Item has been deleted.', 'alert-success');
+            $this->flashMessage($this->translator->translate('structure.admin.flash.deleted'), 'alert-success');
             $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)]);
         };
         return $control;
@@ -169,7 +169,7 @@ class StructurePresenter extends SecuredPresenter
         $control = $this->structureMenuGridFactory->create($this->structureMenu);
         $control->setIsSystem(true);
         $control->onDelete[] = function () {
-            $this->flashMessage('Item has been deleted.', 'alert-success');
+            $this->flashMessage($this->translator->translate('structure.admin.flash.deleted'), 'alert-success');
             $this->redirect('this', ['structureMenuId' => ($this->structureMenu ? $this->structureMenu->getId() : null)]);
         };
         return $control;

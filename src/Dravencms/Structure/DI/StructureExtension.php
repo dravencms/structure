@@ -2,6 +2,7 @@
 
 namespace Dravencms\Structure\DI;
 
+use Contributte\Translation\DI\TranslationProviderInterface;
 use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Dravencms\Structure\Structure;
 use Nette\DI\CompilerExtension;
@@ -19,8 +20,13 @@ use Dravencms\Structure\Seo\StructureSeoProvider;
  * Class StructureExtension
  * @package Dravencms\Structure\DI
  */
-class StructureExtension extends CompilerExtension
+class StructureExtension extends CompilerExtension implements TranslationProviderInterface
 {
+    public function getTranslationResources(): array
+    {
+        return [__DIR__ . '/../lang'];
+    }
+
     const TAG_COMPONENT = 'salamek.cms.component';
     
     public function getConfigSchema(): Schema

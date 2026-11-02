@@ -87,11 +87,11 @@ class MenuMoveForm extends BaseControl
         }
 
         $form->addMultiSelect('menuId', null, $menuItems)
-            ->setRequired(true);
+            ->setRequired('structure.admin.validation.moveRequired');
 
-        $form->addSelect('newParentId', null, ['' => '--root--'] + $menuItems);
+        $form->addSelect('newParentId', null, ['' => 'structure.admin.option.root'] + $menuItems);
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'structure.admin.action.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -119,14 +119,14 @@ class MenuMoveForm extends BaseControl
         {
             if (in_array($moveTo, $moveWhat))
             {
-                $form->addError('Menu item cannot be transfered into its self');
+                $form->addError('structure.admin.validation.moveIntoSelf');
             }
 
             foreach($moveWhat AS $item)
             {
                 if (in_array($item, $this->structureMenuRepository->getPath($moveTo)))
                 {
-                    $form->addError('Cannot set parent as its own child');
+                    $form->addError('structure.admin.validation.moveIntoChild');
                 }
             }
         }

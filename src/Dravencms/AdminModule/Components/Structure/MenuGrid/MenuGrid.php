@@ -87,31 +87,31 @@ class MenuGrid extends BaseControl
 
         $grid->setDataSource($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
 
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'structure.admin.field.identifier')
             ->setTemplate(__DIR__.'/identifier.latte')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnBoolean('isActive', 'Active');
-        $grid->addColumnBoolean('isHidden', 'Hidden');
+        $grid->addColumnBoolean('isActive', 'structure.admin.field.active');
+        $grid->addColumnBoolean('isHidden', 'structure.admin.field.hidden');
 
-        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
+        $grid->addColumnPosition('position', 'structure.admin.field.position', 'up!', 'down!');
 
-        $grid->addAction('submenu', 'Submenu items', 'default', ['structureMenuId' => 'id'])
+        $grid->addAction('submenu', 'structure.admin.action.submenu', 'default', ['structureMenuId' => 'id'])
             ->setIcon('folder-open')
-            ->setTitle('Submenu items')
+            ->setTitle('structure.admin.action.submenu')
             ->setClass('btn btn-sm btn-outline-secondary');
 
         if ($this->user->isAllowed('structure', 'edit')) {
 
             $grid->addAction('move', '')
                 ->setIcon('share')
-                ->setTitle('Move')
+                ->setTitle('structure.admin.action.move')
                 ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
-                ->setTitle('Edit')
+                ->setTitle('structure.admin.action.edit')
                 ->setClass('btn btn-sm btn-primary');
         }
 
@@ -119,18 +119,18 @@ class MenuGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('structure.admin.action.delete')
                 ->setClass('btn btn-sm btn-danger')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
+                ->setConfirmation(new StringConfirmation('structure.admin.confirm.delete', 'identifier'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('structure.admin.action.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('structure.admin.action.exportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('structure.admin.action.exportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('structure.admin.action.exportAll', 'acl_resource_all.csv')
+            ->setTitle('structure.admin.action.exportAll');
 
         return $grid;
     }

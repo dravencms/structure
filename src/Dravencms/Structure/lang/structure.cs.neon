@@ -1,0 +1,81 @@
+admin:
+	field:
+		name: Název
+		title: Titulek stránky
+		h1: 'Hlavní nadpis (H1)'
+		metaDescription: SEO - Popis
+		metaKeywords: SEO - Klíčová slova
+		slug: URL slug
+		customUrl: Vlastní absolutní URL
+		identifier: Identifikátor
+		layout: Rozvržení
+		metaRobots: SEO - Robots
+		sitemapPriority: SEO - Priorita v sitemapě
+		target: Otevírání odkazu
+		latteTemplate: Šablona Latte
+		active: Aktivní
+		hidden: Skryté
+		showH1: Zobrazit hlavní nadpis
+		regularExpression: Regulární výraz
+		regexArguments: Použít argumenty v regulárním výrazu
+		sitemap: Zahrnout do sitemapy
+		homePage: Domovská stránka
+		autoSlug: 'Automaticky generovat slug (ignoruje zadaný URL slug)'
+		position: Pozice
+		rows: Řádky
+		moveItems: Přesunout položky menu
+		moveTo: Přesunout do
+
+	action:
+		save: Uložit
+		edit: Upravit
+		delete: Smazat
+		move: Přesunout
+		submenu: Položky podmenu
+		exportAll: Exportovat CSV
+		exportFiltered: 'Exportovat CSV (filtrováno)'
+
+	title:
+		structure: Struktura a obsah webu
+		structureFor: Struktura a obsah webu - %identifier%
+		newMenuItem: Nová položka menu
+		newHeading: Struktura a obsah webu - Nová položka menu
+		moveMenuItem: Přesunout položku menu %identifier%
+		systemPaths: Systémové cesty vytvořené systémem nebo moduly
+
+	option:
+		default: Výchozí
+		blank: Nové okno nebo karta
+		self: Stejný rámec
+		parent: Nadřazený rámec
+		top: Celé okno
+		root: --kořen--
+
+	validation:
+		nameRequired: Zadejte název položky menu.
+		nameTooLong: Název smí mít nejvýše %d znaků.
+		h1Required: 'Zadejte hlavní nadpis (H1).'
+		h1TooLong: Hlavní nadpis smí mít nejvýše %d znaků.
+		titleRequired: Zadejte titulek stránky.
+		titleTooLong: Titulek smí mít nejvýše %d znaků.
+		descriptionTooLong: SEO popis smí mít nejvýše %d znaků.
+		keywordsTooLong: SEO klíčová slova smí mít nejvýše %d znaků.
+		customUrlInvalid: Zadejte platnou vlastní URL.
+		robotsTooLong: SEO Robots smí mít nejvýše %d znaků.
+		priorityRequired: Vyberte platnou prioritu v sitemapě.
+		layoutRequired: Vyberte platné rozvržení.
+		identifierRequired: Zadejte jedinečný identifikátor.
+		nameTaken: Položka menu s tímto názvem již existuje.
+		keywordCount: Je povoleno nejvýše 20 klíčových slov oddělených čárkami.
+		identifierTaken: Položka menu s tímto identifikátorem již existuje.
+		moveRequired: Vyberte položky menu k přesunu.
+		moveIntoSelf: Položku menu nelze přesunout do sebe samé.
+		moveIntoChild: Položku menu nelze přesunout pod jejího potomka.
+
+	confirm:
+		delete: Opravdu chcete smazat „%s“?
+
+	flash:
+		saved: Změny byly uloženy.
+		created: Nová položka menu byla uložena.
+		deleted: Položka byla smazána.
