@@ -82,3 +82,11 @@ admin:
 
 menu:
     structure: 'Website structure and content'
+
+acl:
+    resource: 'Website structure'
+    permissions:
+        edit:
+            label: 'Manage website structure'
+        delete:
+            label: 'Delete website structure'

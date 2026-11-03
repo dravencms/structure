@@ -82,3 +82,11 @@ admin:
 
 menu:
     structure: 'Struktura a obsah webu'
+
+acl:
+    resource: 'Struktura webu'
+    permissions:
+        edit:
+            label: 'Spravovat strukturu webu'
+        delete:
+            label: 'Mazat strukturu webu'
