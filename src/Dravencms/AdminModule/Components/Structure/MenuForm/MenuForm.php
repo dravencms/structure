@@ -253,6 +253,7 @@ class MenuForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
+        $this->requirePermission('structure', 'edit');
         $values = $form->getValues();
 
         if ($values->isHomePage) {

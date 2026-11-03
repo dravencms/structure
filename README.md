@@ -10,7 +10,7 @@ Content structure and menu routing for DravenCMS applications. The package manag
 - CMS component discovery and placement in page layouts.
 - Configurable frontend layout directory and presenter mappings.
 - Optional sitemap and `robots.txt` integration with DravenCMS SEO.
-- Admin menu, ACL, and Doctrine fixture support.
+- Provider-defined admin navigation and ACL permissions.
 
 ## Requirements
 
@@ -48,7 +48,7 @@ dravencms.structure:
         Dravencms\FrontModule\Components\*\*\-\*Factory: Dravencms\Model\*\Repository\*CmsRepository
 ```
 
-Apply the resulting database schema changes through the Doctrine migration workflow used by your application. Load the supplied fixtures when you need the default administration menu and ACL definitions.
+Apply the resulting database schema changes through the Doctrine migration workflow used by your application. Navigation and ACL definitions come from providers; assign permissions through the group editor.
 
 ## Configuration
 
@@ -72,3 +72,7 @@ Structure does not require SEO, and SEO does not require Structure. The integrat
 ## License
 
 This package is licensed under the LGPL-3.0 license.
+
+## Admin authorization and mutations
+
+Administration uses User 3.1, Admin 3.2 and Application 0.3 guards. Screens and write callbacks enforce the existing provider-defined permissions server-side, including direct URLs and bulk callbacks. Mutating signals require POST and a session-bound action token; synchronize the matching admin assets when upgrading. See the User package's `user:security:migrate` instructions for the password-reset schema change.

@@ -84,6 +84,7 @@ class MenuGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('structure', 'edit');
 
         $grid->setDataSource($this->menuRepository->getMenuQueryBuilder($this->parentMenu, $this->isSystem));
 
@@ -149,8 +150,10 @@ class MenuGrid extends BaseControl
      * @throws \Exception
      */
     #[\Dravencms\User\Attributes\IsAllowed('structure', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('structure', 'delete');
         $aclOperations = $this->menuRepository->getById($id);
         foreach ($aclOperations AS $aclOperation)
         {
@@ -162,14 +165,20 @@ class MenuGrid extends BaseControl
         $this->onDelete($this->parentMenu);
     }
 
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleUp(int $id): void
     {
+        $this->requirePermission('structure', 'edit');
         $menuItem = $this->menuRepository->getOneById($id);
         $this->menuRepository->moveUp($menuItem, 1);
     }
 
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleDown(int $id): void
     {
+        $this->requirePermission('structure', 'edit');
         $menuItem = $this->menuRepository->getOneById($id);
         $this->menuRepository->moveDown($menuItem, 1);
     }

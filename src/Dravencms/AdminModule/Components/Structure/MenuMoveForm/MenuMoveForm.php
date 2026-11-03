@@ -138,6 +138,7 @@ class MenuMoveForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
+        $this->requirePermission('structure', 'edit');
         $values = $form->getValues();
 
         $moveWhat = $this->structureMenuRepository->getById($values->menuId);

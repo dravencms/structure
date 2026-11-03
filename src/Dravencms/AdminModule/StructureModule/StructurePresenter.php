@@ -19,6 +19,7 @@ use Dravencms\Structure\TCms;
 /**
  * Homepage presenter.
  */
+#[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
 class StructurePresenter extends SecuredPresenter
 {
     use TCms;
@@ -51,6 +52,7 @@ class StructurePresenter extends SecuredPresenter
      * @param $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
     public function actionDefault(?int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('structure.admin.title.structure');
@@ -76,6 +78,7 @@ class StructurePresenter extends SecuredPresenter
      * @param null $structureMenuId
      * @throws Nette\Application\BadRequestException
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
     public function actionEdit(?int $id = null, ?int $structureMenuId = null): void
     {
         $this->template->h1 = $this->translator->translate('structure.admin.title.structure');
@@ -100,6 +103,7 @@ class StructurePresenter extends SecuredPresenter
         }
     }
 
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
     public function actionMove(int $id): void
     {
         /** @var Menu $menu */
@@ -178,6 +182,7 @@ class StructurePresenter extends SecuredPresenter
     /**
      * @param $structureMenuId
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
     public function handleBlocksJson(int $structureMenuId): void
     {
         $structureMenu = $this->structureMenuRepository->getOneById($structureMenuId);
@@ -201,6 +206,7 @@ class StructurePresenter extends SecuredPresenter
     /**
      * @param $componentClass
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
     public function handleComponentJson($componentClass)
     {
         $this->payload->actions = (object)/*We work with object in JS not arrays*/
@@ -212,8 +218,11 @@ class StructurePresenter extends SecuredPresenter
      * @param $structureMenuId
      * @param array $structureTree
      */
+    #[\Dravencms\User\Attributes\IsAllowed('structure', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleStructureSave(int $structureMenuId, array $structureTree): void
     {
+        $this->requirePermission('structure', 'edit');
         $menu = $this->structureMenuRepository->getOneById($structureMenuId);
 
         $this->structure->saveStructureTree($menu, $structureTree);

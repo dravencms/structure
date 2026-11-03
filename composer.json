@@ -19,7 +19,8 @@
     "dravencms/admin": "^3.0",
     "php": "^8.4",
     "dravencms/database": "^0.2.4",
-    "latte/latte": "^3.1"
+    "latte/latte": "^3.1",
+    "dravencms/application": "^0.3"
   },
   "suggest": {
     "dravencms/seo": "Adds Structure menu entries to sitemap.xml and robots.txt"
@@ -38,6 +39,7 @@
     }
   },
   "conflict": {
-    "dravencms/user": "<3.0"
+    "dravencms/user": "<3.1",
+    "dravencms/admin": "<3.2"
   }
 }
