@@ -79,3 +79,6 @@ admin:
 		saved: The changes have been saved.
 		created: The new menu item has been saved.
 		deleted: The item has been deleted.
+
+menu:
+    structure: 'Website structure and content'

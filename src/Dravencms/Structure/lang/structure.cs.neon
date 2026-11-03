@@ -79,3 +79,6 @@ admin:
 		saved: Změny byly uloženy.
 		created: Nová položka menu byla uložena.
 		deleted: Položka byla smazána.
+
+menu:
+    structure: 'Struktura a obsah webu'

@@ -47,6 +47,9 @@ class StructureExtension extends CompilerExtension implements TranslationProvide
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
+        if ($this->compiler->getExtensions(\Dravencms\Admin\DI\AdminExtension::class) !== []) {
+            $builder->addDefinition($this->prefix('adminMenuProvider'))->setFactory(\Dravencms\Structure\AdminMenuProvider::class);
+        }
         $config = (array) $this->getConfig();
      
         $builder->addDefinition($this->prefix('structure'))

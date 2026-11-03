@@ -5,4 +5,3 @@
 - Dravencms\Model\Structure\Repository\MenuContentRepository
 - Dravencms\Model\Structure\Fixtures\AclOperationFixtures
 - Dravencms\Model\Structure\Fixtures\AclResourceFixtures
-- Dravencms\Model\Structure\Fixtures\AdminMenuFixtures

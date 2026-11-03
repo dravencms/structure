@@ -16,7 +16,7 @@
   ],
   "require": {
     "dravencms/locale": ">=2.0",
-    "dravencms/admin": ">=2.0",
+    "dravencms/admin": "^3.0",
     "php": "^8.4",
     "dravencms/database": "^0.2.4",
     "latte/latte": "^3.1"
