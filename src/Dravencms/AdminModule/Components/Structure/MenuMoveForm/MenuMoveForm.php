@@ -110,6 +110,10 @@ class MenuMoveForm extends BaseControl
      */
     public function editFormValidate(Form $form): void
     {
+        if (!$this->user->isAllowed('structure', 'edit')) {
+            $form->addError('structure.admin.validation.editForbidden');
+            return;
+        }
         $values = $form->getValues();
 
         $moveWhat = $this->structureMenuRepository->getById($values->menuId);
@@ -138,7 +142,6 @@ class MenuMoveForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
-        $this->requirePermission('structure', 'edit');
         $values = $form->getValues();
 
         $moveWhat = $this->structureMenuRepository->getById($values->menuId);

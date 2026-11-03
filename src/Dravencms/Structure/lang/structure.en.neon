@@ -69,6 +69,7 @@ admin:
 		keywordCount: At most 20 comma-separated keywords are allowed.
 		identifierTaken: A menu item with this identifier already exists.
 		moveRequired: Please select menu items to move.
+		editForbidden: 'You do not have permission to edit the website structure.'
 		moveIntoSelf: A menu item cannot be moved into itself.
 		moveIntoChild: A menu item cannot be moved under its own child.
 

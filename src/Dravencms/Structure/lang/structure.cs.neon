@@ -69,6 +69,7 @@ admin:
 		keywordCount: Je povoleno nejvýše 20 klíčových slov oddělených čárkami.
 		identifierTaken: Položka menu s tímto identifikátorem již existuje.
 		moveRequired: Vyberte položky menu k přesunu.
+		editForbidden: 'Nemáte oprávnění upravovat strukturu webu.'
 		moveIntoSelf: Položku menu nelze přesunout do sebe samé.
 		moveIntoChild: Položku menu nelze přesunout pod jejího potomka.
 
